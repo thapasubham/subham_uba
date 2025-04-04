@@ -47,9 +47,9 @@ switch (command) {
     default:
         console.log("Such command doesn't exist");
         console.log("Available commands:\n" +
-            "\t- add <firstname> <lastname>\n" +
-            "\t- del <firstname>\n" +
-            "\t- read\n" +
-            "\t- update <oldFirstname> <newFirstname> <newLastname>");
+            "\t- uba add <firstname> <lastname>\n" +
+            "\t- uba del <firstname>\n" +
+            "\t- uba read\n" +
+            "\t- uba update <oldFirstname> <newFirstname> <newLastname>");
         break;
 }
