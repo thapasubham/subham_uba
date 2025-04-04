@@ -52,6 +52,11 @@ function UpdateUser(uname,fname, lname){
 }
 
 function DeleteUser(fname){
+
+    if(fname=="all"){
+        fs.writeFileSync(path, '');
+        return;
+    }
     const fileDate = readFile().split("\n")
 
     const index = getIndex(fname); 

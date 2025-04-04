@@ -5,7 +5,7 @@ const { CreateUser, DeleteUser, ReadUser, UpdateUser } = require('./users/user.j
 const args = process.argv;
 
 if (args.length < 3) {
-    console.log("Command not available");
+    console.log("Expected at least one argument!");
     return;
 }
 
@@ -21,10 +21,12 @@ switch (command) {
         break;
 
     case "del":
-        if (args.length === 4) {
+        if (args.length === 4&& args[3]=="--all") {
+            DeleteUser("all");
+        }else if(args.length === 4){
             DeleteUser(args[3]);
         } else {
-            console.log("Invalid Command!\nUsage: del <firstname>");
+            console.log("Invalid Command!\nUsage: del <firstname> or \n del --all");
         }
         break;
 
@@ -48,7 +50,7 @@ switch (command) {
         console.log("Such command doesn't exist");
         console.log("Available commands:\n" +
             "\t- uba add <firstname> <lastname>\n" +
-            "\t- uba del <firstname>\n" +
+            "\t- uba del <firstname>\n or --all(deleted all users)" +
             "\t- uba read\n" +
             "\t- uba update <oldFirstname> <newFirstname> <newLastname>");
         break;
