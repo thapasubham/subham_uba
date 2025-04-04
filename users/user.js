@@ -1,17 +1,39 @@
+const fs = require('fs');
+
+const path ="user.txt"
+
+function readFile(){
+    if(!fs.existsSync){
+fs.writeFileSync(path,'')
+    }
+const fileDate = fs.readFileSync(path, 'utf-8').trim();
+return fileDate;
+}
+
 function CreateUser(fname, lname){
     //implement creating a user
-    console.log(`${fname} ${lname}`);
+    const user =`${fname} ${lname}`
+const fileDate = readFile();
+   fs.appendFileSync(path,"\n"+ user)
+    console.log(`User ${fname} ${lname} added`);
 }
+
 function ReadUser(){
-    //implement read and displays all the users
+    //reads the data of all existing users\
+    const fileDate = readFile();
     console.log("Displaying the Users");
-}
-
-function UpdateUser(fname, lname){
-//implement updating a user date
-console.log(`${fname} ${lname}`)
+    console.log(fileDate);
 
 }
+
+function UpdateUser(uname,fname, lname){
+    //implement updating a user date
+   
+
+    console.log(`changed ${uname} to ${fname} ${lname}`)
+
+}
+
 function DeleteUser(fname){
     //implement delete feauture 
     console.log(`${fname}`);
@@ -21,4 +43,4 @@ function DeleteUser(fname){
 
 
 
-module.exports = CreateUser;
+module.exports ={CreateUser, DeleteUser, UpdateUser, ReadUser};
