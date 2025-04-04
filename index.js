@@ -6,7 +6,7 @@ const args = process.argv;
 
 if (args.length < 3) {
     console.log("Command not available");
-    process.exit(1);
+    return;
 }
 
 const command = args[2];
