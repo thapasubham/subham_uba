@@ -3,10 +3,10 @@ const fs = require('fs');
 const path ="user.txt"
 
 function readFile(){
-    if(!fs.existsSync){
+    if(!fs.existsSync()){
 fs.writeFileSync(path,'')
     }
-const fileDate = fs.readFileSync(path, 'utf-8').trim();
+const fileDate = fs.readFileSync(path, 'utf-8');
 return fileDate;
 }
 
@@ -14,7 +14,7 @@ function CreateUser(fname, lname){
     //implement creating a user
     const user =`${fname} ${lname}`
 const fileDate = readFile();
-   fs.appendFileSync(path,"\n"+ user)
+fs.writeFileSync(path, fileDate+ "\n"+ user);
     console.log(`User ${fname} ${lname} added`);
 }
 
