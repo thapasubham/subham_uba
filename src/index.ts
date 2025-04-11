@@ -1,20 +1,24 @@
 #!/usr/bin/env node
 
-const { CreateUser, DeleteUser, ReadUser, UpdateUser } = require('./users/user.js');
 
+import { Users } from './handlers/UserHandler.js';
 const args = process.argv;
 
 if (args.length < 3) {
-    console.log("Expected at least one argument!");
-    return;
+    console.log("Available commands:\n" +
+        "\t- uba add <firstname> <lastname>\n" +
+        "\t- uba del <firstname> or\n\t--all(deleted all users)\n" +
+        "\t- uba read\n" +
+        "\t- uba update <oldFirstname> <newFirstname> <newLastname>");
+    process.exit();
 }
 
 const command = args[2];
-
+const user = new Users();
 switch (command) {
     case "add":
         if (args.length === 5) {
-            CreateUser(args[3], args[4]);
+            user.CreateUser({firstname:args[3], lastname: args[4]});
         } else {
             console.log("Invalid Command!\nUsage: add <firstname> <lastname>");
         }
@@ -22,9 +26,9 @@ switch (command) {
 
     case "del":
         if (args.length === 4&& args[3]=="--all") {
-            DeleteUser("all");
+            user.DeleteUser({firstname:"all"});
         }else if(args.length === 4){
-            DeleteUser(args[3]);
+            user.DeleteUser({firstname: args[3]});
         } else {
             console.log("Invalid Command!\nUsage: del <firstname> or \n del --all");
         }
@@ -32,7 +36,7 @@ switch (command) {
 
     case "read":
         if (args.length === 3) {
-            ReadUser();
+            user.ReadUser();
         } else {
             console.log("Invalid Command!\nUsage: read");
         }
@@ -40,7 +44,7 @@ switch (command) {
 
     case "update":
         if (args.length === 6) {
-            UpdateUser(args[3], args[4], args[5]);
+            user.Update({firstname:args[3]}, {firstname:args[5], lastname:args[6]});
         } else {
             console.log("Invalid Command!\nUsage: update <oldFirstName> <newFirstName> <newLastName>");
         }
