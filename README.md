@@ -1,3 +1,7 @@
+How to use
+--npm -i
+--npm run build
+
 <h1>Simple Command line CRUD project</h1>
 <p>Command List</p>
 <ul>
