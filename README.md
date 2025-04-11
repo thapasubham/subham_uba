@@ -1,7 +1,8 @@
 How to use
---npm -i
---npm run build
-
+<ul>
+<li>--npm -i</li>
+<li>--npm run build</li>
+</ul>
 <h1>Simple Command line CRUD project</h1>
 <p>Command List</p>
 <ul>
