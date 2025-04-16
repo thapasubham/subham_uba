@@ -5,12 +5,9 @@
   "description": "Simple crud commandline feature",
   "main": "index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "cli": "tsx src/index.ts",
     "lint": "eslint",
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "bin": {
-    "uba": "built/src/index.js"
   },
   "author": "Subham Thapa",
   "license": "ISC",
@@ -19,7 +16,12 @@
     "@types/node": "^22.14.0",
     "eslint": "^9.24.0",
     "globals": "^16.0.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.29.1"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1"
   }
 }
