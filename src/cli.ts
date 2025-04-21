@@ -13,6 +13,7 @@ if(args.length>2){
 }
 }
 
+
 function cliCommands(){
 switch (command) {
     case "add":
