@@ -1,8 +1,9 @@
-import { user } from "../types/user.type.js";
-import { User } from "../abstraction/User.js";
-import {readFile, userExists, SaveUser} from '../utils/files.js'
-import { Logger } from "../utils/Logger.js";
+import { user } from "../../types/user.type.js";
+import { User } from '../abstraction/User.js';
+import {readFile, userExists, SaveUser} from '../../utils/files.js'
+import { Logger } from "../../utils/Logger.js";
 import chalk from "chalk";
+
 
 export class Users extends User{
 
@@ -12,12 +13,12 @@ export class Users extends User{
         user.id = data.length+1;
         
         if(userExists(user)){
-       Logger.Warn("User Already Exists");
+        Logger.Warn("User Already Exists");
         return false;
         }
         else{
             data.push(user);
-          SaveUser(data);
+            SaveUser(data);
             Logger.Success(`User ${user.firstname} ${user.lastname} added!`);
             return true;
         }
@@ -36,7 +37,7 @@ export class Users extends User{
       try{
       const userData =readFile()
        
-      const users = userData.filter((u: any)=>u.id!==query)
+      const users = userData.filter((u: user)=>u.id!==query)
 
       if(userData.length==users.length){
         Logger.Error(`The user with id ${query} doesnt exist`);
@@ -48,30 +49,32 @@ export class Users extends User{
       }
     
       
-    } catch(error){
-    Logger.Error(`Error Deleting user: ${error}`);
+    } catch(err){
+    Logger.Error(`Error Deleting user`);
     return false;
     }
     }
 
-    async ReadUser():  Promise<boolean> {
+    async ReadUser():  Promise<user[]> {
         try{        
             const userdata: user[] = readFile();
-        //   Logger.Info("ID \tFirstname \tLastname")
+        
          if(userdata.length==0){
             Logger.Warn("No Users Exists")
+           
          }
-           userdata.forEach((userdata)=>{
-            Logger.Info(`${userdata.id} \t${userdata.firstname} \t${userdata.lastname}`)
-           });
-
+          userdata.forEach((userdata)=>{
+          Logger.Info(`${userdata.id} \t${userdata.firstname} \t${userdata.lastname}`)
+          });
+          return userdata;
         }
         catch(error){
-            Logger.Error(`${error}`);
-            return false;
+          Logger.Error(`${error}`);
+          return [];
         }
-        return true;
+      
     }
+    
    async Update(user: user):   Promise<boolean>{
     try{const userData: user[]= readFile();
 
@@ -93,6 +96,7 @@ export class Users extends User{
 }
     catch(err){
         console.log(err)
+        
         return false;
     }
     return true;

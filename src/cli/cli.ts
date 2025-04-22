@@ -1,6 +1,5 @@
 import chalk from 'chalk';
 import { Users } from './handlers/UserHandler.js';
-import { user } from './types/user.type.js';
 const args = process.argv;
 
 
@@ -18,7 +17,7 @@ function cliCommands(){
 switch (command) {
     case "add":
         if (args.length === 5) {
-            user.CreateUser({firstname:args[3], lastname: args[4]});
+            user.CreateUser({firstname:args[3], lastname: args[4], id:0} );
         } else {
             console.log(chalk.yellow("Invalid Command!\nUsage: add <firstname> <lastname>"));
         }

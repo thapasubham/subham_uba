@@ -2,6 +2,8 @@ import chalk from 'chalk';
 import * as fs from 'fs'
 import {user} from '../types/user.type.js'
 const path ="user.json"
+
+
 export function readFile(){
     if(!fs.existsSync(path)){
     fs.writeFileSync(path, "[]")
