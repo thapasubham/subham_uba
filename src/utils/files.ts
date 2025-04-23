@@ -41,3 +41,10 @@ export function userExists(user: user){
     }
     return false;
 }
+
+export function getIndex(id: number){
+    const data: user[] = readFile();
+
+  const index =   data.findIndex((u) => u.id === id);
+  return index;
+}

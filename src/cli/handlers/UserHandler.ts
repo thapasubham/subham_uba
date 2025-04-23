@@ -55,7 +55,7 @@ export class Users extends User{
     }
     }
 
-    async ReadUser():  Promise<user[]> {
+    async ReadUsers():  Promise<user[]> {
         try{        
             const userdata: user[] = readFile();
         
