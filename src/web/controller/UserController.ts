@@ -1,26 +1,34 @@
-import { Request, Response } from "express";
+import { Request, response, Response } from "express";
 import { user } from "../../types/user.type.js";
 import { readFile, userExists, SaveUser } from "../../utils/files.js"
+import { responseType, WriteError, WriteResponse } from "../../utils/ApiResponse.js";
 
 
 export class UserController{
 
+   
+
     async CreateUser(req: Request, res: Response){
         try{
+            const response: responseType<user> ={
+                message:"",
+                status: 200
+            }
             const data: user[] = readFile();
             
             const bodyData: user= req.body;
             bodyData.id= data.length+1
             if(userExists(bodyData)){
-                res.status(403).json({
-                    "Message":"User Already Exists"
-                });
+            response.status=206;
+            response.message ="User already Exists"
+               
             } else{
             data.push(bodyData);
             SaveUser(data);
-            res.status(201).json({
-                "Message" :"User Created"
-            });}
+            response.status=201;
+            response.message ="User Created"
+            }
+            WriteResponse(res, response);
         }
         catch(err){
             res.status(500).json({
@@ -31,14 +39,20 @@ export class UserController{
 
    async GetUsers(req: Request, res: Response){
     try{
+        const response: responseType<user> ={
+            message:"",
+            status: 200
+        }
         const data: user[] = readFile();
         if(data.length===0){
-            res.status(204).send({
-                "Message": "User not found"
-            });
+            response.status=204;
+            response.message="User not found"
+           
         } else{
-        res.status(200).send(data);
+            response.data=data;
+            response.status=200;
         }
+        WriteResponse(res, response);
        }catch(err){
         res.status(500).json({
             "Message": "Internal Server Error"
@@ -49,16 +63,23 @@ export class UserController{
 
     async GetUser(req: Request, res: Response){
        try{
+        const response: responseType<user> ={
+            message:"",
+            status: 200
+        }
         const data: user[] = readFile();
         const user = data.filter((d)=>d.id===parseInt(req.params.id))
        if(user.length===0){
-        res.status(404).json({
-            "Message": "User not found"
-        });
+     
+        response.message = "No User Found";
+        response.status =404
        }else{
-        res.status(200).send(user);
-       }
-       }catch(err){
+        response.status = 200
+        response.data=user
+        
+       }WriteResponse(res ,response );
+       }catch(error){
+        console.log(error)
         res.status(500).json({
             "Message": "Internal Server Error"
 
@@ -68,6 +89,10 @@ export class UserController{
 
     async UpdateUser(req: Request, res: Response){
      try{
+        const response: responseType<user> ={
+            message:"",
+            status: 200
+        }
         const data: user[] = readFile();
         const id = parseInt(req.params.id);
         const index = data.findIndex((u) => u.id === id);
@@ -77,22 +102,24 @@ export class UserController{
         id: id
         }   
         if(index===-1){
-        res.status(404).json({
-            "Message":"User Doesnt Exists"
-        });
+            response.status =404;
+            response.message = "User doesn't Exists";
+       
          }else{
             if(userExists(userData)){
-                res.status(204).json({
-                    "Message":"User Already Exists"
-                });
+                response.status =204;
+                response.message ="User Already Exists";
+                
             }else{
                  data[index] =userData;
                  SaveUser(data);
-                res.status(202).json({
-                "Message":"User Updated"
-        });
-    }
-    }
+                response.message = "User Updated"
+                response.status =201;
+
+                }
+            }
+
+        WriteResponse(res, response);
      }catch(err){
         res.status(500).json({
             "Message": "Internal Server Error"
@@ -103,21 +130,25 @@ export class UserController{
 
     async DeleteUser(req: Request, res: Response){
          try{
+            const response: responseType<user> ={
+                message:"",
+                status: 200
+            }
              const userData =readFile();
               
              const users = userData.filter((u: user)=>u.id!==parseInt(req.params.id));
        
              if(userData.length==users.length){
              
-              res.status(404).json({
-                "Message": "The user doesn't exists"
-              });
+                response.status=400;
+                response.message ="The User doesn't exists."
+              
              }else{
                SaveUser(users);
-                res.status(204).json({
-                "Message" :"User Deleted"
-                });
-             }
+               response.status =204;
+               response.message="User Deleted";
+                }
+            WriteResponse(res, response);
       } catch(err){
         res.status(500).json({
             "Message": "Internal Server Error"

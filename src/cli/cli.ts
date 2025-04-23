@@ -36,7 +36,7 @@ switch (command) {
 
     case "read":
         if (args.length === 3) {
-            user.ReadUser();
+            user.ReadUsers();
         } else {
             console.log(chalk.yellow("Invalid Command!\nUsage: read"));
         }
