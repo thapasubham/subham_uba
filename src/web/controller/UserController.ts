@@ -99,9 +99,4 @@ export class UserController {
 
     WriteResponse(res, response);
   }
-
-  async Check(req: Request, res: Response) {
-    checking();
-    res.send("bla bla bla");
-  }
 }

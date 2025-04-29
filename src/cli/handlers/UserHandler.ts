@@ -1,10 +1,9 @@
 import { user } from "../../types/user.type.js";
-import { User } from "../abstraction/User.js";
 import { readFile, userExists, SaveUser } from "../../utils/files.js";
 import { Logger } from "../../utils/Logger.js";
 import chalk from "chalk";
 
-export class Users extends User {
+export class Users {
   async CreateUser(user: user): Promise<boolean> {
     const data: user[] = readFile();
 
