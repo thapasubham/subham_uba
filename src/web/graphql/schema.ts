@@ -8,14 +8,14 @@ const typeDefs = gql`
   }
 
   type Query {
-    users: [User]
+    users(page: Int, offset: Int): [User]
     user(id: ID!): User
   }
 
   input UserInput {
     firstname: String!
     lastname: String!
-    id: Float!
+    id: Float
   }
 
   type Mutation {

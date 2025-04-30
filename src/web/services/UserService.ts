@@ -1,6 +1,13 @@
+import { off } from "process";
 import { User } from "../../cli/abstraction/User";
 import { user } from "../../types/user.type";
-import { saveUser } from "../../utils/db";
+import {
+  deleteUser,
+  readUser,
+  readUserbyId,
+  saveUser,
+  updateUser,
+} from "../../utils/db";
 import { getIndex, readFile, SaveUser, userExists } from "../../utils/files";
 
 export class UserService implements User {
@@ -9,42 +16,36 @@ export class UserService implements User {
 
     users.push(user);
 
-    await SaveUser(users);
+    console.log(user);
+    await saveUser(user);
 
     return user;
   }
-  async DeleteUser(id: number): Promise<user> {
-    const userData: user[] = readFile();
-
-    const index = userData.findIndex((u) => u.id === id);
-    if (index === -1) {
-      throw new Error(`User with ID ${id} not found`);
-    }
-
-    const deletedUser = userData.splice(index, 1)[0];
-    await SaveUser(userData);
-    return deletedUser;
+  async DeleteUser(id: number): Promise<number> {
+    await deleteUser(id);
+    return id;
   }
-  async ReadUsers(id?: number): Promise<user[]> {
-    const users: user[] = readFile();
+  async ReadUsers(
+    page?: number,
+    offset?: number,
+    id?: number
+  ): Promise<user[]> {
     console.log(typeof id);
     if (id) {
-      const index = getIndex(id);
-      return users.slice(index, index + 1);
+      const user = await readUserbyId(id);
+      return user;
     }
 
-    return users;
+    if (page && offset) {
+      const users: user[] = await readUser(page, offset);
+      console.log(users);
+      return users;
+    }
+    return [];
   }
+
   async Update(user: user): Promise<user> {
-    const userData: user[] = readFile();
-
-    const index = userData.findIndex((u) => u.id === user.id);
-    if (index === -1) {
-      throw new Error(`User with ID ${user.id} not found`);
-    }
-
-    userData[index] = user;
-    SaveUser(userData);
+    await updateUser(user);
     return user;
   }
 }

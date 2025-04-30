@@ -5,6 +5,7 @@ import { expressMiddleware } from "@apollo/server/express4";
 import typeDefs from "./graphql/schema";
 import { resolvers } from "./graphql/resolvers";
 import { errorHandler } from "./middleware/error.js";
+
 export async function startServer() {
   const app = express();
 

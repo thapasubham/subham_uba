@@ -6,6 +6,7 @@ import {
   WriteError,
   WriteResponse,
 } from "../../utils/ApiResponse";
+import { GetIndex } from "../../utils/db";
 
 export function validate(req: Request, res: Response, next: NextFunction) {
   const response: responseType<String> = {
@@ -35,16 +36,12 @@ export function validate(req: Request, res: Response, next: NextFunction) {
 }
 
 export function checkID(req: Request, res: Response, next: NextFunction) {
-  const firstname = req.body.firstname;
-  const lastname = req.body.lastname;
-
-  console.log(firstname, lastname);
   const response: responseType<String> = {
     status: 200,
     message: "",
   };
 
-  const index = getIndex(parseInt(req.params.id));
+  const index = GetIndex(parseInt(req.params.id));
 
   if (index === -1) {
     response.message = "User doesn't Exists";
@@ -53,4 +50,21 @@ export function checkID(req: Request, res: Response, next: NextFunction) {
   }
 
   next();
+}
+
+export function checkQuery(req: Request, res: Response, next: NextFunction) {
+  const page = Number(req.query.page);
+  const offset = Number(req.query.offset);
+
+  if (page && offset) {
+    next();
+    return;
+  }
+
+  const errorMsg: responseType<string> = {
+    status: 404,
+    message: "Query not satisfied",
+  };
+
+  WriteError(res, errorMsg);
 }
