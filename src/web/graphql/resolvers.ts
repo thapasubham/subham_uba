@@ -6,8 +6,9 @@ export const resolvers = {
       return uh.ReadUsers(page, offset);
     },
     async user(_: any, { id }: any) {
-      const getUser = (await uh.ReadUsers(parseInt(id))).pop();
-      console.log(getUser);
+      console.log(id);
+      const getUser = (await uh.ReadUsers(0, 0, parseInt(id))).pop();
+
       return getUser;
     },
   },

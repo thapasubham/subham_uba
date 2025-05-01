@@ -1,11 +1,9 @@
 import { Request, Response } from "express";
 import { user } from "../../types/user.type.js";
-import { readFile, userExists, SaveUser, getIndex } from "../../utils/files.js";
 import { responseType, WriteResponse } from "../../utils/ApiResponse.js";
 
 import { UserService } from "../services/UserService.js";
-import { saveUser } from "../../utils/db.js";
-import { off } from "process";
+
 const userService = new UserService();
 export class UserController {
   async CreateUser(req: Request, res: Response) {
@@ -13,7 +11,6 @@ export class UserController {
       message: "",
       status: 200,
     };
-    const data: user[] = readFile();
 
     const bodyData: user = {
       firstname: req.body.firstname,
@@ -33,12 +30,8 @@ export class UserController {
       message: "",
       status: 200,
     };
-    const page = req.query.page
-      ? parseInt(req.query.page as string)
-      : undefined;
-    const offset = req.query.offset
-      ? parseInt(req.query.offset as string)
-      : undefined;
+    const page = parseInt(req.query.page as string);
+    const offset = parseInt(req.query.offset as string);
     const user = await userService.ReadUsers(page, offset);
 
     response.data = user;
@@ -53,8 +46,9 @@ export class UserController {
       status: 200,
     };
 
-    const user = await userService.ReadUsers(parseInt(req.params.id));
-    console.log(user);
+    const id = parseInt(req.params.id);
+    const user = await userService.ReadUsers(0, 0, id);
+
     response.status = 200;
     response.data = user;
 
@@ -87,10 +81,15 @@ export class UserController {
       status: 200,
     };
 
-    await userService.DeleteUser(parseInt(req.params.id));
-    response.status = 204;
-    response.message = "User Deleted";
+    const id = await userService.DeleteUser(parseInt(req.params.id));
 
+    if (id === 0) {
+      response.status = 400;
+      response.message = "Failed to delete user";
+    } else {
+      response.status = 204;
+      response.message = "User Deleted";
+    }
     WriteResponse(res, response);
   }
 }

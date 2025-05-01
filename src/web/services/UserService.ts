@@ -12,33 +12,28 @@ import { getIndex, readFile, SaveUser, userExists } from "../../utils/files";
 
 export class UserService implements User {
   async CreateUser(user: user): Promise<user> {
-    const users = readFile();
+    const createdUser: user = await saveUser(user);
 
-    users.push(user);
-
-    console.log(user);
-    await saveUser(user);
-
-    return user;
+    return createdUser;
   }
   async DeleteUser(id: number): Promise<number> {
-    await deleteUser(id);
-    return id;
+    const del = await deleteUser(id);
+
+    return del;
   }
   async ReadUsers(
     page?: number,
     offset?: number,
     id?: number
   ): Promise<user[]> {
-    console.log(typeof id);
     if (id) {
       const user = await readUserbyId(id);
       return user;
-    }
+    } 
 
     if (page && offset) {
       const users: user[] = await readUser(page, offset);
-      console.log(users);
+
       return users;
     }
     return [];

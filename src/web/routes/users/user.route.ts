@@ -12,9 +12,9 @@ const router = express.Router();
 const usersHandler = new UserController();
 
 router.get("/getUsers", checkQuery, usersHandler.GetUsers);
-router.get("/getUser/:id", usersHandler.GetUser);
+router.get("/getUser/:id", checkID, usersHandler.GetUser);
 router.post("/createUser", validate, usersHandler.CreateUser);
-router.delete("/deleteUser/:id", usersHandler.DeleteUser);
+router.delete("/deleteUser/:id", checkID, usersHandler.DeleteUser);
 router.put("/updateUser/:id", checkID, validate, usersHandler.UpdateUser);
 
 export default router;

@@ -7,6 +7,7 @@ import {
   WriteResponse,
 } from "../../utils/ApiResponse";
 import { GetIndex } from "../../utils/db";
+import { off } from "process";
 
 export function validate(req: Request, res: Response, next: NextFunction) {
   const response: responseType<String> = {
@@ -26,35 +27,28 @@ export function validate(req: Request, res: Response, next: NextFunction) {
     return WriteResponse(res, response);
   }
 
-  if (userExists(user)) {
-    response.message = "User Already exists";
-    response.status = 409;
-    return WriteResponse(res, response);
-  }
-
   next();
 }
 
-export function checkID(req: Request, res: Response, next: NextFunction) {
+export async function checkID(req: Request, res: Response, next: NextFunction) {
   const response: responseType<String> = {
     status: 200,
     message: "",
   };
 
-  const index = GetIndex(parseInt(req.params.id));
+  const index = await GetIndex(parseInt(req.params.id));
 
   if (index === -1) {
     response.message = "User doesn't Exists";
     response.status = 404;
     return WriteError(res, response);
   }
-
   next();
 }
 
 export function checkQuery(req: Request, res: Response, next: NextFunction) {
-  const page = Number(req.query.page);
-  const offset = Number(req.query.offset);
+  const page = Number(req.query.page as string);
+  const offset = Number(req.query.offset as string);
 
   if (page && offset) {
     next();
