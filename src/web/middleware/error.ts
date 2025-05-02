@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import { responseType, WriteError } from "../../utils/ApiResponse";
+import { responseType, WriteError } from "../../utils/ApiResponse.js";
 
 export function errorHandler(
   err: Error,

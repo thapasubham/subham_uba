@@ -1,12 +1,12 @@
-import { User } from "../../cli/abstraction/User";
-import { user } from "../../types/user.type";
+import { User } from "../../cli/abstraction/User.js";
+import { user } from "../../types/user.type.js";
 import {
   deleteUser,
   readUser,
   readUserbyId,
   saveUser,
   updateUser,
-} from "../../utils/db";
+} from "../../utils/db.js";
 
 export class UserService implements User {
   async CreateUser(user: user): Promise<user> {
@@ -29,9 +29,9 @@ export class UserService implements User {
       return user;
     }
 
-    if (page && offset) {
+    if ((page as number) >= 0 && (offset as number) >= 0) {
       console.log(page, offset);
-      const users: user[] = await readUser(page, offset);
+      const users: user[] = await readUser(page as number, offset as number);
 
       return users;
     } else {

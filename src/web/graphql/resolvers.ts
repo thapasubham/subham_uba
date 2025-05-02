@@ -4,7 +4,6 @@ export const resolvers = {
       return dataSource.userService.ReadUsers(page, offset);
     },
     async user(_: any, { id }: any, { dataSource }: any) {
-      console.log(dataSource);
       const getUser = (
         await dataSource.userService.ReadUsers(0, 0, parseInt(id))
       ).pop();
@@ -25,6 +24,7 @@ export const resolvers = {
     },
     async deleteUser(_: any, { id }: any, { dataSource }: any) {
       const user = await dataSource.userService.DeleteUser(parseInt(id));
+
       return user;
     },
   },

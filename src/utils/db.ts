@@ -1,5 +1,5 @@
 import * as sql from "mysql";
-import { user } from "../types/user.type";
+import { user } from "../types/user.type.js";
 const connection: sql.Pool = sql.createPool({
   host: "localhost",
   user: "root",
@@ -98,8 +98,8 @@ export function GetIndex(id: number): Promise<number> {
 export function deleteUser(id: number): Promise<number> {
   return new Promise((resolve, reject) => {
     connection.query(
-      "UPDATE users SET deleteStatus= ? WHERE id = ?",
-      [1, id],
+      "UPDATE users SET deleteStatus= ? WHERE id = ? and deleteStatus =?",
+      [1, id, 0],
       (err, result) => {
         if (err) {
           console.error("Error updating user:", err);

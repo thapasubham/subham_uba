@@ -1,13 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { getIndex, userExists } from "../../utils/files";
-import { user } from "../../types/user.type";
+import { user } from "../../types/user.type.js";
 import {
   responseType,
   WriteError,
   WriteResponse,
-} from "../../utils/ApiResponse";
-import { GetIndex } from "../../utils/db";
-import { off } from "process";
+} from "../../utils/ApiResponse.js";
+import { GetIndex } from "../../utils/db.js";
 
 export function validate(req: Request, res: Response, next: NextFunction) {
   const response: responseType<String> = {
@@ -47,10 +45,9 @@ export async function checkID(req: Request, res: Response, next: NextFunction) {
 }
 
 export function checkQuery(req: Request, res: Response, next: NextFunction) {
-  const page = Number(req.query.page as string);
-  const offset = Number(req.query.offset as string);
-
-  if (page && offset) {
+  const page = Number(req.query.page);
+  const offset = Number(req.query.offset);
+  if (page >= 0 && offset >= 0) {
     next();
     return;
   }
