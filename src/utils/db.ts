@@ -14,7 +14,7 @@ export function saveUser(user: user): Promise<user> {
     connection.query(
       "Insert into users (id, firstname, lastname) values(?,?,?)",
       [user.id, user.firstname, user.lastname],
-      (err, result, fields) => {
+      (err, _result, _fields) => {
         if (err) {
           console.error("error Inserting user: ", err);
           reject(err.message);
@@ -30,7 +30,7 @@ export function updateUser(user: user) {
   connection.query(
     "UPDATE users SET firstname = ?, lastname = ? WHERE id = ?",
     [user.firstname, user.lastname, user.id],
-    (err, result, fields) => {
+    (err, _result, _fields) => {
       if (err) {
         console.error("Error updating user:", err);
         return err.message;
@@ -46,10 +46,10 @@ export function readUser(page: number, offset: number): Promise<user[]> {
     connection.query(
       "select firstname, lastname, id from users where deleteStatus=? LIMIT ? OFFSET ? ",
       [0, page, offset],
-      (err, result, field) => {
+      (err, result, _field) => {
         if (err) {
+          reject([]);
         }
-        reject([]);
 
         resolve(result as user[]);
       }
@@ -62,7 +62,7 @@ export function readUserbyId(id: number): Promise<user[]> {
     connection.query(
       "Select firstname, lastname, id from users where id =? and deleteStatus=?",
       [id, 0],
-      (err, result, fields) => {
+      (err, result, _fields) => {
         if (err) {
           console.log(err);
           reject([]);

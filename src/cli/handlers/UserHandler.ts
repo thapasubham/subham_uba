@@ -34,7 +34,7 @@ export class Users {
         Logger.Success("User Deleted!!");
         return true;
       }
-    } catch (err) {
+    } catch (_err) {
       Logger.Error(`Error Deleting user`);
       return false;
     }

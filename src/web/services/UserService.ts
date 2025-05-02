@@ -1,4 +1,3 @@
-import { off } from "process";
 import { User } from "../../cli/abstraction/User";
 import { user } from "../../types/user.type";
 import {
@@ -8,7 +7,6 @@ import {
   saveUser,
   updateUser,
 } from "../../utils/db";
-import { getIndex, readFile, SaveUser, userExists } from "../../utils/files";
 
 export class UserService implements User {
   async CreateUser(user: user): Promise<user> {
@@ -26,17 +24,19 @@ export class UserService implements User {
     offset?: number,
     id?: number
   ): Promise<user[]> {
-    if (id) {
+    if (typeof id === "number") {
       const user = await readUserbyId(id);
       return user;
-    } 
+    }
 
     if (page && offset) {
+      console.log(page, offset);
       const users: user[] = await readUser(page, offset);
 
       return users;
+    } else {
+      return [];
     }
-    return [];
   }
 
   async Update(user: user): Promise<user> {

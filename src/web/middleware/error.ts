@@ -1,4 +1,4 @@
-import { ErrorRequestHandler, NextFunction, Response } from "express";
+import { NextFunction, Response } from "express";
 import { responseType, WriteError } from "../../utils/ApiResponse";
 
 export function errorHandler(

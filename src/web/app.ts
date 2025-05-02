@@ -5,6 +5,7 @@ import { expressMiddleware } from "@apollo/server/express4";
 import typeDefs from "./graphql/schema";
 import { resolvers } from "./graphql/resolvers";
 import { errorHandler } from "./middleware/error.js";
+import { UserService } from "./services/UserService.js";
 
 export async function startServer() {
   const app = express();
@@ -20,9 +21,19 @@ export async function startServer() {
 
   //graphql
   await server.start();
-  app.use("/graphql", expressMiddleware(server));
 
-  app.use(errorHandler);
+  app.use(
+    "/graphql",
+    expressMiddleware(server, {
+      context: async () => ({
+        dataSource: {
+          userService: new UserService(),
+        },
+      }),
+    }) as any
+  );
+
+  app.use(errorHandler as any);
   try {
     app.listen(PORT, () => {
       console.log(`Server Running at http://localhost:${PORT}`);

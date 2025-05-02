@@ -1,30 +1,30 @@
-import { UserService } from "../services/UserService";
-const uh: UserService = new UserService();
 export const resolvers = {
   Query: {
-    users(_: any, { page, offset }: any) {
-      return uh.ReadUsers(page, offset);
+    users(_: any, { page, offset }: any, { dataSource }: any) {
+      return dataSource.userService.ReadUsers(page, offset);
     },
-    async user(_: any, { id }: any) {
-      console.log(id);
-      const getUser = (await uh.ReadUsers(0, 0, parseInt(id))).pop();
+    async user(_: any, { id }: any, { dataSource }: any) {
+      console.log(dataSource);
+      const getUser = (
+        await dataSource.userService.ReadUsers(0, 0, parseInt(id))
+      ).pop();
 
       return getUser;
     },
   },
 
   Mutation: {
-    async createUser(_: any, { user }: any) {
-      const createdUser = await uh.CreateUser(user);
+    async createUser(_: any, { user }: any, { dataSource }: any) {
+      const createdUser = await dataSource.userService.CreateUser(user);
       return createdUser;
     },
 
-    async updateUser(_: any, { user }: any) {
-      const updatedUser = await uh.Update(user);
+    async updateUser(_: any, { user }: any, { dataSource }: any) {
+      const updatedUser = await dataSource.userService.Update(user);
       return updatedUser;
     },
-    async deleteUser(_: any, { id }: any) {
-      const user = await uh.DeleteUser(parseInt(id));
+    async deleteUser(_: any, { id }: any, { dataSource }: any) {
+      const user = await dataSource.userService.DeleteUser(parseInt(id));
       return user;
     },
   },
