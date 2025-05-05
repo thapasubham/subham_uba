@@ -1,56 +1,61 @@
 import { Request, Response, NextFunction } from "express";
-import { getIndex, readFile, userExists } from "../../utils/files";
-import { user } from "../../types/user.type";
-import { responseType, WriteError, WriteResponse } from "../../utils/ApiResponse";
+import { user } from "../../types/user.type.js";
+import {
+  responseType,
+  WriteError,
+  WriteResponse,
+} from "../../utils/ApiResponse.js";
+import { GetIndex } from "../../utils/db.js";
 
-export function validate(req: Request, res: Response, next: NextFunction){
-    const response: responseType<String>={
-        status: 200,
-        message: ""
-    }
-    const user: user ={
-        id: req.body.id,
-        firstname:req.body.firstname,
-        lastname: req.body.lastname
-    }
-    if(!(user.firstname && user.lastname)){
-        response.message= "Missing fields";
-        response.status = 200
-        
-    }
-    else{
-        if(userExists(user)){
-            response.message= "User ALready exists";
-            response.status = 200
-      
-        }
-        else{
-       next()
-        }
-    }
-    WriteResponse(res, response)
+export function validate(req: Request, res: Response, next: NextFunction) {
+  const response: responseType<String> = {
+    status: 200,
+    message: "",
+  };
+
+  const user: user = {
+    id: req.body.id,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+  };
+
+  if (!(user.firstname && user.lastname)) {
+    response.message = "Missing fields";
+    response.status = 400;
+    return WriteResponse(res, response);
+  }
+
+  next();
 }
 
-export function checkID(req: Request, res: Response, next: NextFunction){
+export async function checkID(req: Request, res: Response, next: NextFunction) {
+  const response: responseType<String> = {
+    status: 200,
+    message: "",
+  };
 
-    const firstname = req.body.firstname;
-    const lastname = req.body.lastname;
+  const index = await GetIndex(parseInt(req.params.id));
 
-    console.log(firstname, lastname);
-    const response: responseType<String>={
-        status: 200,
-        message: ""
-    }
-  
-    const index = getIndex(parseInt(req.params.id));
-   
-    if(index===-1){
-    
-        response.message = "User doesn't Exists";
-        response.status =404
-        WriteError(res, response);
-   } else{
+  if (index === -1) {
+    response.message = "User doesn't Exists";
+    response.status = 404;
+    return WriteError(res, response);
+  }
+  next();
+}
 
+export function checkQuery(req: Request, res: Response, next: NextFunction) {
+  const page = Number(req.query.page);
+  const offset = Number(req.query.offset);
+  if (page >= 0 && offset >= 0) {
     next();
-   }
-}  
+    return;
+  }
+
+  const errorMsg: responseType<string> = {
+    status: 404,
+    message: "Query not satisfied",
+  };
+
+  WriteError(res, errorMsg);
+}
