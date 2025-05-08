@@ -1,5 +1,5 @@
-import { User } from "../../cli/abstraction/User.js";
-import { user } from "../../types/user.type.js";
+import { User } from "../../../abstraction/User.js";
+import { user } from "../../../types/user.type.js";
 import {
   deleteUser,
   readUser,

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { user } from "../../types/user.type.js";
+import { user } from "../../../types/user.type.js";
 import {
   responseType,
   WriteError,
@@ -22,7 +22,7 @@ export function validate(req: Request, res: Response, next: NextFunction) {
   if (!(user.firstname && user.lastname)) {
     response.message = "Missing fields";
     response.status = 400;
-    return WriteResponse(res, response);
+    WriteResponse(res, response);
   }
 
   next();
@@ -39,7 +39,7 @@ export async function checkID(req: Request, res: Response, next: NextFunction) {
   if (index === -1) {
     response.message = "User doesn't Exists";
     response.status = 404;
-    return WriteError(res, response);
+    WriteError(res, response);
   }
   next();
 }

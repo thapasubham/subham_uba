@@ -1,5 +1,5 @@
-import { startServer } from "./web/app.js";
-import { createCli } from "./cli/cli.js";
+import { startServer } from "./app/web/app.js";
+import { createCli } from "./app/cli/cli.js";
 
 createCli();
 

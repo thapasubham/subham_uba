@@ -1,4 +1,4 @@
-import { user } from "../../types/user.type.js";
+import { user } from "../../../types/user.type.js";
 import { readFile, userExists, SaveUser } from "../../utils/files.js";
 import { Logger } from "../../utils/Logger.js";
 import chalk from "chalk";
@@ -34,7 +34,7 @@ export class Users {
         Logger.Success("User Deleted!!");
         return true;
       }
-    } catch (_err) {
+    } catch (err) {
       Logger.Error(`Error Deleting user`);
       return false;
     }

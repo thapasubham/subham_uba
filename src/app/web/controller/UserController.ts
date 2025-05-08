@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { user } from "../../types/user.type.js";
+import { user } from "../../../types/user.type.js";
 import { responseType, WriteResponse } from "../../utils/ApiResponse.js";
 
 import { UserService } from "../services/UserService.js";

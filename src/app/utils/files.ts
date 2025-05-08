@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import * as fs from "fs";
-import { user } from "../types/user.type.js";
+import { user } from "../../types/user.type.js";
 const path = "user.json";
 
 export function readFile() {

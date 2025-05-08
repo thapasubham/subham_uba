@@ -1,4 +1,4 @@
-import { user } from "../../types/user.type.js";
+import { user } from "../types/user.type.js";
 
 export abstract class User {
   abstract CreateUser(user: user): Promise<user>;

@@ -1,5 +1,5 @@
 import * as sql from "mysql";
-import { user } from "../types/user.type.js";
+import { user } from "../../types/user.type.js";
 const connection: sql.Pool = sql.createPool({
   host: "localhost",
   user: "root",
@@ -14,7 +14,7 @@ export function saveUser(user: user): Promise<user> {
     connection.query(
       "Insert into users (id, firstname, lastname) values(?,?,?)",
       [user.id, user.firstname, user.lastname],
-      (err, _result, _fields) => {
+      (err, result, fields) => {
         if (err) {
           console.error("error Inserting user: ", err);
           reject(err.message);

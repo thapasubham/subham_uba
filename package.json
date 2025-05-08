@@ -2,24 +2,31 @@
   "name": "uba-ims",
   "version": "1.0.0",
   "type": "module",
-  "description": "CRUD Applicati",
+  "description": "CRUD Application",
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc && node --env-file=.env dist/src/index.js",
-    "start": "tsx watch --env-file=.env  src/index.ts ",
+    "start": "tsc && node --env-file=.env dist/src/index.js",
+    "dev": "tsx watch --env-file=.env  src/index.ts ",
     "lint": "eslint",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsc && nyc  mocha dist/src/tests/**/*.test.js "
   },
   "author": "Subham Thapa",
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.24.0",
+    "@types/chai": "^5.2.2",
     "@types/express": "^5.0.1",
+    "@types/mocha": "^10.0.10",
     "@types/mysql": "^2.15.27",
     "@types/node": "^22.14.0",
+    "@types/sinon": "^17.0.4",
+    "chai": "^5.2.0",
     "eslint": "^9.24.0",
     "globals": "^16.0.0",
+    "mocha": "^11.2.2",
+    "nyc": "^17.1.0",
+    "sinon": "^20.0.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.29.1"
@@ -31,5 +38,20 @@
     "graphql": "^16.11.0",
     "graphql-tag": "^2.12.6",
     "mysql": "^2.18.1"
+  },
+  "nyc": {
+    "all": true,
+    "check-coverage": true,
+    "skip-full": true,
+    "extension": [
+      ".ts"
+    ],
+    "include": "dist/src/app/**/*.js",
+    "reporter": [
+      "html",
+      "text",
+      "lcov",
+      "cobertura"
+    ]
   }
 }
