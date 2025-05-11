@@ -19,6 +19,7 @@ export class UserController {
     };
 
     await userService.CreateUser(bodyData);
+
     response.status = 201;
     response.message = "User Created";
 

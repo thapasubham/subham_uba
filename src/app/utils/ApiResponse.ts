@@ -7,9 +7,9 @@ export interface responseType<T> {
 }
 
 export function WriteResponse<T>(res: Response, v: responseType<T>) {
-  return res.status(v.status).send(v.data ? v.data : { message: v.message });
+  res.status(v.status).send(v.data ? v.data : { message: v.message });
 }
 
 export function WriteError<T>(res: Response, e: responseType<T>) {
-  return res.status(e.status).send({ message: e.message });
+  res.status(e.status).send({ message: e.message });
 }

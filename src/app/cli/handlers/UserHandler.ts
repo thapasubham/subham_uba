@@ -1,92 +1,87 @@
 import { user } from "../../../types/user.type.js";
-import { readFile, userExists, SaveUser } from "../../utils/files.js";
+import { FileUtility } from "../../utils/files.js";
 import { Logger } from "../../utils/Logger.js";
 import chalk from "chalk";
 
 export class Users {
   async CreateUser(user: user): Promise<boolean> {
-    const data: user[] = readFile();
+    const data: user[] = FileUtility.readFile();
 
     user.id = data.length + 1;
-
-    if (userExists(user)) {
+    if (FileUtility.userExists(user)) {
       Logger.Warn("User Already Exists");
       return false;
+    }
+    data.push(user);
+    const result = FileUtility.SaveUser(data);
+    if (result == false) {
+      Logger.Warn("Failed to save user.");
+      return false;
     } else {
-      data.push(user);
-      SaveUser(data);
       Logger.Success(`User ${user.firstname} ${user.lastname} added!`);
       return true;
     }
   }
 
   async DeleteUser(query: number): Promise<boolean> {
-    try {
-      const userData = readFile();
+    const userData = FileUtility.readFile();
 
-      const users = userData.filter((u: user) => u.id !== query);
+    const users = userData.filter((u: user) => u.id !== query);
 
-      if (userData.length == users.length) {
-        Logger.Error(`The user with id ${query} doesnt exist`);
-        return false;
-      } else {
-        SaveUser(users);
-        Logger.Success("User Deleted!!");
-        return true;
-      }
-    } catch (err) {
-      Logger.Error(`Error Deleting user`);
+    if (userData.length == users.length) {
+      Logger.Error(`The user doesnt exist`);
       return false;
+    }
+
+    const result = FileUtility.SaveUser(users);
+    if (result == false) {
+      Logger.Warn("Failed to Delete User");
+      return false;
+    } else {
+      Logger.Success("User Deleted!!");
+      return true;
     }
   }
 
   async ReadUsers(): Promise<user[]> {
-    try {
-      const userdata: user[] = readFile();
+    const userdata: user[] = FileUtility.readFile();
 
-      if (userdata.length == 0) {
-        Logger.Warn("No Users Exists");
-      }
-      userdata.forEach((userdata) => {
-        Logger.Info(
-          `${userdata.id} \t${userdata.firstname} \t${userdata.lastname}`
-        );
-      });
-      return userdata;
-    } catch (error) {
-      Logger.Error(`${error}`);
+    if (userdata.length == 0) {
+      Logger.Warn("No Users Exists");
       return [];
     }
+    userdata.forEach((userdata) => {
+      Logger.Info(
+        `${userdata.id} \t${userdata.firstname} \t${userdata.lastname}`
+      );
+    });
+    return userdata;
   }
 
   async Update(user: user): Promise<boolean> {
-    try {
-      const userData: user[] = readFile();
+    const userData: user[] = FileUtility.readFile();
 
-      const index = userData.findIndex((u) => u.id === user.id);
+    const index = userData.findIndex((u) => u.id === user.id);
+    if (index === -1) {
+      Logger.Warn("The user doesn't Exist");
+      return false;
+    }
 
-      if (index === -1) {
-        chalk.yellowBright("The user doesn't Exist");
-      }
-
-      userData[index] = user;
-
-      if (userExists(user)) {
-        console.log(
-          chalk.yellowBright(
-            "Cannot update user date. \nUser data already Exists"
-          )
-        );
-        return false;
-      }
-
-      SaveUser(userData);
-      console.log(chalk.green("User data update"));
-    } catch (err) {
-      console.log(err);
+    if (FileUtility.userExists(user)) {
+      Logger.Warn("Cannot update user date. \nUser data already Exists");
 
       return false;
     }
-    return true;
+    userData[index] = user;
+
+    const result = FileUtility.SaveUser(userData);
+
+    if (result == false) {
+      Logger.Error("Failed to update user");
+      return false;
+    } else {
+      Logger.Success("User data updated");
+      return true;
+    }
   }
 }

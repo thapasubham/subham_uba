@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import { Users } from "./handlers/UserHandler.js";
+import { Logger } from "../utils/Logger.js";
 const args = process.argv;
 
 const command = args[2];
@@ -11,14 +12,14 @@ export function createCli() {
   }
 }
 
-function cliCommands() {
+async function cliCommands() {
   switch (command) {
     case "add":
       if (args.length === 5) {
-        user.CreateUser({ firstname: args[3], lastname: args[4], id: 0 });
+        await user.CreateUser({ firstname: args[3], lastname: args[4], id: 0 });
       } else {
         console.log(
-          chalk.yellow("Invalid Command!\nUsage: add <firstname> <lastname>")
+          Logger.Warn("Invalid Command!\nUsage: add <firstname> <lastname>")
         );
       }
       break;
@@ -28,16 +29,16 @@ function cliCommands() {
         user.DeleteUser(parseInt(args[3]));
       } else {
         console.log(
-          chalk.yellow("Invalid Command!\nUsage: del <firstname> or \n del all")
+          Logger.Warn("Invalid Command!\nUsage: del <firstname> or \n del all")
         );
       }
       break;
 
     case "read":
       if (args.length === 3) {
-        user.ReadUsers();
+        await user.ReadUsers();
       } else {
-        console.log(chalk.yellow("Invalid Command!\nUsage: read"));
+        Logger.Warn("Invalid Command!\nUsage: read");
       }
       break;
 
@@ -49,10 +50,8 @@ function cliCommands() {
           id: parseInt(args[5]),
         });
       } else {
-        console.log(
-          chalk.yellow(
-            "Invalid Command!\nUsage: update <firstname> <lastname> <id>"
-          )
+        Logger.Warn(
+          "Invalid Command!\nUsage: update <firstname> <lastname> <id>"
         );
       }
       break;
@@ -64,7 +63,7 @@ function cliCommands() {
 }
 
 function help() {
-  console.log(chalk.yellow("Such command doesn't exist"));
+  Logger.Warn("Such command doesn't exist");
   console.log(
     "Available commands:\n" +
       "\t- uba add <firstname> <lastname>\n" +

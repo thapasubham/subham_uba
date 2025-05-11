@@ -6,6 +6,7 @@ import {
   checkQuery,
   validate,
 } from "../../middleware/validate.middleware.js";
+import { UserService } from "../../services/UserService.js";
 
 const router = express.Router();
 

@@ -22,7 +22,7 @@ export function validate(req: Request, res: Response, next: NextFunction) {
   if (!(user.firstname && user.lastname)) {
     response.message = "Missing fields";
     response.status = 400;
-    WriteResponse(res, response);
+    return WriteResponse(res, response);
   }
 
   next();
@@ -39,7 +39,7 @@ export async function checkID(req: Request, res: Response, next: NextFunction) {
   if (index === -1) {
     response.message = "User doesn't Exists";
     response.status = 404;
-    WriteError(res, response);
+    return WriteError(res, response);
   }
   next();
 }
