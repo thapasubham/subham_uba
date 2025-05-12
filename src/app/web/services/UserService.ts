@@ -17,11 +17,10 @@ export class UserService implements User {
     page?: number,
     offset?: number,
     id?: number
-  ): Promise<user[]> {
+  ): Promise<user[] | user> {
     if (typeof id === "number") {
       const user = await DataBase.readUserbyId(id);
-      console.log(user);
-      return [user];
+      return user;
     }
 
     if ((page as number) >= 0 && (offset as number) >= 0) {
