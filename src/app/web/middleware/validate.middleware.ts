@@ -25,9 +25,9 @@ export function validate(req: Request, res: Response, next: NextFunction) {
 }
 
 export function checkQuery(req: Request, res: Response, next: NextFunction) {
-  const page = Number(req.query.page);
+  const limit = Number(req.query.limit);
   const offset = Number(req.query.offset);
-  if (page >= 0 && offset >= 0) {
+  if (limit >= 0 && offset >= 0) {
     next();
     return;
   }

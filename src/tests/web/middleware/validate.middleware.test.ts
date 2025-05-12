@@ -60,7 +60,7 @@ describe("Middleware tests", () => {
     it("some missing query", () => {
       req = {
         query: {
-          page: "4",
+          limit: "4",
         },
       };
       checkQuery(req, res, callback);
@@ -75,7 +75,7 @@ describe("Middleware tests", () => {
     it("All the query is sent", () => {
       req = {
         query: {
-          page: "4",
+          limit: "4",
           offset: "3",
         },
       };

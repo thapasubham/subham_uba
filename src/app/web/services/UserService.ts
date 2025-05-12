@@ -13,8 +13,11 @@ export class UserService implements User {
 
     return del;
   }
+  /*
+  Returns users
+  */
   async ReadUsers(
-    page?: number,
+    limit?: number,
     offset?: number,
     id?: number
   ): Promise<user[]> {
@@ -23,9 +26,9 @@ export class UserService implements User {
       return user;
     }
 
-    if ((page as number) >= 0 && (offset as number) >= 0) {
+    if ((limit as number) >= 0 && (offset as number) >= 0) {
       const users: user[] = await DataBase.readUser(
-        page as number,
+        limit as number,
         offset as number
       );
 

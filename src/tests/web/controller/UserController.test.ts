@@ -167,7 +167,7 @@ describe("User controller tests ", () => {
       it("No User exists", async () => {
         req = {
           query: {
-            page: "1",
+            limit: "1",
             offset: " 5",
           },
         };
@@ -185,7 +185,7 @@ describe("User controller tests ", () => {
       it("Users exists", async () => {
         req = {
           query: {
-            page: "1",
+            limit: "1",
             offset: " 5",
           },
         };

@@ -30,9 +30,9 @@ export class UserController {
     const response: responseType<user[]> = {
       status: 200,
     };
-    const page = parseInt(req.query.page as string);
+    const limit = parseInt(req.query.limit as string);
     const offset = parseInt(req.query.offset as string);
-    const user = (await userService.ReadUsers(page, offset)) as user[];
+    const user = (await userService.ReadUsers(limit, offset)) as user[];
 
     if (user.length === 0) {
       response.message = "No User exists";

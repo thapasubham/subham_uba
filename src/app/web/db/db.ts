@@ -44,11 +44,11 @@ export class DataBase {
     });
   }
 
-  static readUser(page: number, offset: number): Promise<user[]> {
+  static readUser(limit: number, offset: number): Promise<user[]> {
     return new Promise((resolve, reject) => {
       connection.query(
         "select firstname, lastname, id from users where deleteStatus=? LIMIT ? OFFSET ? ",
-        [0, page, offset],
+        [0, limit, offset],
         (err, result, _field) => {
           if (err) {
             reject([]);
