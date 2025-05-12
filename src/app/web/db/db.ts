@@ -1,5 +1,5 @@
 import * as sql from "mysql";
-import { user } from "../../types/user.type.js";
+import { user } from "../../../types/user.type.js";
 const connection: sql.Pool = sql.createPool({
   host: "localhost",
   user: "root",
@@ -26,18 +26,18 @@ export function saveUser(user: user): Promise<user> {
   });
 }
 
-export function updateUser(user: user): Promise<user> {
+export function updateUser(user: user): Promise<number> {
   return new Promise((resolve, reject) => {
     connection.query(
       "UPDATE users SET firstname = ?, lastname = ? WHERE id = ?",
       [user.firstname, user.lastname, user.id],
-      (err, _result, _fields) => {
+      (err, result, _fields) => {
         if (err) {
           console.error("Error updating user:", err);
           reject(err.message);
         }
 
-        resolve(user);
+        resolve(result.affectedRows);
       }
     );
   });
@@ -70,27 +70,6 @@ export function readUserbyId(id: number): Promise<user> {
         }
 
         resolve(result[0]);
-      }
-    );
-  });
-}
-
-export function GetIndex(id: number): Promise<number> {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "SELECT id FROM users WHERE id = ? AND deleteStatus = ?",
-      [id, 1],
-      (err, results) => {
-        if (err) {
-          console.error("Error:", err);
-          reject(0);
-        } else {
-          if (results.length > 0) {
-            resolve(-1);
-          } else {
-            resolve(id);
-          }
-        }
       }
     );
   });

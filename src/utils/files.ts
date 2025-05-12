@@ -1,6 +1,6 @@
-import chalk from "chalk";
 import * as fs from "fs";
-import { user } from "../../types/user.type.js";
+import { user } from "../types/user.type.js";
+import { Logger } from "./Logger.js";
 const path = "user.json";
 
 export class FileUtility {
@@ -14,7 +14,7 @@ export class FileUtility {
       const userData: user[] = JSON.parse(fileDate);
       return userData;
     } catch (error) {
-      console.log(chalk.red("No user Exists: ", error));
+      Logger.Warn(`No user Exists: , ${error}`);
       return [];
     }
   }
@@ -24,7 +24,7 @@ export class FileUtility {
       fs.writeFileSync(path, JSON.stringify(data, null, 1));
       return true;
     } catch (error) {
-      console.error(chalk.red("Error saving user", error));
+      Logger.Warn(`No user Exists: , ${error}`);
       return false;
     }
   }

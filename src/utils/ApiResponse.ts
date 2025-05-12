@@ -12,6 +12,7 @@ export class ResponseApi {
   }
 
   static WriteError<T>(res: Response, e: responseType<T>) {
+    console.log("help");
     res.status(e.status).send({ message: e.message });
   }
 }
