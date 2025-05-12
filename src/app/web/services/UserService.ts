@@ -17,7 +17,7 @@ export class UserService implements User {
     page?: number,
     offset?: number,
     id?: number
-  ): Promise<user[] | user> {
+  ): Promise<user[]> {
     if (typeof id === "number") {
       const user = await DataBase.readUserbyId(id);
       return user;

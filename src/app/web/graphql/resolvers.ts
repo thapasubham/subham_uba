@@ -1,7 +1,7 @@
 export const resolvers = {
   Query: {
-    users(_: any, { page, offset }: any, { dataSource }: any) {
-      return dataSource.userService.ReadUsers(page, offset);
+    async users(_: any, { page, offset }: any, { dataSource }: any) {
+      return await dataSource.userService.ReadUsers(page, offset);
     },
     async user(_: any, { id }: any, { dataSource }: any) {
       const getUser = (

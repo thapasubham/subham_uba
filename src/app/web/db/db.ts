@@ -60,7 +60,7 @@ export class DataBase {
     });
   }
 
-  static readUserbyId(id: number): Promise<user> {
+  static readUserbyId(id: number): Promise<user[]> {
     return new Promise((resolve, reject) => {
       connection.query(
         "SELECT firstname, lastname, id FROM users WHERE id = ? AND deleteStatus = ?",
@@ -70,7 +70,7 @@ export class DataBase {
             return reject(err.message);
           }
 
-          resolve(result[0]);
+          resolve(result[0] as user[]);
         }
       );
     });

@@ -132,9 +132,9 @@ describe("User Services tests", () => {
     });
     it("User found", async () => {
       let user = { firstname: "John", lastname: "Black", id: 10 };
-      readUserStub.returns(user);
+      readUserStub.returns([user]);
       const result = await userService.ReadUsers(0, 0, 10);
-      assert.deepEqual(result, user);
+      assert.equal(result[0], user);
       Sinon.assert.calledWith(readUserStub, 10);
     });
   });
