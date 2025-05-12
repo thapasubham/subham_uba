@@ -4,7 +4,7 @@ import { DataBase } from "../../../app/web/db/db.js";
 import { user } from "../../../types/user.type";
 import { assert } from "chai";
 
-describe.only("User Services tests", () => {
+describe("User Services tests", () => {
   let userService: UserService;
 
   //test to create user
