@@ -1,10 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { user } from "../../../types/user.type.js";
-import {
-  responseType,
-  WriteError,
-  WriteResponse,
-} from "../../utils/ApiResponse.js";
+import { responseType, ResponseApi } from "../../utils/ApiResponse.js";
 import { GetIndex } from "../../utils/db.js";
 
 export function validate(req: Request, res: Response, next: NextFunction) {
@@ -22,7 +18,7 @@ export function validate(req: Request, res: Response, next: NextFunction) {
   if (!(user.firstname && user.lastname)) {
     response.message = "Missing fields";
     response.status = 400;
-    return WriteResponse(res, response);
+    return ResponseApi.WriteResponse(res, response);
   }
 
   next();
@@ -39,7 +35,7 @@ export async function checkID(req: Request, res: Response, next: NextFunction) {
   if (index === -1) {
     response.message = "User doesn't Exists";
     response.status = 404;
-    return WriteError(res, response);
+    return ResponseApi.WriteError(res, response);
   }
   next();
 }
@@ -57,5 +53,5 @@ export function checkQuery(req: Request, res: Response, next: NextFunction) {
     message: "Query not satisfied",
   };
 
-  WriteError(res, errorMsg);
+  ResponseApi.WriteError(res, errorMsg);
 }

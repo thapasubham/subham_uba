@@ -26,11 +26,11 @@ export class UserService implements User {
   ): Promise<user[]> {
     if (typeof id === "number") {
       const user = await readUserbyId(id);
-      return user;
+      console.log(user);
+      return [user];
     }
 
     if ((page as number) >= 0 && (offset as number) >= 0) {
-      console.log(page, offset);
       const users: user[] = await readUser(page as number, offset as number);
 
       return users;

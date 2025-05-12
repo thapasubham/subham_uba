@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import { responseType, WriteError } from "../../utils/ApiResponse.js";
+import { responseType, ResponseApi } from "../../utils/ApiResponse.js";
 
 export function errorHandler(
   err: Error,
@@ -13,5 +13,5 @@ export function errorHandler(
     status: 500,
   };
 
-  WriteError(res, response);
+  return ResponseApi.WriteError(res, response);
 }

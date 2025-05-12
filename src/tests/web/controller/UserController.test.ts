@@ -1,0 +1,260 @@
+import Sinon from "sinon";
+import { UserController } from "../../../app/web/controller/UserController.js";
+import { UserService } from "../../../app/web/services/UserService.js";
+import { ResponseApi } from "../../../app/utils/ApiResponse.js";
+import { user } from "../../../types/user.type.js";
+
+describe("User controller tests ", () => {
+  let userController: UserController;
+  let req: any;
+  let res: any;
+  let sendStub: Sinon.SinonStub;
+  let statusStub: Sinon.SinonStub;
+  let writeResponseStub: Sinon.SinonStub;
+
+  //only use to stub methods
+  let userservice: UserService;
+  describe("User create test suites", () => {
+    let createUserStub: Sinon.SinonStub;
+
+    //setup
+    beforeEach(() => {
+      userController = new UserController();
+      userservice = new UserService();
+      createUserStub = Sinon.stub(
+        UserService.prototype,
+        "CreateUser"
+      ).resolves();
+      writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
+      statusStub = Sinon.stub().returnsThis();
+      sendStub = Sinon.stub();
+
+      res = {
+        status: statusStub,
+        send: sendStub,
+      };
+    });
+
+    //teardown
+    afterEach(() => {
+      createUserStub.restore();
+      writeResponseStub.restore();
+    });
+
+    //create user test case
+    it("Create user Test case", async () => {
+      req = {
+        body: {
+          firstname: "Subham",
+          lastname: "Thapa",
+        },
+      };
+
+      await userController.CreateUser(req, res);
+      Sinon.assert.calledOnce(createUserStub);
+      Sinon.assert.calledWith(createUserStub, {
+        firstname: "Subham",
+        lastname: "Thapa",
+        id: Sinon.match.number,
+      });
+      Sinon.assert.calledOnce(writeResponseStub);
+      Sinon.assert.calledWith(writeResponseStub, res, {
+        status: 201,
+        message: "User Created",
+      });
+    });
+  });
+
+  describe("Delete User test suite", () => {
+    let deleteUserstub: Sinon.SinonStub;
+
+    //setup
+    beforeEach(() => {
+      userController = new UserController();
+      userservice = new UserService();
+      deleteUserstub = Sinon.stub(
+        UserService.prototype,
+        "DeleteUser"
+      ).resolves();
+      writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
+      statusStub = Sinon.stub().returnsThis();
+      sendStub = Sinon.stub();
+
+      res = {
+        status: statusStub,
+        send: sendStub,
+      };
+    });
+
+    //teardown
+    afterEach(() => {
+      deleteUserstub.restore();
+      writeResponseStub.restore();
+    });
+
+    //testing
+    it("Failed to Delete User", async () => {
+      req = {
+        params: {
+          id: "10",
+        },
+      };
+      deleteUserstub.returns(0);
+      let userData: user[] = [
+        { firstname: "Test", lastname: "test", id: 5 },
+        { firstname: "John", lastname: "Black", id: 6 },
+      ];
+      await userController.DeleteUser(req, res);
+
+      Sinon.assert.calledOnce(deleteUserstub);
+      Sinon.assert.calledWith(deleteUserstub, 10);
+
+      Sinon.assert.calledOnce(writeResponseStub);
+      Sinon.assert.calledWith(writeResponseStub, res, {
+        status: 400,
+        message: "Failed to delete user",
+      });
+    });
+    it("Delete User", async () => {
+      req = {
+        params: {
+          id: "5",
+        },
+      };
+      deleteUserstub.returns(1);
+      let userData: user[] = [
+        { firstname: "Test", lastname: "test", id: 5 },
+        { firstname: "John", lastname: "Black", id: 6 },
+      ];
+      await userController.DeleteUser(req, res);
+
+      Sinon.assert.calledOnce(deleteUserstub);
+      Sinon.assert.calledWith(deleteUserstub, 5);
+
+      Sinon.assert.calledOnce(writeResponseStub);
+      Sinon.assert.calledWith(writeResponseStub, res, {
+        status: 204,
+        message: "User Deleted",
+      });
+    });
+  });
+
+  //read user test cases
+  describe("", () => {
+    let readUserStub: Sinon.SinonStub;
+
+    //setup
+    beforeEach(() => {
+      userController = new UserController();
+      userservice = new UserService();
+      readUserStub = Sinon.stub(UserService.prototype, "ReadUsers").resolves();
+      writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
+      statusStub = Sinon.stub().returnsThis();
+      sendStub = Sinon.stub();
+
+      res = {
+        status: statusStub,
+        send: sendStub,
+      };
+    });
+
+    //teardown
+    afterEach(() => {
+      readUserStub.restore();
+      writeResponseStub.restore();
+    });
+    describe("Get users test suite", () => {
+      it("No User exists", async () => {
+        req = {
+          query: {
+            page: "1",
+            offset: " 5",
+          },
+        };
+        readUserStub.returns([]);
+        await userController.GetUsers(req, res);
+        Sinon.assert.calledOnce(readUserStub);
+        Sinon.assert.calledWith(readUserStub, 1, 5);
+
+        Sinon.assert.calledOnce(writeResponseStub);
+        Sinon.assert.calledWith(writeResponseStub, res, {
+          status: 404,
+          message: "No User exists",
+        });
+      });
+      it("Users exists", async () => {
+        req = {
+          query: {
+            page: "1",
+            offset: " 5",
+          },
+        };
+        let userData: user[] = [
+          { firstname: "Subham", lastname: "Thapa", id: 6 },
+          { firstname: "John", lastname: "Pork", id: 40 },
+          { firstname: "Lee", lastname: "Smith", id: 80 },
+        ];
+        readUserStub.returns(userData);
+        await userController.GetUsers(req, res);
+        Sinon.assert.calledOnce(readUserStub);
+        Sinon.assert.calledWith(readUserStub, 1, 5);
+
+        Sinon.assert.calledOnce(writeResponseStub);
+        Sinon.assert.calledWith(writeResponseStub, res, {
+          status: 200,
+          data: userData,
+        });
+      });
+    });
+
+    //single user test case
+    describe("Single user test suite", () => {
+      it.only("User doesnt exists", async () => {
+        req = {
+          params: {
+            id: "4",
+          },
+        };
+        readUserStub.returns([]);
+        await userController.GetUser(req, res);
+        Sinon.assert.calledOnce(readUserStub);
+        Sinon.assert.calledWith(readUserStub, 0, 0, 4);
+
+        Sinon.assert.calledOnce(writeResponseStub);
+        Sinon.assert.calledWith(writeResponseStub, res, {
+          status: 404,
+          message: "User not found",
+        });
+      });
+
+      //user exists
+      it.only("Userexists", async () => {
+        let user: user = {
+          firstname: "subham",
+          lastname: "thapa",
+          id: 4,
+        };
+        req = {
+          params: {
+            id: "4",
+          },
+        };
+        readUserStub.returns([user]);
+        await userController.GetUser(req, res);
+        Sinon.assert.calledOnce(readUserStub);
+        Sinon.assert.calledWith(readUserStub, 0, 0, 4);
+
+        Sinon.assert.calledOnce(writeResponseStub);
+        Sinon.assert.calledWith(writeResponseStub, res, {
+          status: 200,
+          data: [user],
+        });
+      });
+    });
+  });
+
+  //test the update feature
+  describe("Update user test suite", () => {
+    it("Doesnt update user", () => {});
+  });
+});

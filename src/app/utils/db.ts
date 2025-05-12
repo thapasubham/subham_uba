@@ -17,6 +17,23 @@ export function saveUser(user: user): Promise<user> {
       (err, result, fields) => {
         if (err) {
           console.error("error Inserting user: ", err);
+          return reject(err.message);
+        }
+        console.log();
+        resolve(user);
+      }
+    );
+  });
+}
+
+export function updateUser(user: user): Promise<user> {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "UPDATE users SET firstname = ?, lastname = ? WHERE id = ?",
+      [user.firstname, user.lastname, user.id],
+      (err, _result, _fields) => {
+        if (err) {
+          console.error("Error updating user:", err);
           reject(err.message);
         }
 
@@ -24,21 +41,6 @@ export function saveUser(user: user): Promise<user> {
       }
     );
   });
-}
-
-export function updateUser(user: user) {
-  connection.query(
-    "UPDATE users SET firstname = ?, lastname = ? WHERE id = ?",
-    [user.firstname, user.lastname, user.id],
-    (err, _result, _fields) => {
-      if (err) {
-        console.error("Error updating user:", err);
-        return err.message;
-      }
-
-      return user;
-    }
-  );
 }
 
 export function readUser(page: number, offset: number): Promise<user[]> {
@@ -57,18 +59,17 @@ export function readUser(page: number, offset: number): Promise<user[]> {
   });
 }
 
-export function readUserbyId(id: number): Promise<user[]> {
+export function readUserbyId(id: number): Promise<user> {
   return new Promise((resolve, reject) => {
     connection.query(
-      "Select firstname, lastname, id from users where id =? and deleteStatus=?",
+      "SELECT firstname, lastname, id FROM users WHERE id = ? AND deleteStatus = ?",
       [id, 0],
       (err, result, _fields) => {
         if (err) {
-          console.log(err);
-          reject([]);
+          return reject(err.message);
         }
 
-        resolve(result as user[]);
+        resolve(result[0]);
       }
     );
   });
