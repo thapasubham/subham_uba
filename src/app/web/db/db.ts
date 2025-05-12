@@ -8,86 +8,88 @@ const connection: sql.Pool = sql.createPool({
   connectionLimit: 5,
 });
 
-export function saveUser(user: user): Promise<user> {
-  return new Promise((resolve, reject) => {
-    user.id = Date.now();
-    connection.query(
-      "Insert into users (id, firstname, lastname) values(?,?,?)",
-      [user.id, user.firstname, user.lastname],
-      (err, result, fields) => {
-        if (err) {
-          console.error("error Inserting user: ", err);
-          return reject(err.message);
+export class DataBase {
+  static saveUser(user: user): Promise<user> {
+    return new Promise((resolve, reject) => {
+      user.id = Date.now();
+      connection.query(
+        "Insert into users (id, firstname, lastname) values(?,?,?)",
+        [user.id, user.firstname, user.lastname],
+        (err, result, fields) => {
+          if (err) {
+            console.error("error Inserting user: ", err);
+            return reject(err.message);
+          }
+          console.log();
+          resolve(user);
         }
-        console.log();
-        resolve(user);
-      }
-    );
-  });
-}
+      );
+    });
+  }
 
-export function updateUser(user: user): Promise<number> {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "UPDATE users SET firstname = ?, lastname = ? WHERE id = ?",
-      [user.firstname, user.lastname, user.id],
-      (err, result, _fields) => {
-        if (err) {
-          console.error("Error updating user:", err);
-          reject(err.message);
-        }
+  static updateUser(user: user): Promise<number> {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "UPDATE users SET firstname = ?, lastname = ? WHERE id = ?",
+        [user.firstname, user.lastname, user.id],
+        (err, result, _fields) => {
+          if (err) {
+            console.error("Error updating user:", err);
+            reject(err.message);
+          }
 
-        resolve(result.affectedRows);
-      }
-    );
-  });
-}
-
-export function readUser(page: number, offset: number): Promise<user[]> {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "select firstname, lastname, id from users where deleteStatus=? LIMIT ? OFFSET ? ",
-      [0, page, offset],
-      (err, result, _field) => {
-        if (err) {
-          reject([]);
-        }
-
-        resolve(result as user[]);
-      }
-    );
-  });
-}
-
-export function readUserbyId(id: number): Promise<user> {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "SELECT firstname, lastname, id FROM users WHERE id = ? AND deleteStatus = ?",
-      [id, 0],
-      (err, result, _fields) => {
-        if (err) {
-          return reject(err.message);
-        }
-
-        resolve(result[0]);
-      }
-    );
-  });
-}
-
-export function deleteUser(id: number): Promise<number> {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      "UPDATE users SET deleteStatus= ? WHERE id = ? and deleteStatus =?",
-      [1, id, 0],
-      (err, result) => {
-        if (err) {
-          console.error("Error updating user:", err);
-          reject(-1);
-        } else {
           resolve(result.affectedRows);
         }
-      }
-    );
-  });
+      );
+    });
+  }
+
+  static readUser(page: number, offset: number): Promise<user[]> {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "select firstname, lastname, id from users where deleteStatus=? LIMIT ? OFFSET ? ",
+        [0, page, offset],
+        (err, result, _field) => {
+          if (err) {
+            reject([]);
+          }
+
+          resolve(result as user[]);
+        }
+      );
+    });
+  }
+
+  static readUserbyId(id: number): Promise<user> {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "SELECT firstname, lastname, id FROM users WHERE id = ? AND deleteStatus = ?",
+        [id, 0],
+        (err, result, _fields) => {
+          if (err) {
+            return reject(err.message);
+          }
+
+          resolve(result[0]);
+        }
+      );
+    });
+  }
+
+  static deleteUser(id: number): Promise<number> {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "UPDATE users SET deleteStatus= ? WHERE id = ? and deleteStatus =?",
+        [1, id, 0],
+        (err, result) => {
+          if (err) {
+            console.error("Error updating user:", err);
+            reject(-1);
+          } else {
+            resolve(result.affectedRows);
+          }
+        }
+      );
+    });
+  }
 }
