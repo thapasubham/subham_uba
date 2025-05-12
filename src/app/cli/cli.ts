@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { Users } from "./handlers/UserHandler.js";
-import { Logger } from "../utils/Logger.js";
+import { Logger } from "../../utils/Logger.js";
 const args = process.argv;
 
 const command = args[2];

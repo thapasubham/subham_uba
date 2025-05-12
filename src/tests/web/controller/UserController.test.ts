@@ -1,7 +1,7 @@
 import Sinon from "sinon";
 import { UserController } from "../../../app/web/controller/UserController.js";
 import { UserService } from "../../../app/web/services/UserService.js";
-import { ResponseApi } from "../../../app/utils/ApiResponse.js";
+import { ResponseApi } from "../../../utils/ApiResponse.js";
 import { user } from "../../../types/user.type.js";
 
 describe("User controller tests ", () => {
@@ -209,7 +209,7 @@ describe("User controller tests ", () => {
 
     //single user test case
     describe("Single user test suite", () => {
-      it.only("User doesnt exists", async () => {
+      it("User doesnt exists", async () => {
         req = {
           params: {
             id: "4",
@@ -228,7 +228,7 @@ describe("User controller tests ", () => {
       });
 
       //user exists
-      it.only("Userexists", async () => {
+      it("Userexists", async () => {
         let user: user = {
           firstname: "subham",
           lastname: "thapa",
@@ -255,6 +255,65 @@ describe("User controller tests ", () => {
 
   //test the update feature
   describe("Update user test suite", () => {
-    it("Doesnt update user", () => {});
+    let updateStub: Sinon.SinonStub;
+
+    //setup
+    beforeEach(() => {
+      userController = new UserController();
+      userservice = new UserService();
+      updateStub = Sinon.stub(UserService.prototype, "Update").resolves();
+      writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
+      statusStub = Sinon.stub().returnsThis();
+      sendStub = Sinon.stub();
+
+      res = {
+        status: statusStub,
+        send: sendStub,
+      };
+    });
+
+    //teardown
+    afterEach(() => {
+      updateStub.restore();
+      writeResponseStub.restore();
+    });
+    it("Failed update user", async () => {
+      req = {
+        body: {
+          firstname: "Subham",
+          lastname: "Thapa",
+        },
+        params: {
+          id: "5",
+        },
+      };
+
+      updateStub.returns(0);
+      await userController.UpdateUser(req, res);
+      Sinon.assert.calledWith(writeResponseStub, res, {
+        message: "Failed to update user",
+        status: 404,
+      });
+    });
+
+    it("Update the user", async () => {
+      req = {
+        body: {
+          firstname: "Subham",
+          lastname: "Thapa",
+        },
+        params: {
+          id: "10",
+        },
+      };
+
+      updateStub.returns(1);
+      await userController.UpdateUser(req, res);
+      Sinon.assert.calledOnce(updateStub);
+      Sinon.assert.calledWith(writeResponseStub, res, {
+        message: "User Updated",
+        status: 200,
+      });
+    });
   });
 });

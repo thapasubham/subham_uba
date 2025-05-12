@@ -8,5 +8,5 @@ export abstract class User {
     offset?: number,
     id?: number
   ): Promise<user[]>;
-  abstract Update(user: user): Promise<user>;
+  abstract Update(user: user): Promise<number>;
 }

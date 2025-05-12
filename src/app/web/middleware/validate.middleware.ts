@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { user } from "../../../types/user.type.js";
-import { responseType, ResponseApi } from "../../utils/ApiResponse.js";
-import { GetIndex } from "../../utils/db.js";
+import { responseType, ResponseApi } from "../../../utils/ApiResponse.js";
 
 export function validate(req: Request, res: Response, next: NextFunction) {
   const response: responseType<String> = {
@@ -10,7 +9,7 @@ export function validate(req: Request, res: Response, next: NextFunction) {
   };
 
   const user: user = {
-    id: req.body.id,
+    // id: req.body.id ? req.body.id : 0,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
   };
@@ -18,25 +17,10 @@ export function validate(req: Request, res: Response, next: NextFunction) {
   if (!(user.firstname && user.lastname)) {
     response.message = "Missing fields";
     response.status = 400;
-    return ResponseApi.WriteResponse(res, response);
+    ResponseApi.WriteError(res, response);
+    return;
   }
 
-  next();
-}
-
-export async function checkID(req: Request, res: Response, next: NextFunction) {
-  const response: responseType<String> = {
-    status: 200,
-    message: "",
-  };
-
-  const index = await GetIndex(parseInt(req.params.id));
-
-  if (index === -1) {
-    response.message = "User doesn't Exists";
-    response.status = 404;
-    return ResponseApi.WriteError(res, response);
-  }
   next();
 }
 

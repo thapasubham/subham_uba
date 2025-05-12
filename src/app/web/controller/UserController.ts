@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { user } from "../../../types/user.type.js";
-import { ResponseApi, responseType } from "../../utils/ApiResponse.js";
+import { ResponseApi, responseType } from "../../../utils/ApiResponse.js";
 
 import { UserService } from "../services/UserService.js";
 
@@ -74,10 +74,15 @@ export class UserController {
       id: id,
     };
 
-    await userService.Update(userData);
-    response.message = "User Updated";
-    response.status = 201;
+    const result = await userService.Update(userData);
 
+    if (result === 0) {
+      response.message = "Failed to update user";
+      response.status = 404;
+    } else {
+      response.message = "User Updated";
+      response.status = 200;
+    }
     ResponseApi.WriteResponse(res, response);
   }
 

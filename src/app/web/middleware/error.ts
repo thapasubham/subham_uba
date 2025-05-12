@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import { responseType, ResponseApi } from "../../utils/ApiResponse.js";
+import { responseType, ResponseApi } from "../../../utils/ApiResponse.js";
 
 export function errorHandler(
   err: Error,
@@ -8,7 +8,6 @@ export function errorHandler(
   next: NextFunction
 ) {
   const response: responseType<string> = {
-    data: err.name,
     message: err.message || "Internal Server Error",
     status: 500,
   };

@@ -6,7 +6,7 @@ import {
   readUserbyId,
   saveUser,
   updateUser,
-} from "../../utils/db.js";
+} from "../db/db.js";
 
 export class UserService implements User {
   async CreateUser(user: user): Promise<user> {
@@ -39,8 +39,8 @@ export class UserService implements User {
     }
   }
 
-  async Update(user: user): Promise<user> {
-    await updateUser(user);
-    return user;
+  async Update(user: user): Promise<number> {
+    const result = await updateUser(user);
+    return result;
   }
 }
