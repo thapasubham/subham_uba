@@ -51,7 +51,8 @@ export class UserController {
 
     const id = parseInt(req.params.id);
     const user = await userService.ReadUsers(0, 0, id);
-    if (!user[0]) {
+    console.log(user);
+    if (!user) {
       response.status = 404;
       response.message = "User not found";
     } else {
