@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { user } from "../types/user.type.js";
+import { userType as user } from "../types/user.type.js";
 import { Logger } from "./Logger.js";
 const path = "user.json";
 

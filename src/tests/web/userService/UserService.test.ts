@@ -21,12 +21,6 @@ describe("User Services tests", () => {
         id: 5,
         email: "subham@gmail.com",
         phoneNumber: "",
-        intern: {
-          intern_id: 0,
-          name: "",
-          mentorName: "",
-          startDate: undefined,
-        },
       };
       saveUserStub.returns(user);
       const result = await userService.CreateUser(user);
@@ -78,12 +72,6 @@ describe("User Services tests", () => {
         id: 5,
         email: "",
         phoneNumber: "",
-        intern: {
-          intern_id: 1,
-          name: "Full-Stack",
-          mentorName: "Abby Thew",
-          startDate: undefined,
-        },
       };
       updateUserStub.returns(1);
       const result = await userService.Update(user);
@@ -124,7 +112,6 @@ describe("User Services tests", () => {
             id: 5,
             email: "",
             phoneNumber: "",
-            intern: 1,
           },
           { firstname: "John", lastname: "Black", id: 10 },
           { firstname: "Ashoka", lastname: "Tano", id: 7 },

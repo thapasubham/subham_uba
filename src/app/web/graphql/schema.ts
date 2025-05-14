@@ -6,20 +6,6 @@ const typeDefs = gql`
     lastname: String
     id: Float
     email: String
-    intern:
-  }
-
-  type InternshipDetail{
-    intern_id: number
-    name: string
-    mentorName: String
-    startDate: 
-    endDate:
-    isCertified: Boolean
-  }
-
-  scalar Date{
-
   }
 
   type Query {
