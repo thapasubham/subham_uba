@@ -20,7 +20,7 @@ describe("User Services tests", () => {
         lastname: "thapa",
         id: 5,
         email: "subham@gmail.com",
-        phoneNumber: 9830827938,
+        phoneNumber: "9830827938",
       };
       saveUserStub.returns(user);
       const result = await userService.CreateUser(user);
@@ -71,7 +71,7 @@ describe("User Services tests", () => {
         lastname: "BloodBorne",
         id: 5,
         email: "john@gmail.com",
-        phoneNumber: 9876543310,
+        phoneNumber: "9876543310",
       };
       updateUserStub.returns(1);
       const result = await userService.Update(user);
@@ -111,28 +111,28 @@ describe("User Services tests", () => {
             lastname: "Thapa",
             id: 5,
             email: "subham@gmail.com",
-            phoneNumber: 9876543210,
+            phoneNumber: "9876543210",
           },
           {
             firstname: "John",
             lastname: "Black",
             id: 10,
             email: "john@black.com",
-            phoneNumber: 1234566789,
+            phoneNumber: "1234566789",
           },
           {
             firstname: "Ashoka",
             lastname: "Tano",
             id: 7,
             email: "ashoka@jedi.com",
-            phoneNumber: 15748586520,
+            phoneNumber: "95748586520",
           },
           {
             firstname: "Anikan",
             lastname: "Skywalker",
             id: 14,
             email: "anikan@jedi.com",
-            phoneNumber: 9874563210,
+            phoneNumber: "9874563210",
           },
         ];
         readUserStub.returns(users);
@@ -164,7 +164,7 @@ describe("User Services tests", () => {
         lastname: "Black",
         id: 10,
         email: "john@black.com",
-        phoneNumber: 1248216745,
+        phoneNumber: "1248216745",
       };
       readUserStub.returns(user);
       const result = await userService.ReadUsers(0, 0, 10);

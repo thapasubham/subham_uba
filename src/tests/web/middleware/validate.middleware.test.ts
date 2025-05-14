@@ -48,6 +48,8 @@ describe("Middleware tests", () => {
         body: {
           firstname: "Subham",
           lastname: "Thapa",
+          email: "subham@gmail.com",
+          phoneNumber: "9807846735",
         },
       };
       validate(req, res, callback);

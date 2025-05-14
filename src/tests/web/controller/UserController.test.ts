@@ -49,7 +49,7 @@ describe("User controller tests ", () => {
           firstname: "Subham",
           lastname: "Thapa",
           email: "subham@thapa.com",
-          phoneNumber: 9874563210,
+          phoneNumber: "9874563210",
         },
       };
 
@@ -60,7 +60,7 @@ describe("User controller tests ", () => {
         lastname: "Thapa",
 
         email: "subham@thapa.com",
-        phoneNumber: 9874563210,
+        phoneNumber: "9874563210",
         id: Sinon.match.number,
       });
       Sinon.assert.calledOnce(writeResponseStub);
@@ -111,15 +111,15 @@ describe("User controller tests ", () => {
           firstname: "Test",
           lastname: "test",
           id: 5,
-          email: "",
-          phoneNumber: 7482135964,
+          email: "test@test.com",
+          phoneNumber: "7482135964",
         },
         {
           firstname: "John",
           lastname: "Black",
           id: 6,
-          email: "",
-          phoneNumber: 0,
+          email: "johnblack",
+          phoneNumber: "3246895214",
         },
       ];
       await userController.DeleteUser(req, res);
@@ -146,14 +146,14 @@ describe("User controller tests ", () => {
           lastname: "user",
           id: 5,
           email: "test@user.com",
-          phoneNumber: 7153486248,
+          phoneNumber: "7153486248",
         },
         {
           firstname: "John",
           lastname: "Black",
           id: 6,
           email: "john@black.com",
-          phoneNumber: 1724853694,
+          phoneNumber: "1724853694",
         },
       ];
       await userController.DeleteUser(req, res);
@@ -224,22 +224,22 @@ describe("User controller tests ", () => {
             firstname: "Subham",
             lastname: "Thapa",
             id: 6,
-            email: "",
-            phoneNumber: 0,
+            email: "subham@thapa.com",
+            phoneNumber: "986541275",
           },
           {
             firstname: "John",
             lastname: "Pork",
             id: 40,
             email: "",
-            phoneNumber: 0,
+            phoneNumber: "",
           },
           {
             firstname: "Lee",
             lastname: "Smith",
             id: 80,
-            email: "",
-            phoneNumber: 0,
+            email: "le@smith.com",
+            phoneNumber: "9821745630",
           },
         ];
         readUserStub.returns(userData);
@@ -281,8 +281,8 @@ describe("User controller tests ", () => {
           firstname: "subham",
           lastname: "thapa",
           id: 4,
-          email: "",
-          phoneNumber: 0,
+          email: "subham@thapa.com",
+          phoneNumber: "9412589634",
         };
         req = {
           params: {
