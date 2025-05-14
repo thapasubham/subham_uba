@@ -1,6 +1,6 @@
 import { User } from "../../../abstraction/User.js";
 import { user } from "../../../entity/user.js";
-import { DataBase } from "../database/db.js";
+import { DataBase } from "../database/user.db.js";
 
 /**
  * Class to perfrom CRUD operation

@@ -2,7 +2,7 @@ import Sinon from "sinon";
 import { UserService } from "../../../app/web/services/UserService.js";
 import { user } from "../../../entity/user.js";
 import { assert } from "chai";
-import { DataBase } from "../../../app/web/database/db.js";
+import { DataBase } from "../../../app/web/database/user.db.js";
 
 describe("User Services tests", () => {
   let userService: UserService;
