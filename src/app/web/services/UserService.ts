@@ -67,10 +67,10 @@ export class UserService implements User {
     limit?: number,
     offset?: number,
     id?: number
-  ): Promise<user[]> {
+  ): Promise<user[] | user> {
     if (typeof id === "number") {
       const user = await DataBase.ReadUser(id);
-      return [user];
+      return user;
     }
 
     if ((limit as number) >= 0 && (offset as number) >= 0) {

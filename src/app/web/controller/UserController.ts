@@ -42,7 +42,7 @@ export class UserController {
   }
 
   async GetUser(req: Request, res: Response) {
-    const response: responseType<user[]> = {
+    const response: responseType<user> = {
       status: 200,
     };
 
@@ -54,7 +54,7 @@ export class UserController {
       response.message = "User not found";
     } else {
       response.status = 200;
-      response.data = user;
+      response.data = user as user;
     }
     ResponseApi.WriteResponse(res, response);
   }

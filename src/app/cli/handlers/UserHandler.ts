@@ -1,4 +1,4 @@
-import { user } from "../../../types/user.type.js";
+import { userType as user } from "../../../types/user.type.js";
 import { FileUtility } from "../../../utils/files.js";
 import { Logger } from "../../../utils/Logger.js";
 

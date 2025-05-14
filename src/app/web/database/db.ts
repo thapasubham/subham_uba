@@ -1,13 +1,12 @@
 import { off } from "process";
 import { AppDataSource } from "../../../data-source";
-import { user } from "../../../entity/user";
+import { user } from "../../../entity/user.js";
 
 const userRepository = AppDataSource.getRepository(user);
 
 export class DataBase {
   static async Createuser(user: user) {
     const result = await userRepository.save(user);
-    console.log(result.intern);
     return result;
   }
 

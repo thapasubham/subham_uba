@@ -19,8 +19,8 @@ export class user {
   @Column("varchar", { nullable: false })
   email: string;
 
-  @Column("varchar", { nullable: false })
-  phoneNumber: string;
+  @Column("int", { nullable: false })
+  phoneNumber: number;
 
   @Column("bit", { default: false })
   isDeleted?: boolean;

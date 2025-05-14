@@ -1,4 +1,4 @@
-import { user } from "../types/user.type.js";
+import { user } from "../entity/user.js";
 
 export abstract class User {
   abstract CreateUser(user: user): Promise<user>;
@@ -7,6 +7,6 @@ export abstract class User {
     page?: number,
     offset?: number,
     id?: number
-  ): Promise<user[]>;
+  ): Promise<user[] | user>;
   abstract Update(user: user): Promise<number>;
 }
