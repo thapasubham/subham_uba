@@ -6,7 +6,7 @@ const typeDefs = gql`
     lastname: String
     id: Float
     email: String
-    phoneNumber: Int
+    phoneNumber: String
   }
 
   type Query {
