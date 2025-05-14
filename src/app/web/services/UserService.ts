@@ -21,7 +21,7 @@ export class UserService implements User {
    *
    */
   async CreateUser(user: user): Promise<user> {
-    console.log(user);
+    user.id = Date.now();
     const createdUser: user = await DataBase.Createuser(user);
 
     return createdUser;
@@ -86,7 +86,6 @@ export class UserService implements User {
   }
 
   async Update(user: user): Promise<number> {
-    console.log(user);
     const result = await DataBase.UpdateUser(user);
 
     return result;

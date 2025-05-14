@@ -6,6 +6,7 @@ const typeDefs = gql`
     lastname: String
     id: Float
     email: String
+    phoneNumber: Int
   }
 
   type Query {
@@ -17,6 +18,8 @@ const typeDefs = gql`
     firstname: String!
     lastname: String!
     id: Float
+    email: String!
+    phoneNumber: Int!
   }
 
   type Mutation {

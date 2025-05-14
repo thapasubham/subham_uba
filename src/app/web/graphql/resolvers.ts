@@ -4,9 +4,11 @@ export const resolvers = {
       return await dataSource.userService.ReadUsers(limit, offset);
     },
     async user(_: any, { id }: any, { dataSource }: any) {
-      const getUser = (
-        await dataSource.userService.ReadUsers(0, 0, parseInt(id))
-      ).pop();
+      const getUser = await dataSource.userService.ReadUsers(
+        0,
+        0,
+        parseInt(id)
+      );
 
       return getUser;
     },

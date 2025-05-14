@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class user {
@@ -13,14 +7,15 @@ export class user {
 
   @Column("varchar", { nullable: false })
   firstname: string;
+
   @Column("varchar", { nullable: false })
   lastname: string;
 
   @Column("varchar", { nullable: false })
   email: string;
 
-  @Column("int", { nullable: false })
-  phoneNumber: number;
+  @Column("varchar", { length: 10, nullable: false })
+  phoneNumber: string;
 
   @Column("bit", { default: false })
   isDeleted?: boolean;

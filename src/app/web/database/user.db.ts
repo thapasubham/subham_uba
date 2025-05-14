@@ -11,7 +11,7 @@ export class DataBase {
   }
 
   static async ReadUser(id: number) {
-    const result = await userRepository.findOneBy({ id: id });
+    const result = await userRepository.findOneBy({ id: id, isDeleted: false });
     return result;
   }
 
@@ -20,7 +20,6 @@ export class DataBase {
       where: { isDeleted: false },
       skip: offset,
       take: limit,
-      relations: ["intern"],
     });
     return result;
   }
