@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { user } from "../../../types/user.type.js";
+import { InternshipDetail, user } from "../../../entity/user.js";
 import { responseType, ResponseApi } from "../../../utils/ApiResponse.js";
 
 export function validate(req: Request, res: Response, next: NextFunction) {
@@ -9,9 +9,12 @@ export function validate(req: Request, res: Response, next: NextFunction) {
   };
 
   const user: user = {
-    // id: req.body.id ? req.body.id : 0,
+    id: req.body.id ? req.body.id : 0,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
+    email: req.body.email,
+    phoneNumber: req.body.phoneNumber,
+    intern: req.body.intern_id,
   };
 
   if (!(user.firstname && user.lastname)) {

@@ -2,7 +2,6 @@ import express from "express";
 
 import { UserController } from "../../controller/UserController.js";
 import { checkQuery, validate } from "../../middleware/validate.middleware.js";
-import { UserService } from "../../services/UserService.js";
 
 const router = express.Router();
 
@@ -15,3 +14,5 @@ router.delete("/deleteUser/:id", usersHandler.DeleteUser);
 router.put("/updateUser/:id", validate, usersHandler.UpdateUser);
 
 export default router;
+
+//indexing

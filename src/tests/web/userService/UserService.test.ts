@@ -1,8 +1,8 @@
 import Sinon from "sinon";
 import { UserService } from "../../../app/web/services/UserService.js";
-import { DataBase } from "../../../app/web/db/db.js";
-import { user } from "../../../types/user.type";
+import { user } from "../../../entity/user.js";
 import { assert } from "chai";
+import { DataBase } from "../../../app/web/database/db.js";
 
 describe("User Services tests", () => {
   let userService: UserService;
@@ -12,13 +12,21 @@ describe("User Services tests", () => {
     let saveUserStub: Sinon.SinonStub;
     beforeEach(() => {
       userService = new UserService();
-      saveUserStub = Sinon.stub(DataBase, "saveUser");
+      saveUserStub = Sinon.stub(DataBase, "Createuser");
     });
     it("Create user test case", async () => {
       const user: user = {
         firstname: "Subham",
         lastname: "thapa",
         id: 5,
+        email: "subham@gmail.com",
+        phoneNumber: "",
+        intern: {
+          intern_id: 0,
+          name: "",
+          mentorName: "",
+          startDate: undefined,
+        },
       };
       saveUserStub.returns(user);
       const result = await userService.CreateUser(user);
@@ -33,7 +41,7 @@ describe("User Services tests", () => {
     let deleteuserStub: Sinon.SinonStub;
     beforeEach(() => {
       userService = new UserService();
-      deleteuserStub = Sinon.stub(DataBase, "deleteUser");
+      deleteuserStub = Sinon.stub(DataBase, "DeleteUser");
     });
     afterEach(() => {
       deleteuserStub.restore();
@@ -61,13 +69,21 @@ describe("User Services tests", () => {
     let updateUserStub: Sinon.SinonStub;
     beforeEach(() => {
       userService = new UserService();
-      updateUserStub = Sinon.stub(DataBase, "updateUser");
+      updateUserStub = Sinon.stub(DataBase, "UpdateUser");
     });
     it("Create user test case", async () => {
       const user: user = {
         firstname: "John",
-        lastname: "",
+        lastname: "BloodBorne",
         id: 5,
+        email: "",
+        phoneNumber: "",
+        intern: {
+          intern_id: 1,
+          name: "Full-Stack",
+          mentorName: "Abby Thew",
+          startDate: undefined,
+        },
       };
       updateUserStub.returns(1);
       const result = await userService.Update(user);
@@ -82,7 +98,7 @@ describe("User Services tests", () => {
     let readUserStub: Sinon.SinonStub;
     beforeEach(() => {
       userService = new UserService();
-      readUserStub = Sinon.stub(DataBase, "readUser");
+      readUserStub = Sinon.stub(DataBase, "ReadUsers");
     });
     afterEach(() => {
       readUserStub.restore();
@@ -102,7 +118,14 @@ describe("User Services tests", () => {
 
       it("Read user Data", async () => {
         let users: user[] = [
-          { firstname: "Subham", lastname: "Thapa", id: 5 },
+          {
+            firstname: "Subham",
+            lastname: "Thapa",
+            id: 5,
+            email: "",
+            phoneNumber: "",
+            intern: 1,
+          },
           { firstname: "John", lastname: "Black", id: 10 },
           { firstname: "Ashoka", lastname: "Tano", id: 7 },
           { firstname: "Ashoka", lastname: "Tano", id: 14 },
@@ -119,7 +142,7 @@ describe("User Services tests", () => {
     let readUserStub: Sinon.SinonStub;
     beforeEach(() => {
       userService = new UserService();
-      readUserStub = Sinon.stub(DataBase, "readUserbyId");
+      readUserStub = Sinon.stub(DataBase, "ReadUser");
     });
     afterEach(() => {
       readUserStub.restore();

@@ -2,7 +2,7 @@ import Sinon from "sinon";
 import { UserController } from "../../../app/web/controller/UserController.js";
 import { UserService } from "../../../app/web/services/UserService.js";
 import { ResponseApi } from "../../../utils/ApiResponse.js";
-import { user } from "../../../types/user.type.js";
+import { user } from "../../../entity/user.js";
 
 describe("User controller tests ", () => {
   let userController: UserController;
@@ -215,7 +215,7 @@ describe("User controller tests ", () => {
             id: "4",
           },
         };
-        readUserStub.returns([]);
+        // readUserStub.returns([]);
         await userController.GetUser(req, res);
         Sinon.assert.calledOnce(readUserStub);
         Sinon.assert.calledWith(readUserStub, 0, 0, 4);

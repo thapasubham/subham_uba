@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { user } from "../../../types/user.type.js";
+import { user } from "../../../entity/user.js";
 import { ResponseApi, responseType } from "../../../utils/ApiResponse.js";
 
 import { UserService } from "../services/UserService.js";
@@ -15,6 +15,10 @@ export class UserController {
     const bodyData: user = {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
+      email: req.body.email,
+      phoneNumber: req.body.phoneNumber,
+      intern: req.body.in,
+      isDeleted: false,
       id: Date.now(),
     };
 
@@ -51,7 +55,7 @@ export class UserController {
 
     const id = parseInt(req.params.id);
     const user = await userService.ReadUsers(0, 0, id);
-    console.log(user);
+
     if (!user) {
       response.status = 404;
       response.message = "User not found";
@@ -72,6 +76,10 @@ export class UserController {
     const userData: user = {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
+      email: req.body.email,
+      phoneNumber: req.body.phoneNumber,
+      intern: req.body.in,
+      isDeleted: false,
       id: id,
     };
 

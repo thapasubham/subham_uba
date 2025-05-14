@@ -1,5 +1,5 @@
 import * as sql from "mysql";
-import { user } from "../../../types/user.type.js";
+import { userType as user } from "../../../types/user.type.js";
 const connection: sql.Pool = sql.createPool({
   host: "localhost",
   user: "root",
