@@ -1,6 +1,6 @@
 import { assert, expect } from "chai";
 import { Users } from "../../../app/cli/handlers/UserHandler.js";
-import { user } from "../../../types/user.type.js";
+import { userType as user } from "../../../types/user.type.js";
 import Sinon from "sinon";
 import { Logger } from "../../../utils/Logger.js";
 import { FileUtility } from "../../../utils/files.js";

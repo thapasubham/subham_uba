@@ -45,8 +45,11 @@ describe("User controller tests ", () => {
     it("Create user Test case", async () => {
       req = {
         body: {
+          id: 0,
           firstname: "Subham",
           lastname: "Thapa",
+          email: "subham@thapa.com",
+          phoneNumber: 9874563210,
         },
       };
 
@@ -55,6 +58,9 @@ describe("User controller tests ", () => {
       Sinon.assert.calledWith(createUserStub, {
         firstname: "Subham",
         lastname: "Thapa",
+
+        email: "subham@thapa.com",
+        phoneNumber: 9874563210,
         id: Sinon.match.number,
       });
       Sinon.assert.calledOnce(writeResponseStub);
@@ -101,8 +107,20 @@ describe("User controller tests ", () => {
       };
       deleteUserstub.returns(0);
       let userData: user[] = [
-        { firstname: "Test", lastname: "test", id: 5 },
-        { firstname: "John", lastname: "Black", id: 6 },
+        {
+          firstname: "Test",
+          lastname: "test",
+          id: 5,
+          email: "",
+          phoneNumber: 7482135964,
+        },
+        {
+          firstname: "John",
+          lastname: "Black",
+          id: 6,
+          email: "",
+          phoneNumber: 0,
+        },
       ];
       await userController.DeleteUser(req, res);
 
@@ -123,8 +141,20 @@ describe("User controller tests ", () => {
       };
       deleteUserstub.returns(1);
       let userData: user[] = [
-        { firstname: "Test", lastname: "test", id: 5 },
-        { firstname: "John", lastname: "Black", id: 6 },
+        {
+          firstname: "Test",
+          lastname: "user",
+          id: 5,
+          email: "test@user.com",
+          phoneNumber: 7153486248,
+        },
+        {
+          firstname: "John",
+          lastname: "Black",
+          id: 6,
+          email: "john@black.com",
+          phoneNumber: 1724853694,
+        },
       ];
       await userController.DeleteUser(req, res);
 
@@ -190,9 +220,27 @@ describe("User controller tests ", () => {
           },
         };
         let userData: user[] = [
-          { firstname: "Subham", lastname: "Thapa", id: 6 },
-          { firstname: "John", lastname: "Pork", id: 40 },
-          { firstname: "Lee", lastname: "Smith", id: 80 },
+          {
+            firstname: "Subham",
+            lastname: "Thapa",
+            id: 6,
+            email: "",
+            phoneNumber: 0,
+          },
+          {
+            firstname: "John",
+            lastname: "Pork",
+            id: 40,
+            email: "",
+            phoneNumber: 0,
+          },
+          {
+            firstname: "Lee",
+            lastname: "Smith",
+            id: 80,
+            email: "",
+            phoneNumber: 0,
+          },
         ];
         readUserStub.returns(userData);
         await userController.GetUsers(req, res);
@@ -233,6 +281,8 @@ describe("User controller tests ", () => {
           firstname: "subham",
           lastname: "thapa",
           id: 4,
+          email: "",
+          phoneNumber: 0,
         };
         req = {
           params: {
