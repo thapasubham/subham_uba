@@ -3,6 +3,7 @@ import { user } from "../../../entity/user.js";
 import { ResponseApi, responseType } from "../../../utils/ApiResponse.js";
 
 import { UserService } from "../services/UserService.js";
+import { parseBody } from "../utils/utils.js";
 
 const userService = new UserService();
 export class UserController {
@@ -12,15 +13,7 @@ export class UserController {
       status: 200,
     };
 
-    const bodyData: user = {
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      email: req.body.email,
-      phoneNumber: req.body.phoneNumber,
-      intern: req.body.in,
-      isDeleted: false,
-      id: Date.now(),
-    };
+    const bodyData: user = parseBody(req);
 
     await userService.CreateUser(bodyData);
 
@@ -73,15 +66,7 @@ export class UserController {
     };
 
     const id = parseInt(req.params.id);
-    const userData: user = {
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      email: req.body.email,
-      phoneNumber: req.body.phoneNumber,
-      intern: req.body.in,
-      isDeleted: false,
-      id: id,
-    };
+    const userData: user = parseBody(req);
 
     const result = await userService.Update(userData);
 

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { InternshipDetail, user } from "../../../entity/user.js";
+import { user } from "../../../entity/user.js";
 import { responseType, ResponseApi } from "../../../utils/ApiResponse.js";
+import { parseBody } from "../utils/utils.js";
 
 export function validate(req: Request, res: Response, next: NextFunction) {
   const response: responseType<String> = {
@@ -8,14 +9,7 @@ export function validate(req: Request, res: Response, next: NextFunction) {
     message: "",
   };
 
-  const user: user = {
-    id: req.body.id ? req.body.id : 0,
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    email: req.body.email,
-    phoneNumber: req.body.phoneNumber,
-    intern: req.body.intern_id,
-  };
+  const user: user = parseBody(req);
 
   if (!(user.firstname && user.lastname)) {
     response.message = "Missing fields";

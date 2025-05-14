@@ -86,7 +86,9 @@ export class UserService implements User {
   }
 
   async Update(user: user): Promise<number> {
+    console.log(user);
     const result = await DataBase.UpdateUser(user);
+
     return result;
   }
 }
