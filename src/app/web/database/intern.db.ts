@@ -38,7 +38,7 @@ export class DataBaseIntern {
     return 0;
   }
 
-  static async DeleteUser(id: number) {
+  static async Delete(id: number) {
     const intern = await userRepository.findOneBy({ id: id, isDeleted: false });
     if (intern) {
       intern.isDeleted = true;

@@ -115,10 +115,6 @@ describe("User controller tests ", () => {
           id: 5,
           email: "test@test.com",
           phoneNumber: "7482135964",
-          intern: {
-            id: 4,
-            name: "FUll-Stack",
-          },
         },
         {
           firstname: "John",
@@ -126,10 +122,6 @@ describe("User controller tests ", () => {
           id: 6,
           email: "johnblack",
           phoneNumber: "3246895214",
-          intern: {
-            id: 4,
-            name: "FUll-Stack",
-          },
         },
       ];
 
@@ -159,10 +151,6 @@ describe("User controller tests ", () => {
           id: 5,
           email: "test@user.com",
           phoneNumber: "7153486248",
-          intern: {
-            id: 4,
-            name: "FUll-Stack",
-          },
         },
         {
           firstname: "John",
@@ -170,10 +158,6 @@ describe("User controller tests ", () => {
           id: 6,
           email: "john@black.com",
           phoneNumber: "1724853694",
-          intern: {
-            id: 4,
-            name: "FUll-Stack",
-          },
         },
       ];
       await userController.DeleteUser(req, res);
@@ -246,10 +230,6 @@ describe("User controller tests ", () => {
             id: 6,
             email: "subham@thapa.com",
             phoneNumber: "986541275",
-            intern: {
-              id: 4,
-              name: "FUll-Stack",
-            },
           },
           {
             firstname: "John",
@@ -257,10 +237,6 @@ describe("User controller tests ", () => {
             id: 40,
             email: "",
             phoneNumber: "",
-            intern: {
-              id: 4,
-              name: "FUll-Stack",
-            },
           },
           {
             firstname: "Lee",
@@ -268,10 +244,6 @@ describe("User controller tests ", () => {
             id: 80,
             email: "le@smith.com",
             phoneNumber: "9821745630",
-            intern: {
-              id: 4,
-              name: "FUll-Stack",
-            },
           },
         ];
         readUserStub.returns(userData);
@@ -315,10 +287,6 @@ describe("User controller tests ", () => {
           id: 4,
           email: "subham@thapa.com",
           phoneNumber: "9412589634",
-          intern: {
-            id: 4,
-            name: "FUll-Stack",
-          },
         };
         req = {
           params: {

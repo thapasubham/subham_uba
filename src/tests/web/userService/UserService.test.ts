@@ -1,6 +1,6 @@
 import Sinon from "sinon";
 import { UserService } from "../../../app/web/services/UserService.js";
-import { Intern, user } from "../../../entity/user.js";
+import { user } from "../../../entity/user.js";
 import { assert } from "chai";
 import { DataBase } from "../../../app/web/database/user.db.js";
 
@@ -14,6 +14,9 @@ describe("User Services tests", () => {
       userService = new UserService();
       saveUserStub = Sinon.stub(DataBase, "Createuser");
     });
+    afterEach(() => {
+      saveUserStub.restore();
+    });
     it("Create user test case", async () => {
       const user: user = {
         firstname: "Subham",
@@ -21,7 +24,6 @@ describe("User Services tests", () => {
         id: 5,
         email: "subham@gmail.com",
         phoneNumber: "9830827938",
-        intern: { id: 1 } as Intern,
       };
       saveUserStub.returns(user);
       const result = await userService.CreateUser(user);
@@ -66,6 +68,9 @@ describe("User Services tests", () => {
       userService = new UserService();
       updateUserStub = Sinon.stub(DataBase, "UpdateUser");
     });
+    afterEach(() => {
+      updateUserStub.restore();
+    });
     it("Create user test case", async () => {
       const user: user = {
         firstname: "John",
@@ -73,7 +78,6 @@ describe("User Services tests", () => {
         id: 5,
         email: "john@gmail.com",
         phoneNumber: "9876543310",
-        intern: { id: 3 } as Intern,
       };
       updateUserStub.returns(1);
       const result = await userService.Update(user);
@@ -114,7 +118,6 @@ describe("User Services tests", () => {
             id: 5,
             email: "subham@gmail.com",
             phoneNumber: "9876543210",
-            intern: { id: 3, name: "DevOps" },
           },
           {
             firstname: "John",
@@ -122,7 +125,6 @@ describe("User Services tests", () => {
             id: 10,
             email: "john@black.com",
             phoneNumber: "1234566789",
-            intern: { id: 1, name: "Full-Stack" },
           },
           {
             firstname: "Ashoka",
@@ -130,7 +132,6 @@ describe("User Services tests", () => {
             id: 7,
             email: "ashoka@jedi.com",
             phoneNumber: "95748586520",
-            intern: { id: 3, name: "UI/UX" },
           },
           {
             firstname: "Anikan",
@@ -138,7 +139,6 @@ describe("User Services tests", () => {
             id: 14,
             email: "anikan@jedi.com",
             phoneNumber: "9874563210",
-            intern: { id: 3, name: "UI/UX" },
           },
         ];
         readUserStub.returns(users);

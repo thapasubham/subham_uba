@@ -1,9 +1,9 @@
 import {
   Column,
   Entity,
-  In,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -12,13 +12,13 @@ export class Details {
   @PrimaryColumn("bigint", { nullable: false })
   id: number;
 
-  @Column("varchar", { nullable: false })
+  @Column("varchar", { length: 30, nullable: false })
   firstname: string;
 
-  @Column("varchar", { nullable: false })
+  @Column("varchar", { length: 30, nullable: false })
   lastname: string;
 
-  @Column("varchar", { nullable: false, unique: true })
+  @Column("varchar", { length: 30, nullable: false, unique: true })
   email: string;
 
   @Column("varchar", { length: 10, nullable: false, unique: true })
@@ -29,14 +29,11 @@ export class Details {
 }
 
 @Entity()
-export class user extends Details {
-  @ManyToOne(() => Intern, (Intern) => Intern.name)
-  intern: Intern;
-}
+export class user extends Details {}
 
 @Entity()
-export class Mentors extends Details {
-  @Column("varchar", { nullable: false })
+export class Mentor extends Details {
+  @Column("varchar", { length: 30, nullable: false })
   role: string;
 }
 
@@ -50,4 +47,29 @@ export class Intern {
 
   @Column("boolean", { default: false })
   isDeleted?: boolean;
+}
+
+@Entity()
+export class internShipDetails {
+  @PrimaryGeneratedColumn()
+  id?: number;
+
+  @Column("date")
+  started_at: Date;
+
+  @Column("date")
+  end_at: Date;
+
+  @Column("boolean")
+  isCertified: boolean;
+
+  @ManyToOne(() => Intern)
+  intern: Intern;
+
+  @ManyToOne(() => Mentor)
+  mentor: Mentor;
+
+  @OneToOne(() => user)
+  @JoinColumn()
+  user: user;
 }

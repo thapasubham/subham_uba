@@ -11,9 +11,6 @@ export class DataBase {
 
   static async ReadUser(id: number) {
     const result = await userRepository.findOne({
-      relations: {
-        intern: true,
-      },
       where: { id: id, isDeleted: false },
       select: {
         isDeleted: false,
@@ -24,8 +21,7 @@ export class DataBase {
 
   static async ReadUsers(limit: number, offset: number) {
     const result = await userRepository.find({
-      relations: { intern: true },
-      where: { isDeleted: false },
+        where: { isDeleted: false },
       select: {
         isDeleted: false,
       },

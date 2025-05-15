@@ -7,7 +7,6 @@ const typeDefs = gql`
     id: Float
     email: String!
     phoneNumber: String!
-    intern: Intern!
   }
 
   type Intern {

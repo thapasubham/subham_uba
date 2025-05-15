@@ -31,6 +31,6 @@ export class InternService {
   }
 
   async DeleteIntern(id: number) {
-    return await DataBaseIntern.DeleteUser(id);
+    return await DataBaseIntern.Delete(id);
   }
 }
