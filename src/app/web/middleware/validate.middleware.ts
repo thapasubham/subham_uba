@@ -46,9 +46,9 @@ export function checkQuery(req: Request, res: Response, next: NextFunction) {
 }
 
 export function checkID(req: Request, res: Response, next: NextFunction) {
-  const id = req.params.id;
+  const id = Number(req.params.id);
 
-  if (typeof id !== "number") {
+  if (isNaN(id)) {
     ResponseApi.WriteError(res, {
       status: 404,
       message: "ID cannot be string",

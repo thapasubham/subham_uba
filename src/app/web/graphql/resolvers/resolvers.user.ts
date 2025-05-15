@@ -1,4 +1,4 @@
-export const resolvers = {
+export const userResolvers = {
   Query: {
     async users(_: any, { limit, offset }: any, { dataSource }: any) {
       return await dataSource.userService.ReadUsers(limit, offset);
