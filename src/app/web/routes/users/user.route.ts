@@ -17,4 +17,4 @@ router.post("/createUser", validate, usersHandler.CreateUser);
 router.delete("/deleteUser/:id", checkID, usersHandler.DeleteUser);
 router.put("/updateUser/:id", checkID, validate, usersHandler.UpdateUser);
 
-export default router;
+export const userRouter = router;
