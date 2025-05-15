@@ -1,5 +1,4 @@
-import { off } from "process";
-import { AppDataSource } from "../../../data-source";
+import { AppDataSource } from "../../../data-source.js";
 import { user } from "../../../entity/user.js";
 
 const userRepository = AppDataSource.getRepository(user);
@@ -17,10 +16,12 @@ export class DataBase {
 
   static async ReadUsers(limit: number, offset: number) {
     const result = await userRepository.find({
+      relations: { intern: true },
       where: { isDeleted: false },
       skip: offset,
       take: limit,
     });
+    console.log(result);
     return result;
   }
 

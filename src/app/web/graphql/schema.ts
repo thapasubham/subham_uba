@@ -7,8 +7,13 @@ const typeDefs = gql`
     id: Float
     email: String
     phoneNumber: String
+    intern: Intern
   }
 
+  type Intern {
+    id: Int
+    name: String
+  }
   type Query {
     users(limit: Int, offset: Int): [User]
     user(id: ID!): User

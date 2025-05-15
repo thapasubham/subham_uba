@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  In,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 @Entity()
 export class user {
@@ -19,4 +27,16 @@ export class user {
 
   @Column("bit", { default: false })
   isDeleted?: boolean;
+
+  @ManyToOne(() => Intern, (Intern) => Intern.name)
+  intern: Intern;
+}
+
+@Entity()
+export class Intern {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column("varchar")
+  name: String;
 }
