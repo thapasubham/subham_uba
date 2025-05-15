@@ -14,8 +14,8 @@ export class InternController {
       status: 201,
     };
 
-    const internData: Intern = parseBody(req);
-    await internService.CreateIntern(internData);
+    const intern: Intern = parseBody(req);
+    await internService.CreateIntern(intern);
 
     response.message = "Intern Created";
     ResponseApi.WriteResponse(res, response);
@@ -25,9 +25,6 @@ export class InternController {
     const response: responseType<Intern[]> = {
       status: 200,
     };
-
-    const limit = parseInt(req.query.limit as string) || 10;
-    const offset = parseInt(req.query.offset as string) || 0;
 
     const interns = (await internService.ReadIntern()) as Intern[];
 
@@ -47,7 +44,7 @@ export class InternController {
     };
 
     const id = parseInt(req.params.id);
-    const intern = await internService.ReadIntern(id);
+    const intern = (await internService.ReadIntern(id)) as Intern;
 
     if (!intern) {
       response.status = 404;

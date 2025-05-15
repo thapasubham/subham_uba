@@ -15,6 +15,9 @@ export class DataBase {
         intern: true,
       },
       where: { id: id, isDeleted: false },
+      select: {
+        isDeleted: false,
+      },
     });
     return result;
   }
@@ -23,6 +26,9 @@ export class DataBase {
     const result = await userRepository.find({
       relations: { intern: true },
       where: { isDeleted: false },
+      select: {
+        isDeleted: false,
+      },
       skip: offset,
       take: limit,
     });

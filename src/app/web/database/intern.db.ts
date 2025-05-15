@@ -12,12 +12,15 @@ export class DataBaseIntern {
   static async Read(id: number) {
     const result = await userRepository.findOne({
       where: { id: id, isDeleted: false },
+      select: { id: true, name: true },
     });
     return result;
   }
 
   static async Reads() {
-    const result = await userRepository.find();
+    const result = await userRepository.find({
+      select: { id: true, name: true },
+    });
     return result;
   }
 

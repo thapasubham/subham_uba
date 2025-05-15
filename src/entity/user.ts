@@ -39,10 +39,11 @@ export class Mentors extends Details {
   @Column("varchar", { nullable: false })
   role: string;
 }
+
 @Entity()
 export class Intern {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column("varchar", { unique: true, nullable: false })
   name: String;
