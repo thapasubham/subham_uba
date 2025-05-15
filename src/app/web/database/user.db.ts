@@ -10,7 +10,12 @@ export class DataBase {
   }
 
   static async ReadUser(id: number) {
-    const result = await userRepository.findOneBy({ id: id, isDeleted: false });
+    const result = await userRepository.findOne({
+      relations: {
+        intern: true,
+      },
+      where: { id: id, isDeleted: false },
+    });
     return result;
   }
 
@@ -21,7 +26,6 @@ export class DataBase {
       skip: offset,
       take: limit,
     });
-    console.log(result);
     return result;
   }
 
