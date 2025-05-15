@@ -11,7 +11,15 @@ export function validate(req: Request, res: Response, next: NextFunction) {
 
   const user: user = parseBody(req);
 
-  if (!(user.firstname && user.lastname)) {
+  if (
+    !(
+      user.firstname &&
+      user.lastname &&
+      user.email &&
+      user.intern &&
+      user.phoneNumber
+    )
+  ) {
     response.message = "Missing fields";
     response.status = 400;
     ResponseApi.WriteError(res, response);
@@ -35,4 +43,17 @@ export function checkQuery(req: Request, res: Response, next: NextFunction) {
   };
 
   ResponseApi.WriteError(res, errorMsg);
+}
+
+export function checkID(req: Request, res: Response, next: NextFunction) {
+  const id = req.params.id;
+
+  if (typeof id !== "number") {
+    ResponseApi.WriteError(res, {
+      status: 404,
+      message: "ID cannot be string",
+    });
+  }
+
+  next();
 }

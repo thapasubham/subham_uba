@@ -1,5 +1,6 @@
 import Sinon from "sinon";
 import {
+  checkID,
   checkQuery,
   validate,
 } from "../../../app/web/middleware/validate.middleware.js";
@@ -50,6 +51,7 @@ describe("Middleware tests", () => {
           lastname: "Thapa",
           email: "subham@gmail.com",
           phoneNumber: "9807846735",
+          intern: 4,
         },
       };
       validate(req, res, callback);
@@ -84,6 +86,31 @@ describe("Middleware tests", () => {
       checkQuery(req, res, callback);
 
       Sinon.assert.calledOnce(callback);
+    });
+  });
+
+  describe("check the type of the id", () => {
+    it("When the id isnt a number", () => {
+      req = {
+        params: {
+          id: "someString",
+        },
+      };
+      checkID(req, res, callback);
+      Sinon.assert.calledWith(writeErrorStub, res, {
+        status: 404,
+        message: "ID cannot be string",
+      });
+
+      it("Correct id type test", () => {
+        req = {
+          params: {
+            id: 42,
+          },
+        };
+        checkID(req, res, callback);
+        Sinon.assert.calledOnce(callback);
+      });
     });
   });
 });
