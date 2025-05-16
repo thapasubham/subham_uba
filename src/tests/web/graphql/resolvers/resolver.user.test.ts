@@ -1,11 +1,10 @@
 import { assert } from "chai";
 import { userResolvers } from "../../../../app/web/graphql/resolvers/resolvers.user.js";
-import { UserService } from "../../../../app/web/services/UserService.js";
 import Sinon from "sinon";
 
 describe("User Resolver test", () => {
+  let dataSource: any;
   describe("Query", () => {
-    let dataSource: any;
     let readStub: Sinon.SinonStub;
     beforeEach(() => {
       readStub = Sinon.stub();
@@ -68,8 +67,7 @@ describe("User Resolver test", () => {
     });
   });
 
-  describe("Mutations", () => {
-    let dataSource: any;
+  describe("Create Mutations", () => {
     let createUserStub: Sinon.SinonStub;
     beforeEach(() => {
       createUserStub = Sinon.stub();
@@ -94,6 +92,58 @@ describe("User Resolver test", () => {
       );
       assert.equal(result, data);
       Sinon.assert.calledOnce(dataSource.userService.CreateUser);
+    });
+  });
+
+  describe("Update mutation", () => {
+    let updateStub: Sinon.SinonStub;
+    beforeEach(() => {
+      updateStub = Sinon.stub();
+      dataSource = {
+        userService: { Update: updateStub },
+      };
+    });
+
+    it("User update mutation", async () => {
+      let data = {
+        firstname: "John",
+        lastname: "Spencer",
+        id: 10,
+        email: "spencer@john.com",
+        phoneNumber: "9876543210",
+      };
+      updateStub.resolves(data);
+
+      const result = await userResolvers.Mutation.updateUser(
+        {},
+        { data },
+        { dataSource: dataSource }
+      );
+      assert.equal(result, data);
+      Sinon.assert.calledOnce(dataSource.userService.Update);
+    });
+  });
+
+  describe("Update Mutations", () => {
+    let deleteStub: Sinon.SinonStub;
+    beforeEach(() => {
+      deleteStub = Sinon.stub();
+      dataSource = {
+        userService: { DeleteUser: deleteStub },
+      };
+    });
+
+    it("update user mutation", async () => {
+      let id = 11;
+
+      deleteStub.resolves(1);
+      const result = await userResolvers.Mutation.deleteUser(
+        {},
+        { id },
+        { dataSource: dataSource }
+      );
+      assert.equal(result, 1);
+      Sinon.assert.calledOnce(dataSource.userService.DeleteUser);
     });
   });
 });

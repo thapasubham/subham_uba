@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { user } from "../../../entity/user.js";
+import { Intern, user } from "../../../entity/user.js";
 import { responseType, ResponseApi } from "../../../utils/ApiResponse.js";
 import { parseBody } from "../utils/utils.js";
 
@@ -11,15 +11,7 @@ export function validate(req: Request, res: Response, next: NextFunction) {
 
   const user: user = parseBody(req);
 
-  if (
-    !(
-      user.firstname &&
-      user.lastname &&
-      user.email &&
-      user.intern &&
-      user.phoneNumber
-    )
-  ) {
+  if (!(user.firstname && user.lastname && user.email && user.phoneNumber)) {
     response.message = "Missing fields";
     response.status = 400;
     ResponseApi.WriteError(res, response);
@@ -53,6 +45,27 @@ export function checkID(req: Request, res: Response, next: NextFunction) {
       status: 404,
       message: "ID cannot be string",
     });
+  }
+
+  next();
+}
+export function validateIntern(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const response: responseType<String> = {
+    status: 200,
+    message: "",
+  };
+
+  const intern: Intern = parseBody(req);
+
+  if (!intern.name) {
+    response.message = "Missing fields";
+    response.status = 400;
+    ResponseApi.WriteError(res, response);
+    return;
   }
 
   next();

@@ -9,16 +9,37 @@ const typeDefs = gql`
     phoneNumber: String!
   }
 
+  type Mentor {
+    firstname: String!
+    lastname: String!
+    id: Float
+    email: String!
+    phoneNumber: String!
+    role: String
+  }
+
   type Intern {
     id: Int!
     name: String!
   }
+  scalar Date
 
+  type InternDetails {
+    id: Int!
+    started_at: Date
+    end_at: Date
+    isCertified: Boolean
+    intern: Intern
+    mentor: Mentor
+    user: User
+  }
   type Query {
     users(limit: Int, offset: Int): [User]
     user(id: ID!): User
     intern(id: ID!): Intern
     interns: [Intern]
+    internDetail(id: ID!): InternDetails
+    internDetails: [InternDetails]
   }
 
   input UserInput {

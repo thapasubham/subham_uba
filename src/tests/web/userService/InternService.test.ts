@@ -95,7 +95,16 @@ describe("Testing the Inter service", () => {
       });
 
       it("Read intern Data", async () => {
-        let interns: Intern[] = [];
+        let interns: Intern[] = [
+          {
+            id: 5,
+            name: "Full-stack",
+          },
+          {
+            id: 1,
+            name: "Graphics Design",
+          },
+        ];
         readStub.returns(interns);
         const result = await internService.ReadIntern();
         assert.deepEqual(result, interns);
