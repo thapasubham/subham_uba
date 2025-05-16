@@ -107,7 +107,7 @@ describe.only("Intern Resolver test", () => {
     beforeEach(() => {
       deleteStub = Sinon.stub();
       dataSource = {
-        internService: { DeleteInter: deleteStub },
+        internService: { DeleteIntern: deleteStub },
       };
     });
 
