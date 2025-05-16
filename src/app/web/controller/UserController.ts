@@ -68,6 +68,7 @@ export class UserController {
     const id = parseInt(req.params.id);
     const userData: user = parseBody(req);
 
+    userData.id = id;
     const result = await userService.Update(userData);
 
     if (result === 0) {
