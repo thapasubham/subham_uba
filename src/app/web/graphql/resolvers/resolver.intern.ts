@@ -12,10 +12,10 @@ export const internResolvers = {
       return await dataSource.internService.CreateIntern(intern);
     },
     async updateIntern(_: any, { intern }: any, { dataSource }: any) {
-      return await dataSource.InternService.UpdateIntern(intern);
+      return await dataSource.internService.UpdateIntern(intern);
     },
     async deleteIntern(_: any, { id }: any, { dataSource }: any) {
-      return await dataSource.InternService.DeleteIntern(id);
+      return await dataSource.internService.DeleteIntern(id);
     },
   },
 };
