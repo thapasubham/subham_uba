@@ -1,6 +1,5 @@
 import { internShipDetails } from "../../../entity/user.js";
-import { DetailsDB } from "../database/interndetails.db.js";
-
+import { DetailsDB } from "../database/internDetails.db.js";
 export class InternDetailsService {
   async ReadIntern(id?: number) {
     if (id) {
