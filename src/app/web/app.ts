@@ -8,6 +8,9 @@ import { errorHandler } from "./middleware/error.js";
 import { UserService } from "./services/UserService.js";
 import { internRoutes } from "./routes/users/intern.route.js";
 import { InternService } from "./services/InternService.js";
+import { internDetailsRoutes } from "./routes/users/internDetails.route.js";
+import { InternDetailsService } from "./services/InternDetailsService.js";
+import { mentorRoutes } from "./routes/users/mentor.routes.js";
 
 export async function startServer() {
   const app = express();
@@ -19,8 +22,11 @@ export async function startServer() {
   const server = new ApolloServer({ typeDefs, resolvers });
 
   //restapi
+
   app.use("/api/", userRouter);
   app.use("/api/intern", internRoutes);
+  app.use("/api/detail", internDetailsRoutes);
+  app.use("/api/mentor", mentorRoutes);
   //graphql
   await server.start();
 
@@ -31,6 +37,7 @@ export async function startServer() {
         dataSource: {
           userService: new UserService(),
           internService: new InternService(),
+          detailsService: new InternDetailsService(),
         },
       }),
     }) as any
