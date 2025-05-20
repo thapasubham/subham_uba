@@ -31,7 +31,7 @@ describe("JWT", () => {
   it("No authorization given in header", () => {
     req = { headers: {} };
     verifyStub.returns("");
-    Auth.isAuthenticated(req, res, callback);
+    Auth.isAuthorized(req, res, callback);
     Sinon.assert.calledOnce(responseWrite);
     Sinon.assert.calledWith(responseWrite, res, {
       status: 401,
@@ -50,7 +50,7 @@ describe("JWT", () => {
     const fakeDecode = { id: "1235454" };
     verifyStub.returns(fakeDecode);
 
-    Auth.isAuthenticated(req, res, callback);
+    Auth.isAuthorized(req, res, callback);
 
     Sinon.assert.calledOnce(callback);
   });
@@ -66,7 +66,7 @@ describe("JWT", () => {
     const fakeDecode = { id: "1235454" };
     verifyStub.returns(fakeDecode);
 
-    Auth.isAuthenticated(req, res, callback);
+    Auth.isAuthorized(req, res, callback);
     Sinon.assert.calledWith(responseWrite, res, {
       status: 401,
       message: "Unauthorized",
@@ -75,7 +75,7 @@ describe("JWT", () => {
 
   it("When Token is invalid", () => {
     // verifyStub.throws(new Error("Invalid Token"));
-    const data = () => Auth.isAuthenticated(req, res, callback);
+    const data = () => Auth.isAuthorized(req, res, callback);
     expect(data).to.throw(Error);
   });
 });

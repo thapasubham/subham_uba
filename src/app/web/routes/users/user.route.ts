@@ -13,18 +13,18 @@ const router = express.Router();
 const usersHandler = new UserController();
 
 router.get("/getUsers", checkQuery, usersHandler.GetUsers);
-router.get("/getUser/:id", Auth.isAuthenticated, checkID, usersHandler.GetUser);
+router.get("/getUser/:id", Auth.isAuthorized, checkID, usersHandler.GetUser);
 router.post("/createUser", validate, usersHandler.CreateUser);
 router.post("/login", usersHandler.login);
 router.delete(
   "/deleteUser/:id",
-  Auth.isAuthenticated,
+  Auth.isAuthorized,
   checkID,
   usersHandler.DeleteUser
 );
 router.put(
   "/updateUser/:id",
-  Auth.isAuthenticated,
+  Auth.isAuthorized,
   checkID,
   validate,
   usersHandler.UpdateUser

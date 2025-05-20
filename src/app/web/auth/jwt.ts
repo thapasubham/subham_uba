@@ -5,7 +5,7 @@ import { ResponseApi } from "../../../utils/ApiResponse";
 
 export class Auth {
 
-    static isAuthenticated(req: Request, res: Response, next: NextFunction) {
+    static isAuthorized(req: Request, res: Response, next: NextFunction) {
         try{
         let token = req.headers.authorization;
 
