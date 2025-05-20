@@ -1,4 +1,3 @@
-import { User } from "../../../abstraction/User.js";
 import { user } from "../../../entity/user.js";
 import { DataBase } from "../database/user.db.js";
 
@@ -7,7 +6,7 @@ import { DataBase } from "../database/user.db.js";
  * @example
  * const userService = new UserService();
  */
-export class UserService implements User {
+export class UserService {
   /**
    *
    * Creates new user
@@ -88,6 +87,11 @@ export class UserService implements User {
   async Update(user: user): Promise<number> {
     const result = await DataBase.UpdateUser(user);
 
+    return result;
+  }
+
+  async login(user: any): Promise<any> {
+    const result = await DataBase.login(user);
     return result;
   }
 }

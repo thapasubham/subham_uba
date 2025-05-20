@@ -1,5 +1,6 @@
 import { AppDataSource } from "../../../data-source.js";
 import { user } from "../../../entity/user.js";
+import { Auth } from "../auth/jwt.js";
 
 const userRepository = AppDataSource.getRepository(user);
 
@@ -13,7 +14,10 @@ export class DataBase {
     const result = await userRepository.findOne({
       where: { id: id, isDeleted: false },
       select: {
-        isDeleted: false,
+        firstname: true,
+        lastname: true,
+        email: true,
+        phoneNumber: true,
       },
     });
     return result;
@@ -21,7 +25,7 @@ export class DataBase {
 
   static async ReadUsers(limit: number, offset: number) {
     const result = await userRepository.find({
-        where: { isDeleted: false },
+      where: { isDeleted: false },
       select: {
         isDeleted: false,
       },
@@ -57,5 +61,16 @@ export class DataBase {
     }
 
     return 0;
+  }
+
+  static async login(user: any) {
+    const result = await userRepository.findOneBy({ email: user.email });
+    if (!result) {
+      throw new Error("User doesn't exists");
+    }
+
+    const id = result.id;
+    const token = Auth.Sign(id);
+    return token;
   }
 }

@@ -6,15 +6,28 @@ import {
   checkQuery,
   validate,
 } from "../../middleware/validate.middleware.js";
+import { Auth } from "../../auth/jwt.js";
 
 const router = express.Router();
 
 const usersHandler = new UserController();
 
 router.get("/getUsers", checkQuery, usersHandler.GetUsers);
-router.get("/getUser/:id", checkID, usersHandler.GetUser);
+router.get("/getUser/:id", Auth.isAuthenticated, checkID, usersHandler.GetUser);
 router.post("/createUser", validate, usersHandler.CreateUser);
-router.delete("/deleteUser/:id", checkID, usersHandler.DeleteUser);
-router.put("/updateUser/:id", checkID, validate, usersHandler.UpdateUser);
+router.post("/login", usersHandler.login);
+router.delete(
+  "/deleteUser/:id",
+  Auth.isAuthenticated,
+  checkID,
+  usersHandler.DeleteUser
+);
+router.put(
+  "/updateUser/:id",
+  Auth.isAuthenticated,
+  checkID,
+  validate,
+  usersHandler.UpdateUser
+);
 
 export const userRouter = router;
