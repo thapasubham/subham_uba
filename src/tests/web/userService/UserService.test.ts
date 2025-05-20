@@ -5,13 +5,12 @@ import { assert } from "chai";
 import { DataBase } from "../../../app/web/database/user.db.js";
 
 describe("User Services tests", () => {
-  let userService: UserService;
+  const userService = new UserService();
 
   //test to create user
   describe("Create User test suite", () => {
     let saveUserStub: Sinon.SinonStub;
     beforeEach(() => {
-      userService = new UserService();
       saveUserStub = Sinon.stub(DataBase, "Createuser");
     });
     afterEach(() => {
@@ -37,7 +36,6 @@ describe("User Services tests", () => {
   describe("Delete User test suite", () => {
     let deleteuserStub: Sinon.SinonStub;
     beforeEach(() => {
-      userService = new UserService();
       deleteuserStub = Sinon.stub(DataBase, "DeleteUser");
     });
     afterEach(() => {
@@ -65,7 +63,6 @@ describe("User Services tests", () => {
   describe("Update test suite", () => {
     let updateUserStub: Sinon.SinonStub;
     beforeEach(() => {
-      userService = new UserService();
       updateUserStub = Sinon.stub(DataBase, "UpdateUser");
     });
     afterEach(() => {
@@ -91,7 +88,6 @@ describe("User Services tests", () => {
   describe("", () => {
     let readUserStub: Sinon.SinonStub;
     beforeEach(() => {
-      userService = new UserService();
       readUserStub = Sinon.stub(DataBase, "ReadUsers");
     });
     afterEach(() => {
@@ -152,7 +148,6 @@ describe("User Services tests", () => {
   describe("read user test suite", () => {
     let readUserStub: Sinon.SinonStub;
     beforeEach(() => {
-      userService = new UserService();
       readUserStub = Sinon.stub(DataBase, "ReadUser");
     });
     afterEach(() => {
@@ -180,6 +175,31 @@ describe("User Services tests", () => {
       const result = await userService.ReadUsers(0, 0, 10);
       assert.equal(result, user);
       Sinon.assert.calledWith(readUserStub, 10);
+    });
+  });
+
+  describe("login test", () => {
+    let loginStub: Sinon.SinonStub;
+
+    beforeEach(() => {
+      loginStub = Sinon.stub(DataBase, "login");
+    });
+    after(() => {
+      Sinon.restore();
+    });
+    it("Epic test", async () => {
+      let user = { email: "subham@gmail.com" };
+
+      const data: any = {
+        accessToken: "accessToken",
+        refreshToken: "refreshToken",
+      };
+
+      loginStub.returns(data);
+
+      const result = await userService.login(user);
+      assert.equal(result, data);
+      Sinon.assert.calledWith(loginStub, user);
     });
   });
 });

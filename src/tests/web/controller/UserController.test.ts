@@ -5,7 +5,7 @@ import { ResponseApi } from "../../../utils/ApiResponse.js";
 import { user } from "../../../entity/user.js";
 
 describe("User controller tests ", () => {
-  let userController: UserController;
+  const userController = new UserController();
   let req: any;
   let res: any;
   let sendStub: Sinon.SinonStub;
@@ -13,14 +13,12 @@ describe("User controller tests ", () => {
   let writeResponseStub: Sinon.SinonStub;
 
   //only use to stub methods
-  let userservice: UserService;
+  const userservice = new UserService();
   describe("User create test suites", () => {
     let createUserStub: Sinon.SinonStub;
 
     //setup
     beforeEach(() => {
-      userController = new UserController();
-      userservice = new UserService();
       createUserStub = Sinon.stub(
         UserService.prototype,
         "CreateUser"
@@ -78,8 +76,6 @@ describe("User controller tests ", () => {
 
     //setup
     beforeEach(() => {
-      userController = new UserController();
-      userservice = new UserService();
       deleteUserstub = Sinon.stub(
         UserService.prototype,
         "DeleteUser"
@@ -179,8 +175,6 @@ describe("User controller tests ", () => {
 
     //setup
     beforeEach(() => {
-      userController = new UserController();
-      userservice = new UserService();
       readUserStub = Sinon.stub(UserService.prototype, "ReadUsers").resolves();
       writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
       statusStub = Sinon.stub().returnsThis();
@@ -313,8 +307,6 @@ describe("User controller tests ", () => {
 
     //setup
     beforeEach(() => {
-      userController = new UserController();
-      userservice = new UserService();
       updateStub = Sinon.stub(UserService.prototype, "Update").resolves();
       writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
       statusStub = Sinon.stub().returnsThis();
@@ -368,6 +360,42 @@ describe("User controller tests ", () => {
       Sinon.assert.calledWith(writeResponseStub, res, {
         message: "User Updated",
         status: 200,
+      });
+    });
+  });
+
+  describe("login test", () => {
+    let loginStub: Sinon.SinonStub;
+
+    beforeEach(() => {
+      loginStub = Sinon.stub(UserService.prototype, "login");
+
+      writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
+      statusStub = Sinon.stub().returnsThis();
+      sendStub = Sinon.stub();
+
+      res = {
+        status: statusStub,
+        send: sendStub,
+      };
+    });
+    after(() => {
+      Sinon.restore();
+    });
+    it("Epic test", async () => {
+      req = {
+        body: { email: "subham@gmail.com" },
+      };
+      const data = {
+        accessToken: "accessToken",
+        refreshToken: "refreshToken",
+      };
+      loginStub.returns(data);
+      await userController.login(req, res);
+
+      Sinon.assert.calledWith(writeResponseStub, res, {
+        status: 200,
+        data: data,
       });
     });
   });
