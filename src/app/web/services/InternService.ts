@@ -1,5 +1,5 @@
-import { Intern } from "../../../entity/user";
-import { DataBaseIntern } from "../database/intern.db";
+import { Intern } from "../../../entity/user.js";
+import { DataBaseIntern } from "../database/intern.db.js";
 
 export class InternService {
   /**

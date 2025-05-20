@@ -2,7 +2,7 @@ import { assert } from "chai";
 import Sinon from "sinon";
 import { internResolvers } from "../../../../app/web/graphql/resolvers/resolver.intern.js";
 
-describe.only("Intern Resolver test", () => {
+describe("Intern Resolver test", () => {
   let dataSource: any;
   describe("Query", () => {
     let readStub: Sinon.SinonStub;

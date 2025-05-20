@@ -9,7 +9,10 @@
     "start": "tsc && node --env-file=.env dist/src/index.js",
     "dev": "tsx watch --env-file=.env  src/index.ts ",
     "lint": "eslint",
-    "test": "c8  mocha src/tests/**/*.test.ts "
+    "typeorm": "typeorm-ts-node-esm",
+    "test": "c8  mocha src/tests/**/*.test.ts ",
+    "migration:run": "npm run typeorm -- migration:run -d ./src/data-source.ts",
+    "migration:gen": "npm run typeorm -- migration:generate -d ./src/data-source.ts ./src/migrations/"
   },
   "author": "Subham Thapa",
   "license": "ISC",
@@ -39,6 +42,7 @@
     "graphql-tag": "^2.12.6",
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.2.2",
+    "ts-node": "^10.9.2",
     "typeorm": "^0.3.23"
   }
 }

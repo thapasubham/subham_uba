@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToOne,
@@ -9,6 +10,7 @@ import {
 } from "typeorm";
 @Entity()
 export class Details {
+  @Index()
   @PrimaryColumn("bigint", { nullable: false })
   id: number;
 
