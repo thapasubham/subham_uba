@@ -1,6 +1,13 @@
-import { startServer } from "./web/app.js";
-import { createCli } from "./cli/cli.js";
+import { startServer } from "./app/web/app.js";
+import { createCli } from "./app/cli/cli.js";
+import { AppDataSource } from "./data-source.js";
 
 createCli();
-
-startServer();
+AppDataSource.initialize()
+  .then(() => {
+    console.log("Data Source has been initialized!");
+    startServer();
+  })
+  .catch((err) => {
+    console.error("Error during Data Source initialization:", err);
+  });
