@@ -38,6 +38,7 @@
     "@apollo/server": "^4.12.0",
     "chalk": "^5.4.1",
     "express": "^5.1.0",
+    "express-jwt": "^8.5.1",
     "graphql": "^16.11.0",
     "graphql-tag": "^2.12.6",
     "mysql": "^2.18.1",

@@ -12,8 +12,6 @@ describe("User controller tests ", () => {
   let statusStub: Sinon.SinonStub;
   let writeResponseStub: Sinon.SinonStub;
 
-  //only use to stub methods
-  const userservice = new UserService();
   describe("User create test suites", () => {
     let createUserStub: Sinon.SinonStub;
 

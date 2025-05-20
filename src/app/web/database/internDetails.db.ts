@@ -9,8 +9,10 @@ export class DetailsDB {
     return result;
   }
 
-  static async GetDetails() {
+  static async GetDetails(limit: number, offset: number) {
     const result = await internRepository.find({
+      skip: offset,
+      take: limit,
       relations: {
         mentor: true,
         user: true,
