@@ -17,12 +17,12 @@ const typeDefs = gql`
     phoneNumber: String!
     role: String
   }
+  scalar Date
 
   type Intern {
     id: Int!
     name: String!
   }
-  scalar Date
 
   type InternDetails {
     id: Int!
@@ -40,6 +40,8 @@ const typeDefs = gql`
     interns: [Intern]
     internDetail(id: ID!): InternDetails
     internDetails(limit: Int!, offset: Int!): [InternDetails]
+    mentors(limit: Int!, offset: Int!): [Mentor]
+    mentor(id: ID!): Mentor
   }
 
   input UserInput {
@@ -62,6 +64,16 @@ const typeDefs = gql`
     mentor: Float!
     user: Float!
   }
+
+  input MentorInput {
+    firstname: String!
+    lastname: String!
+    id: Float
+    email: String!
+    phoneNumber: String!
+    role: String
+  }
+
   type Mutation {
     createUser(user: UserInput!): User
     updateUser(user: UserInput!): User
@@ -74,6 +86,10 @@ const typeDefs = gql`
     createDetails(detail: detailInput!): String
     updateDetails(detail: detailInput!): String
     certify(id: ID!): String
+
+    createMentor(mentor: MentorInput!): Mentor
+    updateMentor(mentor: MentorInput!): Mentor
+    deleteMentor(id: ID!): Int
   }
 `;
 

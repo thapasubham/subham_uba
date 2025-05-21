@@ -11,6 +11,7 @@ import { InternService } from "./services/InternService.js";
 import { internDetailsRoutes } from "./routes/users/internDetails.route.js";
 import { InternDetailsService } from "./services/InternDetailsService.js";
 import { mentorRoutes } from "./routes/users/mentor.routes.js";
+import { MentorService } from "./services/MentorService.js";
 
 export async function startServer() {
   const app = express();
@@ -38,6 +39,7 @@ export async function startServer() {
           userService: new UserService(),
           internService: new InternService(),
           detailsService: new InternDetailsService(),
+          mentorService: new MentorService(),
         },
       }),
     }) as any
