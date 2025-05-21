@@ -25,6 +25,7 @@ export async function startServer() {
   app.use("/api/detail", routes.internDetailsRoutes);
   app.use("/api/mentor", routes.mentorRoutes);
   //graphql
+
   await server.start();
 
   app.use(

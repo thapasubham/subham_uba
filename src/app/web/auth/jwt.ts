@@ -4,27 +4,31 @@ import jwt from "jsonwebtoken";
 import { ResponseApi } from "../../../utils/ApiResponse";
 
 export class Auth {
+  static isAuthorized(req: Request, res: Response, next: NextFunction) {
+    try {
+      let token = req.headers.authorization;
 
-    static isAuthorized(req: Request, res: Response, next: NextFunction) {
-        try{
-        let token = req.headers.authorization;
+      if (!token) {
+        ResponseApi.WriteResponse(res, {
+          status: 401,
+          message: "Unauthorized",
+        });
+        return;
+      }
 
+      token = token.split(" ")[1];
+      const decoded: any = this.Decode(token);
 
-        if(!token){
-            ResponseApi.WriteResponse(res, { status: 401, message: "Unauthorized" });
-            return;
-        }
-
-        token = token.split(" ")[1];
-    const decoded: any = jwt.verify(token, process.env.SECRET);
-
-
-    const id = req.params.id;
-    if (decoded.id !== id) {
-      ResponseApi.WriteResponse(res, { status: 401, message: "Unauthorized" });
-      return;
-    }
-    next();}catch(e){
+      const id = req.params.id;
+      if (decoded.id !== id) {
+        ResponseApi.WriteResponse(res, {
+          status: 401,
+          message: "Unauthorized",
+        });
+        return;
+      }
+      next();
+    } catch (e) {
       throw new Error(e);
     }
   }
@@ -37,5 +41,9 @@ export class Auth {
       expiresIn: "30d",
     });
     return { bearerToken: bearerToken, refreshToken: refreshToken };
+  }
+
+  static Decode(token: string) {
+    return jwt.verify(token, process.env.SECRET);
   }
 }
