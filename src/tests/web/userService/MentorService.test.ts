@@ -2,7 +2,7 @@ import Sinon from "sinon";
 import { MentorDb } from "../../../app/web/database/mentor.db.js";
 import { MentorService } from "../../../app/web/services/MentorService.js";
 import { assert } from "chai";
-import { Mentor } from "../../../entity/user";
+import { Mentor, Role } from "../../../entity/user";
 
 describe("Mentor Test", () => {
   let mentorService = new MentorService();
@@ -22,7 +22,7 @@ describe("Mentor Test", () => {
         id: 5,
         email: "subham@thapa.com",
         phoneNumber: "9830825938",
-        role: "Senior Dev",
+        role: new Role(),
       };
       saveUserStub.returns(mentor);
       const result = await mentorService.CreateMentor(mentor);
@@ -86,7 +86,7 @@ describe("Mentor Test", () => {
             id: 5,
             email: "subham@gmail.com",
             phoneNumber: "9876543210",
-            role: "HR",
+            role: new Role(),
           },
           {
             firstname: "John",
@@ -94,7 +94,7 @@ describe("Mentor Test", () => {
             id: 10,
             email: "john@black.com",
             phoneNumber: "1234566789",
-            role: "UI/UX",
+            role: new Role(),
           },
           {
             firstname: "Ashoka",
@@ -102,7 +102,7 @@ describe("Mentor Test", () => {
             id: 7,
             email: "ashoka@jedi.com",
             phoneNumber: "95748586520",
-            role: "QA",
+            role: new Role(),
           },
           {
             firstname: "Anikan",
@@ -110,7 +110,7 @@ describe("Mentor Test", () => {
             id: 14,
             email: "anikan@jedi.com",
             phoneNumber: "9874563210",
-            role: "Full-stack",
+            role: new Role(),
           },
         ];
         readUserStub.returns(users);
@@ -142,7 +142,7 @@ describe("Mentor Test", () => {
         id: 10,
         email: "john@black.com",
         phoneNumber: "1248216745",
-        role: "Full-Stack",
+        role: new Role(),
       };
       readUserStub.returns(user);
       const result = await mentorService.ReadMentors(0, 0, 10);
@@ -192,7 +192,7 @@ describe("Mentor Test", () => {
         id: 5,
         email: "john@gmail.com",
         phoneNumber: "9876543310",
-        role: "UI/UX",
+        role: new Role(),
       };
       updateMentor.returns(1);
       const result = await mentorService.Update(mentor);

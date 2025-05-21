@@ -8,6 +8,16 @@ import {
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
+
+@Entity()
+export class Role {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column("varchar", { length: 20, nullable: false, unique: true })
+  role: string;
+}
+
 @Entity()
 export class Details {
   @Index()
@@ -20,6 +30,7 @@ export class Details {
   @Column("varchar", { length: 30, nullable: false })
   lastname: string;
 
+  @Index("email-idx")
   @Column("varchar", { length: 30, nullable: false, unique: true })
   email: string;
 
@@ -31,12 +42,15 @@ export class Details {
 }
 
 @Entity()
-export class user extends Details {}
+export class user extends Details {
+  @ManyToOne(() => Role)
+  role: Role;
+}
 
 @Entity()
 export class Mentor extends Details {
-  @Column("varchar", { length: 30, nullable: false })
-  role: string;
+  @ManyToOne(() => Role)
+  role: Role;
 }
 
 @Entity()
