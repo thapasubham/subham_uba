@@ -1,5 +1,5 @@
 import { AppDataSource } from "../../../data-source.js";
-import { internShipDetails } from "../../../entity/user.js";
+import { internShipDetails, user } from "../../../entity/user.js";
 
 const internRepository = AppDataSource.getRepository(internShipDetails);
 
@@ -22,7 +22,12 @@ export class DetailsDB {
         intern: {
           name: true,
         },
-        mentor: { firstname: true, lastname: true, role: true },
+        mentor: {
+          id: true,
+          firstname: true,
+          lastname: true,
+          role: true,
+        },
         user: {
           id: true,
           firstname: true,

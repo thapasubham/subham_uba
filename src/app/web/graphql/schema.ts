@@ -34,12 +34,12 @@ const typeDefs = gql`
     user: User
   }
   type Query {
-    users(limit: Int, offset: Int): [User]
+    users(limit: Int!, offset: Int!): [User]
     user(id: ID!): User
     intern(id: ID!): Intern
     interns: [Intern]
     internDetail(id: ID!): InternDetails
-    internDetails: [InternDetails]
+    internDetails(limit: Int!, offset: Int!): [InternDetails]
   }
 
   input UserInput {
@@ -55,6 +55,13 @@ const typeDefs = gql`
     name: String!
   }
 
+  input detailInput {
+    started_at: Date!
+    end_at: Date!
+    intern: Int!
+    mentor: Float!
+    user: Float!
+  }
   type Mutation {
     createUser(user: UserInput!): User
     updateUser(user: UserInput!): User
@@ -63,6 +70,10 @@ const typeDefs = gql`
     createIntern(intern: InternInput!): Intern
     updateIntern(intern: InternInput!): Intern
     deleteIntern(id: ID!): Int
+
+    createDetails(detail: detailInput!): String
+    updateDetails(detail: detailInput!): String
+    certify(id: ID!): String
   }
 `;
 
