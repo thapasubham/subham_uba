@@ -1,6 +1,6 @@
 import Sinon from "sinon";
 import { UserService } from "../../../app/web/services/UserService.js";
-import { user } from "../../../entity/user.js";
+import { Role, user } from "../../../entity/user.js";
 import { assert } from "chai";
 import { DataBase } from "../../../app/web/database/user.db.js";
 
@@ -23,6 +23,7 @@ describe("User Services tests", () => {
         id: 5,
         email: "subham@gmail.com",
         phoneNumber: "9830827938",
+        role: new Role(),
       };
       saveUserStub.returns(user);
       const result = await userService.CreateUser(user);
@@ -75,6 +76,7 @@ describe("User Services tests", () => {
         id: 5,
         email: "john@gmail.com",
         phoneNumber: "9876543310",
+        role: new Role(),
       };
       updateUserStub.returns(1);
       const result = await userService.Update(user);
@@ -114,6 +116,7 @@ describe("User Services tests", () => {
             id: 5,
             email: "subham@gmail.com",
             phoneNumber: "9876543210",
+            role: new Role(),
           },
           {
             firstname: "John",
@@ -121,6 +124,7 @@ describe("User Services tests", () => {
             id: 10,
             email: "john@black.com",
             phoneNumber: "1234566789",
+            role: new Role(),
           },
           {
             firstname: "Ashoka",
@@ -128,6 +132,7 @@ describe("User Services tests", () => {
             id: 7,
             email: "ashoka@jedi.com",
             phoneNumber: "95748586520",
+            role: new Role(),
           },
           {
             firstname: "Anikan",
@@ -135,6 +140,7 @@ describe("User Services tests", () => {
             id: 14,
             email: "anikan@jedi.com",
             phoneNumber: "9874563210",
+            role: new Role(),
           },
         ];
         readUserStub.returns(users);
@@ -166,6 +172,7 @@ describe("User Services tests", () => {
         id: 10,
         email: "john@black.com",
         phoneNumber: "1248216745",
+        role: new Role(),
       };
       readUserStub.returns(user);
       const result = await userService.ReadUsers(0, 0, 10);

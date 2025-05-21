@@ -70,7 +70,7 @@ export class DataBase {
     }
 
     const id = result.id;
-    const token = Auth.Sign(id);
+    const token = Auth.Sign(id, result.role.name);
     return token;
   }
 }

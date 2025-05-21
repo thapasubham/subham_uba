@@ -2,7 +2,7 @@ import Sinon from "sinon";
 import { UserController } from "../../../app/web/controller/UserController.js";
 import { UserService } from "../../../app/web/services/UserService.js";
 import { ResponseApi } from "../../../utils/ApiResponse.js";
-import { user } from "../../../entity/user.js";
+import { Role, user } from "../../../entity/user.js";
 
 describe("User controller tests ", () => {
   const userController = new UserController();
@@ -109,6 +109,7 @@ describe("User controller tests ", () => {
           id: 5,
           email: "test@test.com",
           phoneNumber: "7482135964",
+          role: new Role(),
         },
         {
           firstname: "John",
@@ -116,6 +117,7 @@ describe("User controller tests ", () => {
           id: 6,
           email: "johnblack",
           phoneNumber: "3246895214",
+          role: new Role(),
         },
       ];
 
@@ -145,6 +147,7 @@ describe("User controller tests ", () => {
           id: 5,
           email: "test@user.com",
           phoneNumber: "7153486248",
+          role: new Role(),
         },
         {
           firstname: "John",
@@ -152,6 +155,7 @@ describe("User controller tests ", () => {
           id: 6,
           email: "john@black.com",
           phoneNumber: "1724853694",
+          role: new Role(),
         },
       ];
       await userController.DeleteUser(req, res);
@@ -222,6 +226,7 @@ describe("User controller tests ", () => {
             id: 6,
             email: "subham@thapa.com",
             phoneNumber: "986541275",
+            role: new Role(),
           },
           {
             firstname: "John",
@@ -229,6 +234,7 @@ describe("User controller tests ", () => {
             id: 40,
             email: "",
             phoneNumber: "",
+            role: new Role(),
           },
           {
             firstname: "Lee",
@@ -236,6 +242,7 @@ describe("User controller tests ", () => {
             id: 80,
             email: "le@smith.com",
             phoneNumber: "9821745630",
+            role: new Role(),
           },
         ];
         readUserStub.returns(userData);
@@ -279,6 +286,7 @@ describe("User controller tests ", () => {
           id: 4,
           email: "subham@thapa.com",
           phoneNumber: "9412589634",
+          role: new Role(),
         };
         req = {
           params: {
