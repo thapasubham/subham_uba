@@ -4,7 +4,7 @@ import { Auth } from "../../../app/web/auth/jwt";
 import { ResponseApi } from "../../../utils/ApiResponse";
 import { expect } from "chai";
 
-describe.only("", () => {
+describe("", () => {
   describe("JWT", () => {
     let res: any;
     let req: any;
