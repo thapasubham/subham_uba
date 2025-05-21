@@ -89,4 +89,9 @@ export class MentorService {
 
     return result;
   }
+
+  async login(user: any): Promise<any> {
+    const result = await MentorDb.login(user);
+    return result;
+  }
 }

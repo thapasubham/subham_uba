@@ -166,10 +166,6 @@ describe("User Services tests", () => {
         id: 10,
         email: "john@black.com",
         phoneNumber: "1248216745",
-        intern: {
-          id: 2,
-          name: "DevOps",
-        },
       };
       readUserStub.returns(user);
       const result = await userService.ReadUsers(0, 0, 10);

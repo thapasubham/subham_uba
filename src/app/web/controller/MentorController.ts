@@ -98,4 +98,10 @@ export class MentorController {
     }
     ResponseApi.WriteResponse(res, response);
   }
+
+  async login(req: Request, res: Response) {
+    const result = await mentorService.login(req.body);
+
+    ResponseApi.WriteResponse(res, { status: 200, data: result });
+  }
 }

@@ -42,7 +42,7 @@ export class Mentor extends Details {
 @Entity()
 export class Intern {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number;
 
   @Column("varchar", { unique: true, nullable: false })
   name: String;
@@ -72,6 +72,6 @@ export class internShipDetails {
   mentor: Mentor;
 
   @OneToOne(() => user)
-  @JoinColumn()
+  @JoinColumn({ name: "userId" })
   user: user;
 }

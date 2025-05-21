@@ -1,5 +1,6 @@
 import { AppDataSource } from "../../../data-source.js";
 import { Mentor } from "../../../entity/user.js";
+import { Auth } from "../auth/jwt.js";
 
 const repository = AppDataSource.getRepository(Mentor);
 export class MentorDb {
@@ -55,5 +56,16 @@ export class MentorDb {
     }
 
     return 0;
+  }
+
+  static async login(user: any) {
+    const result = await repository.findOneBy({ email: user.email });
+    if (!result) {
+      throw new Error("User doesn't exists");
+    }
+
+    const id = result.id;
+    const token = Auth.Sign(id);
+    return token;
   }
 }
