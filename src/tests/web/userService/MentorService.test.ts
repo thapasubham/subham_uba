@@ -176,4 +176,29 @@ describe("Mentor Test", () => {
       Sinon.assert.calledWith(deleteStub, id);
     });
   });
+
+  describe("Update test suite", () => {
+    let updateMentor: Sinon.SinonStub;
+    beforeEach(() => {
+      updateMentor = Sinon.stub(MentorDb, "UpdateMentor");
+    });
+    afterEach(() => {
+      updateMentor.restore();
+    });
+    it("Create user test case", async () => {
+      const mentor: Mentor = {
+        firstname: "John",
+        lastname: "BloodBorne",
+        id: 5,
+        email: "john@gmail.com",
+        phoneNumber: "9876543310",
+        role: "UI/UX",
+      };
+      updateMentor.returns(1);
+      const result = await mentorService.Update(mentor);
+      assert.equal(result, 1);
+      Sinon.assert.calledOnce(updateMentor);
+      Sinon.assert.calledWith(updateMentor, Mentor);
+    });
+  });
 });
