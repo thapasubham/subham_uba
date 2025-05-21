@@ -4,7 +4,7 @@ import { MentorService } from "../../../app/web/services/MentorService.js";
 import { assert } from "chai";
 import { Mentor } from "../../../entity/user";
 
-describe.only("Mentor Test", () => {
+describe("Mentor Test", () => {
   let mentorService = new MentorService();
 
   describe("Create User test suite", () => {

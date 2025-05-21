@@ -1,12 +1,12 @@
 import express from "express";
 
-import { UserController } from "../../controller/UserController.js";
+import { UserController } from "../controller/UserController.js";
 import {
   checkID,
   checkQuery,
   validate,
-} from "../../middleware/validate.middleware.js";
-import { Auth } from "../../auth/jwt.js";
+} from "../middleware/validate.middleware.js";
+import { Auth } from "../auth/jwt.js";
 
 const router = express.Router();
 

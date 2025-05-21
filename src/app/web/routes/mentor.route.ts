@@ -4,9 +4,9 @@ import {
   checkID,
   checkQuery,
   validate,
-} from "../../middleware/validate.middleware.js";
-import { MentorController } from "../../controller/MentorController.js";
-import { Auth } from "../../auth/jwt.js";
+} from "../middleware/validate.middleware.js";
+import { MentorController } from "../controller/MentorController.js";
+import { Auth } from "../auth/jwt.js";
 
 const router = express.Router();
 
