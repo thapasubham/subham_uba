@@ -28,5 +28,6 @@ router.put(
   validate,
   mentorController.UpdateMentor
 );
+router.post("/login", mentorController.login);
 
 export const mentorRoutes = router;

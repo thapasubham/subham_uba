@@ -15,7 +15,7 @@ export class Role {
   id: number;
 
   @Column("varchar", { length: 20, nullable: false, unique: true })
-  role: string;
+  name: string;
 }
 
 @Entity()

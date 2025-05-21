@@ -17,10 +17,11 @@ export class Auth {
       }
 
       token = token.split(" ")[1];
-      const decoded: any = this.Decode(token);
+      const decoded: any = Auth.Decode(token);
 
       const id = req.params.id;
-      if (decoded.id !== id) {
+      if (decoded.id !== id && decoded.role != "admin") {
+        console.log(typeof decoded.role);
         ResponseApi.WriteResponse(res, {
           status: 401,
           message: "Unauthorized",
@@ -33,8 +34,8 @@ export class Auth {
     }
   }
 
-  static Sign(user: number) {
-    const bearerToken = jwt.sign({ id: user }, process.env.SECRET, {
+  static Sign(user: number, role: string) {
+    const bearerToken = jwt.sign({ id: user, role: role }, process.env.SECRET, {
       expiresIn: "10m",
     });
     const refreshToken = jwt.sign({ id: user }, process.env.SECRET, {

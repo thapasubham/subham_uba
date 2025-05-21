@@ -64,7 +64,7 @@ describe("", () => {
           id: "123334",
         },
       };
-      const fakeDecode = { id: "1235454" };
+      const fakeDecode = { id: "1235454", role: "user" };
       verifyStub.returns(fakeDecode);
 
       Auth.isAuthorized(req, res, callback);
@@ -73,14 +73,26 @@ describe("", () => {
         message: "Unauthorized",
       });
     });
+    it("when the id doesnt but role is admin", () => {
+      req = {
+        headers: {
+          authorization: "bearer fakejwt",
+        },
+        params: {
+          id: "123334",
+        },
+      };
+      const fakeDecode = { id: "1454", role: "admin" };
+      verifyStub.returns(fakeDecode);
 
-    it("When Token is invalid", () => {
-      // verifyStub.throws(new Error("Invalid Token"));
-      const data = () => Auth.isAuthorized(req, res, callback);
-      expect(data).to.throw(Error);
+      Auth.isAuthorized(req, res, callback);
+      Sinon.assert.calledOnce(callback);
+      it("When Token is invalid", () => {
+        const data = () => Auth.isAuthorized(req, res, callback);
+        expect(data).to.throw(Error);
+      });
     });
   });
-
   describe("Sign Test", () => {
     let signStub: Sinon.SinonStub;
     beforeEach(() => {
@@ -95,7 +107,7 @@ describe("", () => {
       let bearerToken = "bearerToken";
       let refreshToken = "bearerToken";
 
-      Auth.Sign(892834);
+      Auth.Sign(892834, "admin");
 
       Sinon.assert.calledTwice(signStub);
     });

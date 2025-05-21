@@ -59,13 +59,19 @@ export class MentorDb {
   }
 
   static async login(user: any) {
-    const result = await repository.findOneBy({ email: user.email });
+    const result = await repository.findOne({
+      where: { email: user.email },
+      relations: {
+        role: true,
+      },
+    });
     if (!result) {
       throw new Error("User doesn't exists");
     }
 
     const id = result.id;
-    const token = Auth.Sign(id);
+    const role = result.role.name;
+    const token = Auth.Sign(id, role);
     return token;
   }
 }
