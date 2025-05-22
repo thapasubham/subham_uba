@@ -26,7 +26,8 @@ export async function startServer() {
   app.use("/api/intern", routes.internRoutes);
   app.use("/api/detail", routes.internDetailsRoutes);
   app.use("/api/mentor", routes.mentorRoutes);
-
+  app.use("/api/roles", routes.rolesRoutes);
+  app.use("/api/permission", routes.permissionRoutes);
   //graphql
 
   await server.start();
