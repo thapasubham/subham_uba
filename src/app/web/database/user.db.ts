@@ -3,6 +3,7 @@ import { User } from "../../../entity/user.js";
 import { login } from "../../../types/login.types.js";
 import { PasswordHasher } from "../auth/hash.js";
 import { Auth } from "../auth/jwt.js";
+import { HttpError } from "../middleware/error.js";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -24,6 +25,9 @@ export class DataBase {
         phoneNumber: true,
       },
     });
+    if (!result) {
+      throw new HttpError("User doesn't exists", 404);
+    }
     return result;
   }
 
@@ -70,7 +74,7 @@ export class DataBase {
   static async Login(user: login) {
     const result = await userRepository.findOneBy({ email: user.email });
     if (!result) {
-      throw new Error("User doesn't exists");
+      throw new HttpError("User doesn't exists", 404);
     }
 
     await PasswordHasher.Compare(user.password, result.password);

@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { Intern, User } from "../../../entity/user.js";
+import { User } from "../../../entity/user.js";
 import { responseType, ResponseApi } from "../../../utils/ApiResponse.js";
 import { parseBody } from "../utils/utils.js";
 import { login } from "../../../types/login.types.js";
+import { Intern } from "../../../entity/intern.js";
 
 export function validate(req: Request, res: Response, next: NextFunction) {
   const response: responseType<String> = {

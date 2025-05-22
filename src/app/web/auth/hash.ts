@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { HttpError } from "../middleware/error";
 export class PasswordHasher {
   static async Hash(password: string): Promise<string> {
     let hashedPassword = await bcrypt.hash(password, 5);
@@ -8,7 +9,7 @@ export class PasswordHasher {
   static async Compare(password: string, hashedPassword: string) {
     let val = await bcrypt.compare(password, hashedPassword);
     if (!val) {
-      throw new Error("Password Doesnt Match");
+      throw new HttpError("Password Doesnt Match", 401);
     }
   }
 }

@@ -3,6 +3,7 @@ import { Mentor } from "../../../entity/user.js";
 import { login } from "../../../types/login.types.js";
 import { PasswordHasher } from "../auth/hash.js";
 import { Auth } from "../auth/jwt.js";
+import { HttpError } from "../middleware/error.js";
 
 const repository = AppDataSource.getRepository(Mentor);
 export class MentorDb {
@@ -19,6 +20,10 @@ export class MentorDb {
         isDeleted: false,
       },
     });
+    if (!result) {
+      throw new HttpError("User doesn't exists", 404);
+    }
+
     return result;
   }
   static async ReadMentors(limit: number, offset: number) {
@@ -70,7 +75,7 @@ export class MentorDb {
       },
     });
     if (!result) {
-      throw new Error("User doesn't exists");
+      throw new HttpError("User doesn't exists", 404);
     }
     await PasswordHasher.Compare(user.password, result.password);
 

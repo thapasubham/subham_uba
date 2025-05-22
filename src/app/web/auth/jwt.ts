@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import jwt from "jsonwebtoken";
 import { ResponseApi } from "../../../utils/ApiResponse";
+import { HttpError } from "../middleware/error";
 
 export class Auth {
   static isAuthorized(req: Request, res: Response, next: NextFunction) {
@@ -30,7 +31,7 @@ export class Auth {
       }
       next();
     } catch (e) {
-      throw new Error(e);
+      throw new HttpError(e.message || "Unauthorized", 401);
     }
   }
 
