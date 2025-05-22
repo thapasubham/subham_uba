@@ -2,8 +2,8 @@ import Sinon from "sinon";
 import { MentorDb } from "../../../app/web/database/mentor.db.js";
 import { MentorService } from "../../../app/web/services/MentorService.js";
 import { assert } from "chai";
-import { Mentor } from "../../../entity/user";
-import {Role} from "../../../entity/role";
+import { Mentor } from "../../../entity/user.js";
+import { Role } from "../../../entity/role.js";
 
 describe("Mentor Test", () => {
   const mentorService = new MentorService();

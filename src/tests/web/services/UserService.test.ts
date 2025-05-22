@@ -3,7 +3,7 @@ import { UserService } from "../../../app/web/services/UserService.js";
 import { User } from "../../../entity/user.js";
 import { assert } from "chai";
 import { DataBase } from "../../../app/web/database/user.db.js";
-import {Role} from "../../../entity/role";
+import { Role } from "../../../entity/role.js";
 
 describe("User Services tests", () => {
   const userService = new UserService();
