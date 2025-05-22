@@ -330,24 +330,6 @@ describe("User controller tests ", () => {
       updateStub.restore();
       writeResponseStub.restore();
     });
-    it("Failed update user", async () => {
-      req = {
-        body: {
-          firstname: "Subham",
-          lastname: "Thapa",
-        },
-        params: {
-          id: "5",
-        },
-      };
-
-      updateStub.returns(0);
-      await userController.UpdateUser(req, res);
-      Sinon.assert.calledWith(writeResponseStub, res, {
-        message: "Failed to update user",
-        status: 404,
-      });
-    });
 
     it("Update the user", async () => {
       req = {

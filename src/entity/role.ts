@@ -13,6 +13,9 @@ export class Permission {
 
   @Column("varchar", { length: 20 })
   name: string;
+
+  @Column("boolean", {default: false})
+  isDeleted: boolean;
 }
 @Entity()
 export class Role {

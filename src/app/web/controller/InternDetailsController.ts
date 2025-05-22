@@ -30,7 +30,7 @@ export class InternDetailsController {
     const id = Number(req.params.id);
     const detail = await internService.ReadIntern(0, 0, id);
 
-    console.log(detail);
+
     if (!detail) {
       response.message = "No data were found";
       response.status = 404;
@@ -61,7 +61,7 @@ export class InternDetailsController {
   }
 
   async Certify(req: Request, res: Response) {
-    const response: responseType<String> = {
+    const response: responseType<string> = {
       message: "",
       status: 200,
     };

@@ -47,15 +47,15 @@ export class UserDb {
       id: user.id,
       isDeleted: false,
     });
-    if (result) {
-      result.firstname = user.firstname;
-      result.lastname = user.lastname;
-      result.phoneNumber = user.phoneNumber;
-      result.email = user.email;
-      await userRepository.save(result);
-      return 1;
+    if (!result) {
+     throw new HttpError("User doesn't exists", 404);
     }
-    return 0;
+    result.firstname = user.firstname;
+    result.lastname = user.lastname;
+    result.phoneNumber = user.phoneNumber;
+    result.email = user.email;
+    await userRepository.save(result);
+    return 1;
   }
 
   static async DeleteUser(id: number) {

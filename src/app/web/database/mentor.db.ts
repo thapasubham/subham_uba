@@ -43,16 +43,16 @@ export class MentorDb {
       id: mentor.id,
       isDeleted: false,
     });
-    if (result) {
-      result.firstname = mentor.firstname;
-      result.lastname = mentor.lastname;
-      result.phoneNumber = mentor.phoneNumber;
-      result.email = mentor.email;
-      result.role = mentor.role;
-      await repository.save(result);
-      return 1;
+    if (!result) {
+      throw new HttpError("Mentor doesn't exists", 404);
     }
-    return 0;
+     result.firstname = mentor.firstname;
+    result.lastname = mentor.lastname;
+    result.phoneNumber = mentor.phoneNumber;
+    result.email = mentor.email;
+    result.role = mentor.role;
+    await repository.save(result);
+    return 1;
   }
 
   static async DeleteMentor(id: number) {

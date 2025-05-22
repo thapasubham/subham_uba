@@ -69,15 +69,12 @@ export class UserController {
     const userData: User = parseBody(req);
 
     userData.id = id;
-    const result = await userService.Update(userData);
+    await userService.Update(userData);
 
-    if (result === 0) {
-      response.message = "Failed to update user";
-      response.status = 404;
-    } else {
+
       response.message = "User Updated";
       response.status = 200;
-    }
+
     ResponseApi.WriteResponse(res, response);
   }
 

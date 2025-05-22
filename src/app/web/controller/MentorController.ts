@@ -49,13 +49,10 @@ export class MentorController {
     const id = parseInt(req.params.id);
     const user = await mentorService.ReadMentors(0, 0, id);
 
-    if (!user) {
-      response.status = 404;
-      response.message = "User not found";
-    } else {
+
       response.status = 200;
       response.data = user as Mentor;
-    }
+
     ResponseApi.WriteResponse(res, response);
   }
 
