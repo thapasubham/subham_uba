@@ -2,7 +2,7 @@ import Sinon from "sinon";
 import { UserController } from "../../../app/web/controller/UserController.js";
 import { UserService } from "../../../app/web/services/UserService.js";
 import { ResponseApi } from "../../../utils/ApiResponse.js";
-import {  user } from "../../../entity/user.js";
+import {  User } from "../../../entity/user.js";
 import {Role} from "../../../entity/role";
 
 describe("User controller tests ", () => {
@@ -103,7 +103,7 @@ describe("User controller tests ", () => {
         },
       };
       deleteUserstub.returns(0);
-      const userData: user[] = [
+      const userData: User[] = [
         {
           firstname: "Test",
           lastname: "test",
@@ -141,7 +141,7 @@ describe("User controller tests ", () => {
         },
       };
       deleteUserstub.returns(1);
-      const userData: user[] = [
+      const userData: User[] = [
         {
           firstname: "Test",
           lastname: "user",
@@ -220,7 +220,7 @@ describe("User controller tests ", () => {
             offset: " 5",
           },
         };
-        let userData: user[] = [
+        let userData: User[] = [
           {
             firstname: "Subham",
             lastname: "Thapa",
@@ -281,7 +281,7 @@ describe("User controller tests ", () => {
 
       //user exists
       it("Userexists", async () => {
-        let user: user = {
+        let user: User = {
           firstname: "subham",
           lastname: "thapa",
           id: 4,

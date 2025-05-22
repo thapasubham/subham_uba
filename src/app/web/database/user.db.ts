@@ -1,13 +1,13 @@
 import { AppDataSource } from "../../../data-source.js";
-import { user } from "../../../entity/user.js";
+import { User } from "../../../entity/user.js";
 import { login } from "../../../types/login.types.js";
 import { PasswordHasher } from "../auth/hash.js";
 import { Auth } from "../auth/jwt.js";
 
-const userRepository = AppDataSource.getRepository(user);
+const userRepository = AppDataSource.getRepository(User);
 
 export class DataBase {
-  static async Createuser(user: user) {
+  static async Createuser(user: User) {
     const hashedPassword = await PasswordHasher.Hash(user.password);
     user.password = hashedPassword;
     const result = await userRepository.save(user);
@@ -39,7 +39,7 @@ export class DataBase {
     return result;
   }
 
-  static async UpdateUser(user: user) {
+  static async UpdateUser(user: User) {
     console.log(user.id);
     const result = await userRepository.findOneBy({
       id: user.id,

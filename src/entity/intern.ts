@@ -1,39 +1,46 @@
-import {Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn} from "typeorm";
-import {Mentor, user} from "./user";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Mentor, User } from "./user.js";
 
 @Entity()
 export class Intern {
-    @PrimaryGeneratedColumn()
-    id?: number;
+  @PrimaryGeneratedColumn()
+  id?: number;
 
-    @Column("varchar", { unique: true, nullable: false })
-    name: string;
+  @Column("varchar", { unique: true, nullable: false })
+  name: string;
 
-    @Column("boolean", { default: false })
-    isDeleted?: boolean;
+  @Column("boolean", { default: false })
+  isDeleted?: boolean;
 }
 
 @Entity()
 export class internShipDetails {
-    @PrimaryGeneratedColumn()
-    id?: number;
+  @PrimaryGeneratedColumn()
+  id?: number;
 
-    @Column("date")
-    started_at: Date;
+  @Column("date")
+  started_at: Date;
 
-    @Column("date")
-    end_at: Date;
+  @Column("date")
+  end_at: Date;
 
-    @Column("boolean")
-    isCertified: boolean;
+  @Column("boolean")
+  isCertified: boolean;
 
-    @ManyToOne(() => Intern)
-    intern: Intern;
+  @ManyToOne(() => Intern)
+  intern: Intern;
 
-    @ManyToOne(() => Mentor)
-    mentor: Mentor;
+  @ManyToOne(() => Mentor)
+  mentor: Mentor;
 
-    @OneToOne(() => user)
-    @JoinColumn({ name: "userId" })
-    user: user;
+  @OneToOne(() => User)
+  @JoinColumn({ name: "userId" })
+  user: User;
 }

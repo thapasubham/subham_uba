@@ -1,6 +1,6 @@
 import Sinon from "sinon";
 import { UserService } from "../../../app/web/services/UserService.js";
-import { user } from "../../../entity/user.js";
+import { User } from "../../../entity/user.js";
 import { assert } from "chai";
 import { DataBase } from "../../../app/web/database/user.db.js";
 import {Role} from "../../../entity/role";
@@ -18,7 +18,7 @@ describe("User Services tests", () => {
       saveUserStub.restore();
     });
     it("Create user test case", async () => {
-      const user: user = {
+      const user: User = {
         firstname: "Subham",
         lastname: "thapa",
         id: 5,
@@ -72,7 +72,7 @@ describe("User Services tests", () => {
       updateUserStub.restore();
     });
     it("Create user test case", async () => {
-      const user: user = {
+      const user: User = {
         firstname: "John",
         lastname: "BloodBorne",
         id: 5,
@@ -111,7 +111,7 @@ describe("User Services tests", () => {
       });
 
       it("Read user Data", async () => {
-        let users: user[] = [
+        let users: User[] = [
           {
             firstname: "Subham",
             lastname: "Thapa",

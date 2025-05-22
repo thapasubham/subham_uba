@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Intern, user } from "../../../entity/user.js";
+import { Intern, User } from "../../../entity/user.js";
 import { responseType, ResponseApi } from "../../../utils/ApiResponse.js";
 import { parseBody } from "../utils/utils.js";
 import { login } from "../../../types/login.types.js";
@@ -10,7 +10,7 @@ export function validate(req: Request, res: Response, next: NextFunction) {
     message: "",
   };
 
-  const user: user = parseBody(req);
+  const user: User = parseBody(req);
 
   if (!(user.firstname && user.lastname && user.email && user.phoneNumber)) {
     response.message = "Missing fields";

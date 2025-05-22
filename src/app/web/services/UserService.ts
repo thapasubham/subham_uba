@@ -1,4 +1,4 @@
-import { user } from "../../../entity/user.js";
+import { User } from "../../../entity/user.js";
 import { login } from "../../../types/login.types.js";
 import { DataBase } from "../database/user.db.js";
 
@@ -11,18 +11,18 @@ export class UserService {
   /**
    *
    * Creates new user
-   * @param {user} [user] - Pass the user object you want to create
+   * @param {User} [user] - Pass the user object you want to create
    *
-   * @returns {user} - Newly created user.
+   * @returns {User} - Newly created user.
    *
    * @example
    * const user= {id: 4, firstname: "John", lastname :"Pork"}
    * const result = userService.CreateUser(user);
    *
    */
-  async CreateUser(user: user): Promise<user> {
+  async CreateUser(user: User): Promise<User> {
     user.id = Date.now();
-    const createdUser: user = await DataBase.Createuser(user);
+    const createdUser: User = await DataBase.Createuser(user);
 
     return createdUser;
   }
@@ -52,7 +52,7 @@ export class UserService {
    * @param {number} [limit] - Total number of users to retrieve.
    * @param {number} [offset] - Number of users to skip from the start.
    * @param {number} [id] - The ID of the user to return.
-   * @returns {user[]} - The requested users. Always returns array.
+   * @returns {User[]} - The requested users. Always returns array.
    *
    * @example
    * //Get user by Id
@@ -67,14 +67,14 @@ export class UserService {
     limit?: number,
     offset?: number,
     id?: number
-  ): Promise<user[] | user> {
+  ): Promise<User[] | User> {
     if (typeof id === "number") {
       const user = await DataBase.ReadUser(id);
       return user;
     }
 
     if ((limit as number) >= 0 && (offset as number) >= 0) {
-      const users: user[] = await DataBase.ReadUsers(
+      const users: User[] = await DataBase.ReadUsers(
         limit as number,
         offset as number
       );
@@ -85,7 +85,7 @@ export class UserService {
     }
   }
 
-  async Update(user: user): Promise<number> {
+  async Update(user: User): Promise<number> {
     const result = await DataBase.UpdateUser(user);
 
     return result;

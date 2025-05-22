@@ -4,7 +4,7 @@ import { DetailsDB } from "../../../app/web/database/internDetails.db.js";
 
 import { assert } from "chai";
 import {Intern, internShipDetails } from "../../../entity/intern.js";
-import { Mentor, user } from "../../../entity/user.js";
+import { Mentor, User } from "../../../entity/user.js";
 
 describe("Intern details test", () => {
   let detailService = new InternDetailsService();
@@ -21,7 +21,7 @@ describe("Intern details test", () => {
     it("Read by id", async () => {
       const data: internShipDetails = {
         id: 4,
-        user: new user(),
+        user: new User(),
         started_at: undefined,
         end_at: undefined,
         isCertified: false,
@@ -47,7 +47,7 @@ describe("Intern details test", () => {
       let data: internShipDetails[] = [
         {
           id: 4,
-          user: new user(),
+          user: new User(),
           started_at: undefined,
           end_at: undefined,
           isCertified: false,
@@ -56,7 +56,7 @@ describe("Intern details test", () => {
         },
         {
           id: 5,
-          user: new user(),
+          user: new User(),
           started_at: undefined,
           end_at: undefined,
           isCertified: false,
@@ -65,7 +65,7 @@ describe("Intern details test", () => {
         },
         {
           id: 10,
-          user: new user(),
+          user: new User(),
           started_at: undefined,
           end_at: undefined,
           isCertified: false,
@@ -96,7 +96,7 @@ describe("Intern details test", () => {
         isCertified: false,
         intern: new Intern(),
         mentor: new Mentor(),
-        user: new user(),
+        user: new User(),
       };
       createStub.returns(detail);
       const result = await detailService.CreateIntern(detail);
@@ -121,7 +121,7 @@ describe("Intern details test", () => {
         isCertified: false,
         intern: new Intern(),
         mentor: new Mentor(),
-        user: new user(),
+        user: new User(),
       };
       updateStub.returns(detail);
       const result = await detailService.UpdateIntern(detail);

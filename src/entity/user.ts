@@ -2,13 +2,11 @@ import {
   Column,
   Entity,
   Index,
+  JoinColumn,
   ManyToOne,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
 } from "typeorm";
-import {Role} from "./role";
-
-
+import { Role } from "./role.js";
 
 @Entity()
 export class Details {
@@ -34,18 +32,14 @@ export class Details {
 
   @Column("boolean", { default: false })
   isDeleted?: boolean;
-}
 
-@Entity()
-export class user extends Details {
   @ManyToOne(() => Role)
+  @JoinColumn({ name: "role_id" })
   role: Role;
 }
 
 @Entity()
-export class Mentor extends Details {
-  @ManyToOne(() => Role)
-  role: Role;
-}
+export class User extends Details {}
 
-
+@Entity()
+export class Mentor extends Details {}
