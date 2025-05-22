@@ -1,5 +1,5 @@
 import { AppDataSource } from "../../../data-source.js";
-import { Intern } from "../../../entity/user.js";
+import { Intern } from "../../../entity/intern.js";
 
 const internRepository = AppDataSource.getRepository(Intern);
 

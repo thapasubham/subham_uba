@@ -1,8 +1,10 @@
 import Sinon from "sinon";
 import { InternDetailsService } from "../../../app/web/services/InternDetailsService.js";
 import { DetailsDB } from "../../../app/web/database/internDetails.db.js";
-import { Intern, internShipDetails, Mentor, user } from "../../../entity/user";
+
 import { assert } from "chai";
+import {Intern, internShipDetails } from "../../../entity/intern.js";
+import { Mentor, user } from "../../../entity/user.js";
 
 describe("Intern details test", () => {
   let detailService = new InternDetailsService();
@@ -17,7 +19,7 @@ describe("Intern details test", () => {
       readDetailStub.restore();
     });
     it("Read by id", async () => {
-      let data: internShipDetails = {
+      const data: internShipDetails = {
         id: 4,
         user: new user(),
         started_at: undefined,

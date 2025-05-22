@@ -2,7 +2,8 @@ import Sinon from "sinon";
 import { UserController } from "../../../app/web/controller/UserController.js";
 import { UserService } from "../../../app/web/services/UserService.js";
 import { ResponseApi } from "../../../utils/ApiResponse.js";
-import { Role, user } from "../../../entity/user.js";
+import {  user } from "../../../entity/user.js";
+import {Role} from "../../../entity/role";
 
 describe("User controller tests ", () => {
   const userController = new UserController();
@@ -102,7 +103,7 @@ describe("User controller tests ", () => {
         },
       };
       deleteUserstub.returns(0);
-      let userData: user[] = [
+      const userData: user[] = [
         {
           firstname: "Test",
           lastname: "test",
@@ -140,7 +141,7 @@ describe("User controller tests ", () => {
         },
       };
       deleteUserstub.returns(1);
-      let userData: user[] = [
+      const userData: user[] = [
         {
           firstname: "Test",
           lastname: "user",

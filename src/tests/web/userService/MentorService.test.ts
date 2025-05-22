@@ -2,10 +2,11 @@ import Sinon from "sinon";
 import { MentorDb } from "../../../app/web/database/mentor.db.js";
 import { MentorService } from "../../../app/web/services/MentorService.js";
 import { assert } from "chai";
-import { Mentor, Role } from "../../../entity/user";
+import { Mentor } from "../../../entity/user";
+import {Role} from "../../../entity/role";
 
 describe("Mentor Test", () => {
-  let mentorService = new MentorService();
+  const mentorService = new MentorService();
 
   describe("Create User test suite", () => {
     let saveUserStub: Sinon.SinonStub;

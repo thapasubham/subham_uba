@@ -1,5 +1,5 @@
-import { internShipDetails } from "../../../entity/user.js";
 import { DetailsDB } from "../database/internDetails.db.js";
+import {internShipDetails} from "../../../entity/intern";
 export class InternDetailsService {
   async ReadIntern(
     limit?: number,

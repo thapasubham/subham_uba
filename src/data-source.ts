@@ -1,12 +1,12 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import {
-  Intern,
-  internShipDetails,
   Mentor,
-  Role,
+
   user,
 } from "./entity/user.js";
+import {Intern, internShipDetails} from "./entity/intern";
+import {Role} from "./entity/role";
 
 export const AppDataSource = new DataSource({
   type: "mysql",

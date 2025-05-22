@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { internShipDetails } from "../../../entity/user.js";
+import { internShipDetails } from "../../../entity/intern.js";
 import { ResponseApi, responseType } from "../../../utils/ApiResponse.js";
 import { InternDetailsService } from "../services/InternDetailsService.js";
 import { parseBody } from "../utils/utils.js";

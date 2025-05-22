@@ -2,16 +2,16 @@ import Sinon from "sinon";
 import { InternService } from "../../../app/web/services/InternService.js";
 import { DataBaseIntern } from "../../../app/web/database/intern.db.js";
 import { assert } from "chai";
-import { Intern } from "../../../entity/user.js";
+import { Intern } from "../../../entity/intern.js";
 describe("Testing the Inter service", () => {
-  let internService = new InternService();
+  const internService = new InternService();
 
   describe("Intern", () => {
     let saveIntern: Sinon.SinonStub;
 
     beforeEach(() => {
       saveIntern = Sinon.stub(DataBaseIntern, "Create");
-      internService = new InternService();
+
     });
 
     afterEach(() => {

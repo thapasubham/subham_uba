@@ -1,5 +1,5 @@
 import { AppDataSource } from "../../../data-source.js";
-import { internShipDetails, user } from "../../../entity/user.js";
+import { internShipDetails} from "../../../entity/intern.js";
 
 const internRepository = AppDataSource.getRepository(internShipDetails);
 

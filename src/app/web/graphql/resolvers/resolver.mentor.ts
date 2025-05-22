@@ -1,5 +1,3 @@
-import { Mentor } from "../../../../entity/user";
-
 export const mentor = {
   Query: {
     async mentors(_: any, { limit, offset }: any, { dataSource }: any) {

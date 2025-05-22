@@ -2,7 +2,7 @@ import Sinon from "sinon";
 import { InternController } from "../../../app/web/controller/InternController.js";
 import { InternService } from "../../../app/web/services/InternService.js";
 import { ResponseApi } from "../../../utils/ApiResponse.js";
-import { Intern } from "../../../entity/user.js";
+import { Intern } from "../../../entity/intern.js";
 
 describe("Intern controller tests ", () => {
   let internController = new InternController();

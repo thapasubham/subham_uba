@@ -1,8 +1,9 @@
 import Sinon from "sinon";
 import { UserService } from "../../../app/web/services/UserService.js";
-import { Role, user } from "../../../entity/user.js";
+import { user } from "../../../entity/user.js";
 import { assert } from "chai";
 import { DataBase } from "../../../app/web/database/user.db.js";
+import {Role} from "../../../entity/role";
 
 describe("User Services tests", () => {
   const userService = new UserService();
