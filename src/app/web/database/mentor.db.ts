@@ -1,15 +1,14 @@
-import { AppDataSource } from "../../../data-source.js";
-import { Mentor } from "../../../entity/user.js";
-import { login } from "../../../types/login.types.js";
-import { PasswordHasher } from "../auth/hash.js";
-import { Auth } from "../auth/jwt.js";
-import { HttpError } from "../middleware/error.js";
+import {AppDataSource} from "../../../data-source.js";
+import {Mentor} from "../../../entity/user.js";
+import {login} from "../../../types/login.types.js";
+import {PasswordHasher} from "../auth/hash.js";
+import {Auth} from "../auth/jwt.js";
+import {HttpError} from "../middleware/error.js";
 
 const repository = AppDataSource.getRepository(Mentor);
 export class MentorDb {
   static async CreateMentor(mentor: Mentor) {
-    const hashedPassword = await PasswordHasher.Hash(mentor.password);
-    mentor.password = hashedPassword;
+    mentor.password = await PasswordHasher.Hash(mentor.password);
     const result = await repository.save(mentor);
     return result;
   }
@@ -81,7 +80,6 @@ export class MentorDb {
 
     const id = result.id;
     const role = result.role.name;
-    const token = Auth.Sign(id, role);
-    return token;
+    return Auth.Sign(id, role);
   }
 }

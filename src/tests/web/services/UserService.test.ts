@@ -2,7 +2,7 @@ import Sinon from "sinon";
 import { UserService } from "../../../app/web/services/UserService.js";
 import { User } from "../../../entity/user.js";
 import { assert } from "chai";
-import { DataBase } from "../../../app/web/database/user.db.js";
+import { UserDb } from "../../../app/web/database/user.db";
 import { Role } from "../../../entity/role.js";
 
 describe("User Services tests", () => {
@@ -12,7 +12,7 @@ describe("User Services tests", () => {
   describe("Create User test suite", () => {
     let saveUserStub: Sinon.SinonStub;
     beforeEach(() => {
-      saveUserStub = Sinon.stub(DataBase, "Createuser");
+      saveUserStub = Sinon.stub(UserDb, "Createuser");
     });
     afterEach(() => {
       saveUserStub.restore();
@@ -39,7 +39,7 @@ describe("User Services tests", () => {
   describe("Delete User test suite", () => {
     let deleteuserStub: Sinon.SinonStub;
     beforeEach(() => {
-      deleteuserStub = Sinon.stub(DataBase, "DeleteUser");
+      deleteuserStub = Sinon.stub(UserDb, "DeleteUser");
     });
     afterEach(() => {
       deleteuserStub.restore();
@@ -66,7 +66,7 @@ describe("User Services tests", () => {
   describe("Update test suite", () => {
     let updateUserStub: Sinon.SinonStub;
     beforeEach(() => {
-      updateUserStub = Sinon.stub(DataBase, "UpdateUser");
+      updateUserStub = Sinon.stub(UserDb, "UpdateUser");
     });
     afterEach(() => {
       updateUserStub.restore();
@@ -92,7 +92,7 @@ describe("User Services tests", () => {
   describe("", () => {
     let readUserStub: Sinon.SinonStub;
     beforeEach(() => {
-      readUserStub = Sinon.stub(DataBase, "ReadUsers");
+      readUserStub = Sinon.stub(UserDb, "ReadUsers");
     });
     afterEach(() => {
       readUserStub.restore();
@@ -156,7 +156,7 @@ describe("User Services tests", () => {
   describe("read user test suite", () => {
     let readUserStub: Sinon.SinonStub;
     beforeEach(() => {
-      readUserStub = Sinon.stub(DataBase, "ReadUser");
+      readUserStub = Sinon.stub(UserDb, "ReadUser");
     });
     afterEach(() => {
       readUserStub.restore();
@@ -187,7 +187,7 @@ describe("User Services tests", () => {
     let loginStub: Sinon.SinonStub;
 
     beforeEach(() => {
-      loginStub = Sinon.stub(DataBase, "Login");
+      loginStub = Sinon.stub(UserDb, "Login");
     });
     after(() => {
       Sinon.restore();

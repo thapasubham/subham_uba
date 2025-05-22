@@ -1,6 +1,6 @@
 import Sinon from "sinon";
 import { InternService } from "../../../app/web/services/InternService.js";
-import { DataBaseIntern } from "../../../app/web/database/intern.db.js";
+import { InternDb } from "../../../app/web/database/internDb";
 import { assert } from "chai";
 import { Intern } from "../../../entity/intern.js";
 describe("Testing the Inter service", () => {
@@ -10,7 +10,7 @@ describe("Testing the Inter service", () => {
     let saveIntern: Sinon.SinonStub;
 
     beforeEach(() => {
-      saveIntern = Sinon.stub(DataBaseIntern, "Create");
+      saveIntern = Sinon.stub(InternDb, "Create");
 
     });
 
@@ -33,7 +33,7 @@ describe("Testing the Inter service", () => {
   describe("Delete intern test suite", () => {
     let deleteinternStub: Sinon.SinonStub;
     beforeEach(() => {
-      deleteinternStub = Sinon.stub(DataBaseIntern, "Delete");
+      deleteinternStub = Sinon.stub(InternDb, "Delete");
     });
     afterEach(() => {
       deleteinternStub.restore();
@@ -60,7 +60,7 @@ describe("Testing the Inter service", () => {
   describe("Update test suite", () => {
     let updateStub: Sinon.SinonStub;
     beforeEach(() => {
-      updateStub = Sinon.stub(DataBaseIntern, "Update");
+      updateStub = Sinon.stub(InternDb, "Update");
     });
     it("Create intern test case", async () => {
       const intern: Intern = {
@@ -81,7 +81,7 @@ describe("Testing the Inter service", () => {
   describe("", () => {
     let readStub: Sinon.SinonStub;
     beforeEach(() => {
-      readStub = Sinon.stub(DataBaseIntern, "Reads");
+      readStub = Sinon.stub(InternDb, "Reads");
     });
     afterEach(() => {
       readStub.restore();
@@ -116,7 +116,7 @@ describe("Testing the Inter service", () => {
   describe("read intern test suite", () => {
     let readStub: Sinon.SinonStub;
     beforeEach(() => {
-      readStub = Sinon.stub(DataBaseIntern, "Read");
+      readStub = Sinon.stub(InternDb, "Read");
     });
     afterEach(() => {
       readStub.restore();

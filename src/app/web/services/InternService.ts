@@ -1,5 +1,5 @@
 import { Intern } from "../../../entity/intern.js";
-import { DataBaseIntern } from "../database/intern.db.js";
+import { InternDb } from "../database/internDb";
 
 export class InternService {
   /**
@@ -7,7 +7,7 @@ export class InternService {
    * @param {intern} [Intern]
    */
   async CreateIntern(intern: Intern) {
-    const result = await DataBaseIntern.Create(intern);
+    const result = await InternDb.Create(intern);
     return result;
   }
 
@@ -19,18 +19,18 @@ export class InternService {
    */
   async ReadIntern(id?: number): Promise<Intern[] | Intern> {
     if (id) {
-      return await DataBaseIntern.Read(id);
+      return await InternDb.Read(id);
     }
-    const result = await DataBaseIntern.Reads();
+    const result = await InternDb.Reads();
     return result;
   }
 
   async UpdateIntern(intern: Intern) {
-    const result = await DataBaseIntern.Update(intern);
+    const result = await InternDb.Update(intern);
     return result;
   }
 
   async DeleteIntern(id: number) {
-    return await DataBaseIntern.Delete(id);
+    return await InternDb.Delete(id);
   }
 }

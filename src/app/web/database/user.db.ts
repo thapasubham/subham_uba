@@ -1,18 +1,16 @@
-import { AppDataSource } from "../../../data-source.js";
-import { User } from "../../../entity/user.js";
-import { login } from "../../../types/login.types.js";
-import { PasswordHasher } from "../auth/hash.js";
-import { Auth } from "../auth/jwt.js";
-import { HttpError } from "../middleware/error.js";
+import {AppDataSource} from "../../../data-source.js";
+import {User} from "../../../entity/user.js";
+import {login} from "../../../types/login.types.js";
+import {PasswordHasher} from "../auth/hash.js";
+import {Auth} from "../auth/jwt.js";
+import {HttpError} from "../middleware/error.js";
 
 const userRepository = AppDataSource.getRepository(User);
 
-export class DataBase {
+export class UserDb {
   static async Createuser(user: User) {
-    const hashedPassword = await PasswordHasher.Hash(user.password);
-    user.password = hashedPassword;
-    const result = await userRepository.save(user);
-    return result;
+    user.password = await PasswordHasher.Hash(user.password);
+    return await userRepository.save(user);
   }
 
   static async ReadUser(id: number) {
@@ -80,7 +78,6 @@ export class DataBase {
     await PasswordHasher.Compare(user.password, result.password);
 
     const id = result.id;
-    const token = Auth.Sign(id, result.role.name);
-    return token;
+    return Auth.Sign(id, result.role.name);
   }
 }

@@ -1,6 +1,6 @@
 import { User } from "../../../entity/user.js";
 import { login } from "../../../types/login.types.js";
-import { DataBase } from "../database/user.db.js";
+import { UserDb } from "../database/user.db";
 
 /**
  * Class to perfrom CRUD operation
@@ -22,7 +22,7 @@ export class UserService {
    */
   async CreateUser(user: User): Promise<User> {
     user.id = Date.now();
-    const createdUser: User = await DataBase.Createuser(user);
+    const createdUser: User = await UserDb.Createuser(user);
 
     return createdUser;
   }
@@ -41,7 +41,7 @@ export class UserService {
    *
    */
   async DeleteUser(id: number): Promise<number> {
-    const del = await DataBase.DeleteUser(id);
+    const del = await UserDb.DeleteUser(id);
 
     return del;
   }
@@ -69,12 +69,12 @@ export class UserService {
     id?: number
   ): Promise<User[] | User> {
     if (typeof id === "number") {
-      const user = await DataBase.ReadUser(id);
+      const user = await UserDb.ReadUser(id);
       return user;
     }
 
     if ((limit as number) >= 0 && (offset as number) >= 0) {
-      const users: User[] = await DataBase.ReadUsers(
+      const users: User[] = await UserDb.ReadUsers(
         limit as number,
         offset as number
       );
@@ -86,13 +86,13 @@ export class UserService {
   }
 
   async Update(user: User): Promise<number> {
-    const result = await DataBase.UpdateUser(user);
+    const result = await UserDb.UpdateUser(user);
 
     return result;
   }
 
   async Login(user: login): Promise<any> {
-    const result = await DataBase.Login(user);
+    const result = await UserDb.Login(user);
     return result;
   }
 }
