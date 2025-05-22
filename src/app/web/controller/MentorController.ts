@@ -100,7 +100,7 @@ export class MentorController {
   }
 
   async login(req: Request, res: Response) {
-    const result = await mentorService.login(req.body);
+    const result = await mentorService.Login(req.body);
 
     ResponseApi.WriteResponse(res, { status: 200, data: result });
   }

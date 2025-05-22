@@ -1,10 +1,14 @@
 import { AppDataSource } from "../../../data-source.js";
 import { Mentor } from "../../../entity/user.js";
+import { login } from "../../../types/login.types.js";
+import { PasswordHasher } from "../auth/hash.js";
 import { Auth } from "../auth/jwt.js";
 
 const repository = AppDataSource.getRepository(Mentor);
 export class MentorDb {
   static async CreateMentor(mentor: Mentor) {
+    const hashedPassword = await PasswordHasher.Hash(mentor.password);
+    mentor.password = hashedPassword;
     const result = await repository.save(mentor);
     return result;
   }
@@ -58,7 +62,7 @@ export class MentorDb {
     return 0;
   }
 
-  static async login(user: any) {
+  static async Login(user: login) {
     const result = await repository.findOne({
       where: { email: user.email },
       relations: {
@@ -68,6 +72,7 @@ export class MentorDb {
     if (!result) {
       throw new Error("User doesn't exists");
     }
+    await PasswordHasher.Compare(user.password, result.password);
 
     const id = result.id;
     const role = result.role.name;

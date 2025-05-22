@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { Intern, user } from "../../../entity/user.js";
 import { responseType, ResponseApi } from "../../../utils/ApiResponse.js";
 import { parseBody } from "../utils/utils.js";
+import { login } from "../../../types/login.types.js";
 
 export function validate(req: Request, res: Response, next: NextFunction) {
   const response: responseType<String> = {
@@ -62,6 +63,23 @@ export function validateIntern(
   const intern: Intern = parseBody(req);
 
   if (!intern.name) {
+    response.message = "Missing fields";
+    response.status = 400;
+    ResponseApi.WriteError(res, response);
+    return;
+  }
+
+  next();
+}
+
+export function validateLogin(req: Request, res: Response, next: NextFunction) {
+  const response: responseType<String> = {
+    status: 200,
+    message: "",
+  };
+
+  const user: login = parseBody(req);
+  if (!(user.email && user.password)) {
     response.message = "Missing fields";
     response.status = 400;
     ResponseApi.WriteError(res, response);

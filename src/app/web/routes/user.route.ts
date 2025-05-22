@@ -5,6 +5,7 @@ import {
   checkID,
   checkQuery,
   validate,
+  validateLogin,
 } from "../middleware/validate.middleware.js";
 import { Auth } from "../auth/jwt.js";
 
@@ -15,7 +16,7 @@ const usersHandler = new UserController();
 router.get("/getUsers", checkQuery, usersHandler.GetUsers);
 router.get("/getUser/:id", Auth.isAuthorized, checkID, usersHandler.GetUser);
 router.post("/createUser", validate, usersHandler.CreateUser);
-router.post("/login", usersHandler.login);
+router.post("/login", validateLogin, usersHandler.login);
 router.delete(
   "/deleteUser/:id",
   Auth.isAuthorized,

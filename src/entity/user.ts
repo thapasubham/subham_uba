@@ -8,7 +8,7 @@ import {
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
-
+import bcrypt from "bcrypt";
 @Entity()
 export class Role {
   @PrimaryGeneratedColumn()

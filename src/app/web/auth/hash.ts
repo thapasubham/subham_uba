@@ -7,6 +7,8 @@ export class PasswordHasher {
 
   static async Compare(password: string, hashedPassword: string) {
     let val = await bcrypt.compare(password, hashedPassword);
-    return val;
+    if (!val) {
+      throw new Error("Password Doesnt Match");
+    }
   }
 }

@@ -27,17 +27,6 @@ export async function startServer() {
   app.use("/api/detail", routes.internDetailsRoutes);
   app.use("/api/mentor", routes.mentorRoutes);
 
-  app.post("/test", async (req, res) => {
-    let password = req.body.pass;
-    const v = await PasswordHasher.Hash(password);
-    res.send(v);
-  });
-
-  app.post("/test1", async (req, res) => {
-    let password = req.body.pass;
-    const v = await   PasswordHasher.Compare(password, req.body.e);
-    res.send(v);
-  });
   //graphql
 
   await server.start();

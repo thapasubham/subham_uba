@@ -22,6 +22,7 @@ describe("Mentor Test", () => {
         id: 5,
         email: "subham@thapa.com",
         phoneNumber: "9830825938",
+        password: "password123",
         role: new Role(),
       };
       saveUserStub.returns(mentor);
@@ -36,13 +37,13 @@ describe("Mentor Test", () => {
     let loginStub: Sinon.SinonStub;
 
     beforeEach(() => {
-      loginStub = Sinon.stub(MentorDb, "login");
+      loginStub = Sinon.stub(MentorDb, "Login");
     });
     after(() => {
       Sinon.restore();
     });
     it("Epic test", async () => {
-      let user = { email: "sishir@rijal.com" };
+      let user = { email: "sishir@rijal.com", password: "password43" };
 
       const data: any = {
         accessToken: "accessToken",
@@ -51,7 +52,7 @@ describe("Mentor Test", () => {
 
       loginStub.returns(data);
 
-      const result = await mentorService.login(user);
+      const result = await mentorService.Login(user);
       assert.equal(result, data);
       Sinon.assert.calledWith(loginStub, user);
     });

@@ -73,11 +73,7 @@ export class DataBase {
       throw new Error("User doesn't exists");
     }
 
-    let checkPassword = PasswordHasher.Compare(user.password, result.password);
-
-    if (!checkPassword) {
-      throw new Error("Password doesn't match");
-    }
+    await PasswordHasher.Compare(user.password, result.password);
 
     const id = result.id;
     const token = Auth.Sign(id, result.role.name);

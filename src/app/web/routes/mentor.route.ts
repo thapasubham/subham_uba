@@ -4,6 +4,7 @@ import {
   checkID,
   checkQuery,
   validate,
+  validateLogin,
 } from "../middleware/validate.middleware.js";
 import { MentorController } from "../controller/MentorController.js";
 import { Auth } from "../auth/jwt.js";
@@ -28,6 +29,6 @@ router.put(
   validate,
   mentorController.UpdateMentor
 );
-router.post("/login", mentorController.login);
+router.post("/login", validateLogin, mentorController.login);
 
 export const mentorRoutes = router;
