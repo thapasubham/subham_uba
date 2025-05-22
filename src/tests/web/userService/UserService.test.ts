@@ -23,6 +23,7 @@ describe("User Services tests", () => {
         id: 5,
         email: "subham@gmail.com",
         phoneNumber: "9830827938",
+        password: "Subham",
         role: new Role(),
       };
       saveUserStub.returns(user);
