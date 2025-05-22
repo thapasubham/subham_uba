@@ -185,13 +185,16 @@ describe("User Services tests", () => {
     let loginStub: Sinon.SinonStub;
 
     beforeEach(() => {
-      loginStub = Sinon.stub(DataBase, "login");
+      loginStub = Sinon.stub(DataBase, "Login");
     });
     after(() => {
       Sinon.restore();
     });
     it("Epic test", async () => {
-      let user = { email: "subham@gmail.com" };
+      let user = {
+        email: "subham@gmail.com",
+        password: "cool secure password",
+      };
 
       const data: any = {
         accessToken: "accessToken",
@@ -200,7 +203,7 @@ describe("User Services tests", () => {
 
       loginStub.returns(data);
 
-      const result = await userService.login(user);
+      const result = await userService.Login(user);
       assert.equal(result, data);
       Sinon.assert.calledWith(loginStub, user);
     });

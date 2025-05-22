@@ -2,12 +2,14 @@ import express from "express";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import typeDefs from "./graphql/schema.js";
-import { resolvers } from "./graphql/resolvers/resolver.js";
+import { resolvers } from "./graphql/resolvers/index.js";
 import { errorHandler } from "./middleware/error.js";
 
 import routes from "./routes/index.js";
 
 import { dataSource } from "./graphql/datasource/index.js";
+import { PasswordHasher } from "./auth/hash.js";
+import { asyncWrapProviders } from "async_hooks";
 
 export async function startServer() {
   const app = express();
@@ -24,6 +26,18 @@ export async function startServer() {
   app.use("/api/intern", routes.internRoutes);
   app.use("/api/detail", routes.internDetailsRoutes);
   app.use("/api/mentor", routes.mentorRoutes);
+
+  app.post("/test", async (req, res) => {
+    let password = req.body.pass;
+    const v = await PasswordHasher.Hash(password);
+    res.send(v);
+  });
+
+  app.post("/test1", async (req, res) => {
+    let password = req.body.pass;
+    const v = await   PasswordHasher.Compare(password, req.body.e);
+    res.send(v);
+  });
   //graphql
 
   await server.start();

@@ -34,6 +34,9 @@ export class Details {
   @Column("varchar", { length: 30, nullable: false, unique: true })
   email: string;
 
+  @Column("varchar")
+  password?: string;
+
   @Column("varchar", { length: 10, nullable: false, unique: true })
   phoneNumber: string;
 

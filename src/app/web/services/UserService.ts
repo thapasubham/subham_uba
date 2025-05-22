@@ -1,4 +1,5 @@
 import { user } from "../../../entity/user.js";
+import { login } from "../../../types/login.types.js";
 import { DataBase } from "../database/user.db.js";
 
 /**
@@ -90,8 +91,8 @@ export class UserService {
     return result;
   }
 
-  async login(user: any): Promise<any> {
-    const result = await DataBase.login(user);
+  async Login(user: login): Promise<any> {
+    const result = await DataBase.Login(user);
     return result;
   }
 }

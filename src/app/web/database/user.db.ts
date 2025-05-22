@@ -1,5 +1,7 @@
 import { AppDataSource } from "../../../data-source.js";
 import { user } from "../../../entity/user.js";
+import { login } from "../../../types/login.types.js";
+import { PasswordHasher } from "../auth/hash.js";
 import { Auth } from "../auth/jwt.js";
 
 const userRepository = AppDataSource.getRepository(user);
@@ -63,10 +65,16 @@ export class DataBase {
     return 0;
   }
 
-  static async login(user: any) {
+  static async Login(user: login) {
     const result = await userRepository.findOneBy({ email: user.email });
     if (!result) {
       throw new Error("User doesn't exists");
+    }
+
+    let checkPassword = PasswordHasher.Compare(user.password, result.password);
+
+    if (!checkPassword) {
+      throw new Error("Password doesn't match");
     }
 
     const id = result.id;

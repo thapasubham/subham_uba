@@ -73,7 +73,7 @@ describe("", () => {
         message: "Unauthorized",
       });
     });
-    it("when the id doesnt but role is admin", () => {
+    it("The id doesnt match but role is admin", () => {
       req = {
         headers: {
           authorization: "bearer fakejwt",
@@ -91,6 +91,13 @@ describe("", () => {
         const data = () => Auth.isAuthorized(req, res, callback);
         expect(data).to.throw(Error);
       });
+    });
+
+    it("When Token is invalid", () => {
+      // verifyStub.throws(new Error("Invalid Token"));
+
+      const data = () => Auth.isAuthorized(req, res, callback);
+      expect(data).to.throw(Error);
     });
   });
   describe("Sign Test", () => {

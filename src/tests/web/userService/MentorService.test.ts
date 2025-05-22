@@ -15,7 +15,7 @@ describe("Mentor Test", () => {
     afterEach(() => {
       saveUserStub.restore();
     });
-    it("Create user test case", async () => {
+    it("Create mentor test case", async () => {
       const mentor: Mentor = {
         firstname: "Subham",
         lastname: "Thapa",
@@ -65,20 +65,20 @@ describe("Mentor Test", () => {
     afterEach(() => {
       readUserStub.restore();
     });
-    describe("read users test suite", () => {
+    describe("read mentor test suite", () => {
       it("Query doesnt satistify", async () => {
         const result = await mentorService.ReadMentors();
         assert.deepEqual(result, []);
         Sinon.assert.notCalled(readUserStub);
       });
-      it("No user Found", async () => {
+      it("No mentor found", async () => {
         readUserStub.returns([]);
         const result = await mentorService.ReadMentors(1, 5);
         assert.deepEqual(result, []);
         Sinon.assert.calledOnce(readUserStub);
       });
 
-      it("Read user Data", async () => {
+      it("Read mentor Data", async () => {
         let users: Mentor[] = [
           {
             firstname: "Subham",
@@ -121,7 +121,7 @@ describe("Mentor Test", () => {
     });
   });
 
-  describe("read user test suite", () => {
+  describe("read mentor test suite", () => {
     let readUserStub: Sinon.SinonStub;
     beforeEach(() => {
       readUserStub = Sinon.stub(MentorDb, "ReadMentor");
@@ -151,7 +151,7 @@ describe("Mentor Test", () => {
     });
   });
 
-  describe("Delete User test suite", () => {
+  describe("Delete mentor test suite", () => {
     let deleteStub: Sinon.SinonStub;
     beforeEach(() => {
       deleteStub = Sinon.stub(MentorDb, "DeleteMentor");
@@ -185,7 +185,7 @@ describe("Mentor Test", () => {
     afterEach(() => {
       updateMentor.restore();
     });
-    it("Create user test case", async () => {
+    it("Update mentor test case", async () => {
       const mentor: Mentor = {
         firstname: "John",
         lastname: "BloodBorne",
@@ -198,7 +198,7 @@ describe("Mentor Test", () => {
       const result = await mentorService.Update(mentor);
       assert.equal(result, 1);
       Sinon.assert.calledOnce(updateMentor);
-      Sinon.assert.calledWith(updateMentor, Mentor);
+      Sinon.assert.calledWith(updateMentor, mentor);
     });
   });
 });

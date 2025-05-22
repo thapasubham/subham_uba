@@ -100,7 +100,7 @@ export class UserController {
   }
 
   async login(req: Request, res: Response) {
-    const result = await userService.login(req.body);
+    const result = await userService.Login(req.body);
 
     ResponseApi.WriteResponse(res, { status: 200, data: result });
   }

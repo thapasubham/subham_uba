@@ -374,7 +374,7 @@ describe("User controller tests ", () => {
     let loginStub: Sinon.SinonStub;
 
     beforeEach(() => {
-      loginStub = Sinon.stub(UserService.prototype, "login");
+      loginStub = Sinon.stub(UserService.prototype, "Login");
 
       writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
       statusStub = Sinon.stub().returnsThis();

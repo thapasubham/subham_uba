@@ -43,7 +43,7 @@ describe("Intern Resolver test", () => {
       readStub.resolves(data);
       const result = await internResolvers.Query.interns(
         {},
-        { limit: 5, offset: 5 },
+        {},
         { dataSource: dataSource }
       );
       assert.equal(result, data);
@@ -102,7 +102,7 @@ describe("Intern Resolver test", () => {
     });
   });
 
-  describe("Update Mutations", () => {
+  describe("Delete Mutations", () => {
     let deleteStub: Sinon.SinonStub;
     beforeEach(() => {
       deleteStub = Sinon.stub();
@@ -111,7 +111,7 @@ describe("Intern Resolver test", () => {
       };
     });
 
-    it("update user mutation", async () => {
+    it("Delete intern mutation", async () => {
       let id = 11;
 
       deleteStub.resolves(1);
