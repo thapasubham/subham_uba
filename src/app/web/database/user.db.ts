@@ -8,6 +8,8 @@ const userRepository = AppDataSource.getRepository(user);
 
 export class DataBase {
   static async Createuser(user: user) {
+    const hashedPassword = await PasswordHasher.Hash(user.password);
+    user.password = hashedPassword;
     const result = await userRepository.save(user);
     return result;
   }
