@@ -15,7 +15,8 @@ export class permissionDB {
     return result;
   }
   static async ReadPermission(id: number) {
-    const result = await permRepository.findOne({ where: { id: id } });
+    const result = await permRepository.findOneBy({ id: id });
+    console.log(result);
     return result;
   }
 
