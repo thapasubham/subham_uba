@@ -3,6 +3,7 @@ import { internShipDetails } from "../../../entity/intern.js";
 import { ResponseApi, responseType } from "../../../utils/ApiResponse.js";
 import { InternDetailsService } from "../services/InternDetailsService.js";
 import { parseBody } from "../utils/utils.js";
+import { constants } from "../../../constants/constant.js";
 
 const internService = new InternDetailsService();
 export class InternDetailsController {
@@ -32,7 +33,7 @@ export class InternDetailsController {
 
 
     if (!detail) {
-      response.message = "No data were found";
+      response.message = constants.NO_DATA;
       response.status = 404;
     } else {
       response.data = detail as internShipDetails;

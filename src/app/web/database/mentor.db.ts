@@ -4,12 +4,13 @@ import { login } from "../../../types/login.types.js";
 import { PasswordHasher } from "../auth/hash.js";
 import { Auth } from "../auth/authorization.js";
 import { HttpError } from "../middleware/error.js";
+import { constants } from "../../../constants/constant.js";
 
 const repository = AppDataSource.getRepository(Mentor);
 export class MentorDb {
   static async CreateMentor(mentor: Mentor) {
-    mentor.password = await PasswordHasher.Hash(mentor.password);
-    const result = await repository.save(mentor);
+    const entity = repository.create(mentor);
+    const result = await repository.save(entity);
     return result;
   }
   static async ReadMentor(id: number) {
@@ -32,7 +33,7 @@ export class MentorDb {
       },
     });
     if (!result) {
-      throw new HttpError("User doesn't exists", 404);
+      throw new HttpError(constants.NO_USER, 404);
     }
 
     return result;
@@ -63,18 +64,27 @@ export class MentorDb {
 
   static async UpdateMentor(mentor: Mentor) {
     console.log(mentor.id);
+
     let result = await repository.findOneBy({
       id: mentor.id,
       isDeleted: false,
     });
     if (!result) {
-      throw new HttpError("Mentor doesn't exists", 404);
+      throw new HttpError(constants.NO_USER, 404);
     }
-    result = { ...mentor };
+    result.firstname = mentor.firstname;
+    result.lastname = mentor.lastname;
+    result.phoneNumber = mentor.phoneNumber;
+    result.email = mentor.email;
+    result.password = mentor.password;
+    result.role = mentor.role;
     await repository.save(result);
+
+    //returns 1 indicating update was successfull
     return 1;
   }
 
+  //returns the status of delete 1 = success, 0= failed to delete;
   static async DeleteMentor(id: number) {
     const mentor = await repository.findOneBy({ id: id, isDeleted: false });
     if (mentor) {

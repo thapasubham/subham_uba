@@ -4,6 +4,7 @@ import { ResponseApi, responseType } from "../../../utils/ApiResponse.js";
 
 import { UserService } from "../services/UserService.js";
 import { parseBody } from "../utils/utils.js";
+import { login } from "../../../types/login.types.js";
 
 const userService = new UserService();
 export class UserController {
@@ -49,13 +50,9 @@ export class UserController {
     const id = parseInt(req.params.id);
     const user = await userService.ReadUsers(0, 0, id);
 
-    if (!user) {
-      response.status = 404;
-      response.message = "User not found";
-    } else {
-      response.status = 200;
-      response.data = user as User;
-    }
+    response.status = 200;
+    response.data = user as User;
+
     ResponseApi.WriteResponse(res, response);
   }
 
@@ -71,9 +68,8 @@ export class UserController {
     userData.id = id;
     await userService.Update(userData);
 
-
-      response.message = "User Updated";
-      response.status = 200;
+    response.message = "User Updated";
+    response.status = 200;
 
     ResponseApi.WriteResponse(res, response);
   }
@@ -97,7 +93,8 @@ export class UserController {
   }
 
   async login(req: Request, res: Response) {
-    const result = await userService.Login(req.body);
+    const login: login = req.body;
+    const result = await userService.Login(login);
 
     ResponseApi.WriteResponse(res, { status: 200, data: result });
   }

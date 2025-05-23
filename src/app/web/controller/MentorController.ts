@@ -31,13 +31,9 @@ export class MentorController {
     const offset = parseInt(req.query.offset as string);
     const user = (await mentorService.ReadMentors(limit, offset)) as Mentor[];
 
-    if (user.length === 0) {
-      response.message = "No User exists";
-      response.status = 404;
-    } else {
-      response.data = user;
-      response.status = 200;
-    }
+    response.data = user;
+    response.status = 200;
+
     ResponseApi.WriteResponse(res, response);
   }
 
@@ -49,9 +45,8 @@ export class MentorController {
     const id = parseInt(req.params.id);
     const user = await mentorService.ReadMentors(0, 0, id);
 
-
-      response.status = 200;
-      response.data = user as Mentor;
+    response.status = 200;
+    response.data = user as Mentor;
 
     ResponseApi.WriteResponse(res, response);
   }
