@@ -5,4 +5,5 @@ export const constants = {
   NO_PERMISSION_FOUND: "No permission found",
   NO_DATA: "No data were found",
   SALT: 6,
+  PERMISSION_DELETED: "Permission Deleted",
 };

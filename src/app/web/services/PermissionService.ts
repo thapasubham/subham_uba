@@ -10,7 +10,7 @@ export class PermissionService {
     return await permissionDB.ReadPermissions();
   }
 
-  async ReadPermission(id: number) {
+  async ReadPermission(id: number): Promise<Permission> {
     return await permissionDB.ReadPermission(id);
   }
 

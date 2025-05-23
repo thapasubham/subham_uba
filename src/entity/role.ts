@@ -9,23 +9,23 @@ import {
 @Entity()
 export class Permission {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column("varchar", { length: 20 })
   name: string;
 
   @Column("boolean", { default: false })
-  isDeleted: boolean;
+  isDeleted?: boolean;
 }
 @Entity()
 export class Role {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column("varchar", { length: 20, nullable: false, unique: true })
   name: string;
 
   @ManyToMany(() => Permission)
   @JoinTable()
-  permission: Permission[];
+  permission?: Permission[];
 }

@@ -11,7 +11,6 @@ describe("Testing the Inter service", () => {
 
     beforeEach(() => {
       saveIntern = Sinon.stub(InternDb, "Create");
-
     });
 
     afterEach(() => {

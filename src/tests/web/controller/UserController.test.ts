@@ -220,7 +220,7 @@ describe("User controller tests ", () => {
             offset: "5",
           },
         };
-        let userData: User[] = [
+        let userData = [
           {
             firstname: "Subham",
             lastname: "Thapa",

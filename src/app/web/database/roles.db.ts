@@ -35,8 +35,8 @@ export class RolesDB {
     const permission = await permissionDB.ReadPermission(permissionID);
 
     roles.permission.push(permission);
-    console.log(roles.permission);
     const result = await roleRepository.save(roles);
+    return result;
   }
 
   static async DeleteRole() {}
