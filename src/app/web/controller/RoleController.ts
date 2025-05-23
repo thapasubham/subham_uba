@@ -30,4 +30,11 @@ export class RoleController {
     const result = await roleService.UpdateRole(roleID, permissionId);
     ResponseApi.WriteResponse(res, { status: 201, data: result });
   }
+
+  async DeleteRole(req: Request, res: Response){
+    const roleID = Number(req.params.id);
+    const result = await roleService.DeleteRole(roleID);
+    ResponseApi.WriteResponse(res, { status: 204, data: result });
+  }
+
 }

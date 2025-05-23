@@ -39,5 +39,10 @@ export class RolesDB {
     return result;
   }
 
-  static async DeleteRole() {}
+  static async DeleteRole(id :number  ) {
+    const result = await roleRepository.delete({
+      id: id,
+    });
+    return result;
+  }
 }

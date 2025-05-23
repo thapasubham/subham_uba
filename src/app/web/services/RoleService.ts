@@ -16,4 +16,8 @@ export class RoleService {
   async UpdateRole(roleID: number, permission_id: number) {
     return await RolesDB.AddPermissionToRole(roleID, permission_id);
   }
+
+  async DeleteRole(id: number) {
+    return await RolesDB.DeleteRole(id);
+  }
 }
