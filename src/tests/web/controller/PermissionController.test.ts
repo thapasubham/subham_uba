@@ -5,7 +5,7 @@ import { ResponseApi } from "../../../utils/ApiResponse.js";
 import { Permission } from "../../../entity/role.js";
 import { constants } from "../../../constants/constant.js";
 
-describe.only("Permission controller test", () => {
+describe("Permission controller test", () => {
   let permissionController = new PermissionController();
 
   let req: any;
