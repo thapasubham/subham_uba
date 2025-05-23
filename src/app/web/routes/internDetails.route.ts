@@ -1,6 +1,6 @@
 import express from "express";
-import { InternDetailsController } from "../../controller/InternDetailsController.js";
-import { checkID } from "../../middleware/validate.middleware.js";
+import { InternDetailsController } from "../controller/InternDetailsController.js";
+import { checkID } from "../middleware/validate.middleware.js";
 
 const router = express.Router();
 

@@ -17,12 +17,12 @@ const typeDefs = gql`
     phoneNumber: String!
     role: String
   }
+  scalar Date
 
   type Intern {
     id: Int!
     name: String!
   }
-  scalar Date
 
   type InternDetails {
     id: Int!
@@ -34,12 +34,14 @@ const typeDefs = gql`
     user: User
   }
   type Query {
-    users(limit: Int, offset: Int): [User]
+    users(limit: Int!, offset: Int!): [User]
     user(id: ID!): User
     intern(id: ID!): Intern
     interns: [Intern]
     internDetail(id: ID!): InternDetails
-    internDetails: [InternDetails]
+    internDetails(limit: Int!, offset: Int!): [InternDetails]
+    mentors(limit: Int!, offset: Int!): [Mentor]
+    mentor(id: ID!): Mentor
   }
 
   input UserInput {
@@ -55,6 +57,23 @@ const typeDefs = gql`
     name: String!
   }
 
+  input detailInput {
+    started_at: Date!
+    end_at: Date!
+    intern: Int!
+    mentor: Float!
+    user: Float!
+  }
+
+  input MentorInput {
+    firstname: String!
+    lastname: String!
+    id: Float
+    email: String!
+    phoneNumber: String!
+    role: String
+  }
+
   type Mutation {
     createUser(user: UserInput!): User
     updateUser(user: UserInput!): User
@@ -63,6 +82,14 @@ const typeDefs = gql`
     createIntern(intern: InternInput!): Intern
     updateIntern(intern: InternInput!): Intern
     deleteIntern(id: ID!): Int
+
+    createDetails(detail: detailInput!): String
+    updateDetails(detail: detailInput!): String
+    certify(id: ID!): String
+
+    createMentor(mentor: MentorInput!): Mentor
+    updateMentor(mentor: MentorInput!): Mentor
+    deleteMentor(id: ID!): Int
   }
 `;
 

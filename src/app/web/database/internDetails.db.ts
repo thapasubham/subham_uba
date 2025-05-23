@@ -1,5 +1,5 @@
 import { AppDataSource } from "../../../data-source.js";
-import { internShipDetails } from "../../../entity/user.js";
+import { internShipDetails } from "../../../entity/intern.js";
 
 const internRepository = AppDataSource.getRepository(internShipDetails);
 
@@ -9,8 +9,10 @@ export class DetailsDB {
     return result;
   }
 
-  static async GetDetails() {
+  static async GetDetails(limit: number, offset: number) {
     const result = await internRepository.find({
+      skip: offset,
+      take: limit,
       relations: {
         mentor: true,
         user: true,
@@ -20,7 +22,12 @@ export class DetailsDB {
         intern: {
           name: true,
         },
-        mentor: { firstname: true, lastname: true, role: true },
+        mentor: {
+          id: true,
+          firstname: true,
+          lastname: true,
+          role: true,
+        },
         user: {
           id: true,
           firstname: true,
@@ -49,7 +56,7 @@ export class DetailsDB {
       },
     });
     if (result) {
-      result = detail;
+      result = { ...detail };
       await internRepository.save(result);
     }
     return result;

@@ -1,0 +1,49 @@
+import express from "express";
+
+import {
+  checkID,
+  checkQuery,
+  validate,
+  validateLogin,
+} from "../middleware/validate.middleware.js";
+import { MentorController } from "../controller/MentorController.js";
+import { Auth } from "../auth/authorization.js";
+
+const router = express.Router();
+
+const mentorController = new MentorController();
+
+router.get(
+  "/",
+
+  checkQuery,
+  mentorController.GetMentors
+);
+router.get(
+  "/:id",
+
+  checkID,
+  mentorController.GetMentor
+);
+router.post(
+  "/",
+  Auth.isAuthorized("add"),
+  validate,
+  mentorController.CreateMentor
+);
+router.delete(
+  "/:id",
+  Auth.isAuthorized("delete"),
+  checkID,
+  mentorController.DeleteMentor
+);
+router.put(
+  "/:id",
+  Auth.isAuthorized("edit"),
+  checkID,
+  validate,
+  mentorController.UpdateMentor
+);
+router.post("/login", validateLogin, mentorController.login);
+
+export const mentorRoutes = router;

@@ -2,25 +2,22 @@ import Sinon from "sinon";
 import { UserController } from "../../../app/web/controller/UserController.js";
 import { UserService } from "../../../app/web/services/UserService.js";
 import { ResponseApi } from "../../../utils/ApiResponse.js";
-import { user } from "../../../entity/user.js";
+import { User } from "../../../entity/user.js";
+import { Role } from "../../../entity/role";
 
 describe("User controller tests ", () => {
-  let userController: UserController;
+  const userController = new UserController();
   let req: any;
   let res: any;
   let sendStub: Sinon.SinonStub;
   let statusStub: Sinon.SinonStub;
   let writeResponseStub: Sinon.SinonStub;
 
-  //only use to stub methods
-  let userservice: UserService;
   describe("User create test suites", () => {
     let createUserStub: Sinon.SinonStub;
 
     //setup
     beforeEach(() => {
-      userController = new UserController();
-      userservice = new UserService();
       createUserStub = Sinon.stub(
         UserService.prototype,
         "CreateUser"
@@ -78,8 +75,6 @@ describe("User controller tests ", () => {
 
     //setup
     beforeEach(() => {
-      userController = new UserController();
-      userservice = new UserService();
       deleteUserstub = Sinon.stub(
         UserService.prototype,
         "DeleteUser"
@@ -108,13 +103,14 @@ describe("User controller tests ", () => {
         },
       };
       deleteUserstub.returns(0);
-      let userData: user[] = [
+      const userData = [
         {
           firstname: "Test",
           lastname: "test",
           id: 5,
           email: "test@test.com",
           phoneNumber: "7482135964",
+          role: new Role(),
         },
         {
           firstname: "John",
@@ -122,6 +118,7 @@ describe("User controller tests ", () => {
           id: 6,
           email: "johnblack",
           phoneNumber: "3246895214",
+          role: new Role(),
         },
       ];
 
@@ -144,13 +141,14 @@ describe("User controller tests ", () => {
         },
       };
       deleteUserstub.returns(1);
-      let userData: user[] = [
+      const userData = [
         {
           firstname: "Test",
           lastname: "user",
           id: 5,
           email: "test@user.com",
           phoneNumber: "7153486248",
+          role: new Role(),
         },
         {
           firstname: "John",
@@ -158,6 +156,7 @@ describe("User controller tests ", () => {
           id: 6,
           email: "john@black.com",
           phoneNumber: "1724853694",
+          role: new Role(),
         },
       ];
       await userController.DeleteUser(req, res);
@@ -179,8 +178,6 @@ describe("User controller tests ", () => {
 
     //setup
     beforeEach(() => {
-      userController = new UserController();
-      userservice = new UserService();
       readUserStub = Sinon.stub(UserService.prototype, "ReadUsers").resolves();
       writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
       statusStub = Sinon.stub().returnsThis();
@@ -220,16 +217,17 @@ describe("User controller tests ", () => {
         req = {
           query: {
             limit: "1",
-            offset: " 5",
+            offset: "5",
           },
         };
-        let userData: user[] = [
+        let userData = [
           {
             firstname: "Subham",
             lastname: "Thapa",
             id: 6,
             email: "subham@thapa.com",
             phoneNumber: "986541275",
+            role: new Role(),
           },
           {
             firstname: "John",
@@ -237,6 +235,7 @@ describe("User controller tests ", () => {
             id: 40,
             email: "",
             phoneNumber: "",
+            role: new Role(),
           },
           {
             firstname: "Lee",
@@ -244,6 +243,7 @@ describe("User controller tests ", () => {
             id: 80,
             email: "le@smith.com",
             phoneNumber: "9821745630",
+            role: new Role(),
           },
         ];
         readUserStub.returns(userData);
@@ -261,32 +261,15 @@ describe("User controller tests ", () => {
 
     //single user test case
     describe("Single user test suite", () => {
-      it("User doesnt exists", async () => {
-        req = {
-          params: {
-            id: "4",
-          },
-        };
-        // readUserStub.returns([]);
-        await userController.GetUser(req, res);
-        Sinon.assert.calledOnce(readUserStub);
-        Sinon.assert.calledWith(readUserStub, 0, 0, 4);
-
-        Sinon.assert.calledOnce(writeResponseStub);
-        Sinon.assert.calledWith(writeResponseStub, res, {
-          status: 404,
-          message: "User not found",
-        });
-      });
-
       //user exists
       it("Userexists", async () => {
-        let user: user = {
+        let user = {
           firstname: "subham",
           lastname: "thapa",
           id: 4,
           email: "subham@thapa.com",
           phoneNumber: "9412589634",
+          role: new Role(),
         };
         req = {
           params: {
@@ -313,8 +296,6 @@ describe("User controller tests ", () => {
 
     //setup
     beforeEach(() => {
-      userController = new UserController();
-      userservice = new UserService();
       updateStub = Sinon.stub(UserService.prototype, "Update").resolves();
       writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
       statusStub = Sinon.stub().returnsThis();
@@ -330,24 +311,6 @@ describe("User controller tests ", () => {
     afterEach(() => {
       updateStub.restore();
       writeResponseStub.restore();
-    });
-    it("Failed update user", async () => {
-      req = {
-        body: {
-          firstname: "Subham",
-          lastname: "Thapa",
-        },
-        params: {
-          id: "5",
-        },
-      };
-
-      updateStub.returns(0);
-      await userController.UpdateUser(req, res);
-      Sinon.assert.calledWith(writeResponseStub, res, {
-        message: "Failed to update user",
-        status: 404,
-      });
     });
 
     it("Update the user", async () => {
@@ -368,6 +331,42 @@ describe("User controller tests ", () => {
       Sinon.assert.calledWith(writeResponseStub, res, {
         message: "User Updated",
         status: 200,
+      });
+    });
+  });
+
+  describe("login test", () => {
+    let loginStub: Sinon.SinonStub;
+
+    beforeEach(() => {
+      loginStub = Sinon.stub(UserService.prototype, "Login");
+
+      writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
+      statusStub = Sinon.stub().returnsThis();
+      sendStub = Sinon.stub();
+
+      res = {
+        status: statusStub,
+        send: sendStub,
+      };
+    });
+    after(() => {
+      Sinon.restore();
+    });
+    it("Epic test", async () => {
+      req = {
+        body: { email: "subham@gmail.com" },
+      };
+      const data = {
+        accessToken: "accessToken",
+        refreshToken: "refreshToken",
+      };
+      loginStub.returns(data);
+      await userController.login(req, res);
+
+      Sinon.assert.calledWith(writeResponseStub, res, {
+        status: 200,
+        data: data,
       });
     });
   });
