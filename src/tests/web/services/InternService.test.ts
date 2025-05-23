@@ -1,6 +1,6 @@
 import Sinon from "sinon";
 import { InternService } from "../../../app/web/services/InternService.js";
-import { InternDb } from "../../../app/web/database/internDb";
+import { InternDb } from "../../../app/web/database/intern.db";
 import { assert } from "chai";
 import { Intern } from "../../../entity/intern.js";
 describe("Testing the Inter service", () => {
