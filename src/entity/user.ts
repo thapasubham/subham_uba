@@ -1,4 +1,6 @@
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   Index,
@@ -7,6 +9,7 @@ import {
   PrimaryColumn,
 } from "typeorm";
 import { Role } from "./role.js";
+import { PasswordHasher } from "../app/web/auth/hash.js";
 
 @Entity()
 export class Details {
@@ -36,6 +39,13 @@ export class Details {
   @ManyToOne(() => Role)
   @JoinColumn({ name: "role_id" })
   role: Role;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    console.log("hook fired");
+    this.password = await PasswordHasher.Hash(this.password);
+  }
 }
 
 @Entity()
