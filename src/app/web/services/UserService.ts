@@ -1,6 +1,6 @@
 import { User } from "../../../entity/user.js";
 import { login } from "../../../types/login.types.js";
-import { UserDb } from "../database/user.db";
+import { UserDb } from "../database/user.db.js";
 
 /**
  * Class to perfrom CRUD operation

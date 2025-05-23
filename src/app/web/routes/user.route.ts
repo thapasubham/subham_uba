@@ -7,25 +7,35 @@ import {
   validate,
   validateLogin,
 } from "../middleware/validate.middleware.js";
-import { Auth } from "../auth/jwt.js";
+import { Auth } from "../auth/authorization.js";
 
 const router = express.Router();
 
 const usersHandler = new UserController();
 
-router.get("/getUsers", checkQuery, usersHandler.GetUsers);
-router.get("/getUser/:id", Auth.isAuthorized, checkID, usersHandler.GetUser);
+router.get(
+  "/getUsers",
+  Auth.isAuthorized("view"),
+  checkQuery,
+  usersHandler.GetUsers
+);
+router.get(
+  "/getUser/:id",
+  Auth.isAuthorized("view"),
+  checkID,
+  usersHandler.GetUser
+);
 router.post("/createUser", validate, usersHandler.CreateUser);
 router.post("/login", validateLogin, usersHandler.login);
 router.delete(
   "/deleteUser/:id",
-  Auth.isAuthorized,
+  Auth.isAuthorized("delete"),
   checkID,
   usersHandler.DeleteUser
 );
 router.put(
   "/updateUser/:id",
-  Auth.isAuthorized,
+  Auth.isAuthorized("update"),
   checkID,
   validate,
   usersHandler.UpdateUser

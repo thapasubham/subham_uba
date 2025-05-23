@@ -1,9 +1,9 @@
-import {AppDataSource} from "../../../data-source.js";
-import {User} from "../../../entity/user.js";
-import {login} from "../../../types/login.types.js";
-import {PasswordHasher} from "../auth/hash.js";
-import {Auth} from "../auth/jwt.js";
-import {HttpError} from "../middleware/error.js";
+import { AppDataSource } from "../../../data-source.js";
+import { User } from "../../../entity/user.js";
+import { login } from "../../../types/login.types.js";
+import { PasswordHasher } from "../auth/hash.js";
+import { Auth } from "../auth/authorization.js";
+import { HttpError } from "../middleware/error.js";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -43,17 +43,14 @@ export class UserDb {
 
   static async UpdateUser(user: User) {
     console.log(user.id);
-    const result = await userRepository.findOneBy({
+    let result = await userRepository.findOneBy({
       id: user.id,
       isDeleted: false,
     });
     if (!result) {
-     throw new HttpError("User doesn't exists", 404);
+      throw new HttpError("User doesn't exists", 404);
     }
-    result.firstname = user.firstname;
-    result.lastname = user.lastname;
-    result.phoneNumber = user.phoneNumber;
-    result.email = user.email;
+    result = { ...user };
     await userRepository.save(result);
     return 1;
   }

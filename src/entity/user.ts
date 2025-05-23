@@ -12,7 +12,7 @@ import { Role } from "./role.js";
 export class Details {
   @Index()
   @PrimaryColumn("bigint", { nullable: false })
-  id: number;
+  id?: number;
 
   @Column("varchar", { length: 30, nullable: false })
   firstname: string;

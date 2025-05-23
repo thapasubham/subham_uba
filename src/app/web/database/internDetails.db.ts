@@ -1,5 +1,5 @@
 import { AppDataSource } from "../../../data-source.js";
-import { internShipDetails} from "../../../entity/intern.js";
+import { internShipDetails } from "../../../entity/intern.js";
 
 const internRepository = AppDataSource.getRepository(internShipDetails);
 
@@ -56,7 +56,7 @@ export class DetailsDB {
       },
     });
     if (result) {
-      result = detail;
+      result = { ...detail };
       await internRepository.save(result);
     }
     return result;

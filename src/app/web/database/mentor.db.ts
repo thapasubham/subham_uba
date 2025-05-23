@@ -1,9 +1,9 @@
-import {AppDataSource} from "../../../data-source.js";
-import {Mentor} from "../../../entity/user.js";
-import {login} from "../../../types/login.types.js";
-import {PasswordHasher} from "../auth/hash.js";
-import {Auth} from "../auth/jwt.js";
-import {HttpError} from "../middleware/error.js";
+import { AppDataSource } from "../../../data-source.js";
+import { Mentor } from "../../../entity/user.js";
+import { login } from "../../../types/login.types.js";
+import { PasswordHasher } from "../auth/hash.js";
+import { Auth } from "../auth/authorization.js";
+import { HttpError } from "../middleware/error.js";
 
 const repository = AppDataSource.getRepository(Mentor);
 export class MentorDb {
@@ -15,7 +15,19 @@ export class MentorDb {
   static async ReadMentor(id: number) {
     const result = await repository.findOne({
       where: { id: id, isDeleted: false },
+      relations: ["role"],
       select: {
+        id: true,
+        firstname: true,
+        lastname: true,
+        email: true,
+        phoneNumber: true,
+        role: {
+          id: true,
+          name: true,
+          permission: true,
+        },
+        password: false,
         isDeleted: false,
       },
     });
@@ -28,7 +40,19 @@ export class MentorDb {
   static async ReadMentors(limit: number, offset: number) {
     const result = await repository.find({
       where: { isDeleted: false },
+      relations: ["role"],
       select: {
+        id: true,
+        firstname: true,
+        lastname: true,
+        email: true,
+        phoneNumber: true,
+        role: {
+          id: true,
+          name: true,
+          permission: true,
+        },
+        password: false,
         isDeleted: false,
       },
       skip: offset,
@@ -39,18 +63,14 @@ export class MentorDb {
 
   static async UpdateMentor(mentor: Mentor) {
     console.log(mentor.id);
-    const result = await repository.findOneBy({
+    let result = await repository.findOneBy({
       id: mentor.id,
       isDeleted: false,
     });
     if (!result) {
       throw new HttpError("Mentor doesn't exists", 404);
     }
-     result.firstname = mentor.firstname;
-    result.lastname = mentor.lastname;
-    result.phoneNumber = mentor.phoneNumber;
-    result.email = mentor.email;
-    result.role = mentor.role;
+    result = { ...mentor };
     await repository.save(result);
     return 1;
   }

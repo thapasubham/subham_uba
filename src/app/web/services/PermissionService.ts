@@ -1,26 +1,24 @@
-import {Permission} from "../../../entity/role";
-import {permissionDB} from "../database/permission.db";
+import { Permission } from "../../../entity/role.js";
+import { permissionDB } from "../database/permission.db.js";
 
 export class PermissionService {
-    async CreatePermission(permission: Permission) {
-        return await permissionDB.CreatePermission(permission);
-    }
+  async CreatePermission(permission: Permission) {
+    return await permissionDB.CreatePermission(permission);
+  }
 
-    async ReadPermissions() {
-        return await permissionDB.ReadPermissions();
-    }
+  async ReadPermissions() {
+    return await permissionDB.ReadPermissions();
+  }
 
-    async ReadPermission(id: number) {
-        return await permissionDB.ReadPermission(id);
-    }
+  async ReadPermission(id: number) {
+    return await permissionDB.ReadPermission(id);
+  }
 
-    async UpdatePermission(permission: Permission) {
+  async UpdatePermission(permission: Permission) {
+    return await permissionDB.UpdatePermission(permission);
+  }
 
-        return await permissionDB.UpdatePermission(permission);
-    }
-
-    async DeletePermission(id: number) {
-        return await permissionDB.DeletePermission(id);
-
-    }
+  async DeletePermission(id: number) {
+    return await permissionDB.DeletePermission(id);
+  }
 }

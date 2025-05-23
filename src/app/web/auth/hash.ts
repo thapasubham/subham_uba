@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { HttpError } from "../middleware/error";
+import { HttpError } from "../middleware/error.js";
 export class PasswordHasher {
   static async Hash(password: string): Promise<string> {
     let hashedPassword = await bcrypt.hash(password, 5);

@@ -7,24 +7,39 @@ import {
   validateLogin,
 } from "../middleware/validate.middleware.js";
 import { MentorController } from "../controller/MentorController.js";
-import { Auth } from "../auth/jwt.js";
+import { Auth } from "../auth/authorization.js";
 
 const router = express.Router();
 
 const mentorController = new MentorController();
 
-router.get("/", checkQuery, mentorController.GetMentors);
-router.get("/:id", Auth.isAuthorized, checkID, mentorController.GetMentor);
-router.post("/", validate, mentorController.CreateMentor);
+router.get(
+  "/",
+
+  checkQuery,
+  mentorController.GetMentors
+);
+router.get(
+  "/:id",
+
+  checkID,
+  mentorController.GetMentor
+);
+router.post(
+  "/",
+  Auth.isAuthorized("add"),
+  validate,
+  mentorController.CreateMentor
+);
 router.delete(
   "/:id",
-  Auth.isAuthorized,
+  Auth.isAuthorized("delete"),
   checkID,
   mentorController.DeleteMentor
 );
 router.put(
   "/:id",
-  Auth.isAuthorized,
+  Auth.isAuthorized("edit"),
   checkID,
   validate,
   mentorController.UpdateMentor
