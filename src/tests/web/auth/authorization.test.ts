@@ -3,18 +3,20 @@ import jwt from "jsonwebtoken";
 import { Auth } from "../../../app/web/auth/authorization.js";
 import { expect } from "chai";
 import { HttpError } from "../../../app/web/middleware/error.js";
+import { constants } from "../../../constants/constant.js";
 
-describe.only("Auth Middleware", () => {
+describe("Auth Middleware", () => {
   let req: any;
   let res: any;
   let next: Sinon.SinonSpy;
   let verifyStub: Sinon.SinonStub;
-
+  let getPermissionStub: Sinon.SinonStub;
   beforeEach(() => {
     req = { headers: {}, params: {} };
     res = {};
     next = Sinon.spy();
     verifyStub = Sinon.stub(jwt, "verify");
+    getPermissionStub = Sinon.stub(Auth, "getPermission");
   });
 
   afterEach(() => {
@@ -28,7 +30,7 @@ describe.only("Auth Middleware", () => {
       await middleware(req, res, next);
     } catch (err) {
       expect(err).to.be.instanceOf(HttpError);
-      expect(err.message).to.equal("Unauthorized");
+      expect(err.message).to.equal(constants.UNAUTHORIZED_MSG);
     }
   });
 
@@ -42,7 +44,7 @@ describe.only("Auth Middleware", () => {
       },
     };
     verifyStub.returns({ id: "123", role: "user" });
-
+    getPermissionStub.returns(["view", "edit"]);
     const middleware = Auth.isAuthorized("view");
     await middleware(req, res, next);
 
@@ -80,7 +82,7 @@ describe.only("Auth Middleware", () => {
       },
     };
     verifyStub.returns({ id: "123", role: "admin" });
-
+    getPermissionStub.returns(["view", "edit"]);
     const middleware = Auth.isAuthorized("view");
     await middleware(req, res, next);
 
@@ -94,7 +96,7 @@ describe.only("Auth Middleware", () => {
       },
     };
     verifyStub.throws(new HttpError("Invalid Token"));
-
+    getPermissionStub.returns(["view"]);
     const middleware = Auth.isAuthorized("view");
 
     try {

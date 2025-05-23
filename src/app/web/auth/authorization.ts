@@ -12,11 +12,14 @@ export class Auth {
       try {
         let token = req.headers.authorization;
         if (!token) {
-          throw new HttpError(constants.UNAUTHORIZED, 401);
+          throw new HttpError(
+            constants.UNAUTHORIZED_MSG,
+            constants.UNAUTHORIZED_STAUTS
+          );
         }
 
         token = token.split(" ")[1];
-        
+
         const decoded: any = await Auth.Decode(token);
         const id = Number(req.params.id);
         const decodedID = decoded.id;
@@ -25,12 +28,18 @@ export class Auth {
         const rolePermission = await Auth.getPermission(role, permission);
         const idMatch = Auth.matchID(id, decodedID);
 
-        if (idMatch && rolePermission) {
-          throw new HttpError(constants.UNAUTHORIZED, 401);
+        if (idMatch || rolePermission) {
+          return next();
         }
-        next();
+        throw new HttpError(
+          constants.UNAUTHORIZED_MSG,
+          constants.UNAUTHORIZED_STAUTS
+        );
       } catch (e) {
-        throw new HttpError(e.message || "Unauthorized", 401);
+        throw new HttpError(
+          e.message || constants.UNAUTHORIZED_MSG,
+          constants.UNAUTHORIZED_STAUTS
+        );
       }
     };
   }
