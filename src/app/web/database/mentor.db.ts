@@ -104,7 +104,7 @@ export class MentorDb {
       },
     });
     if (!result) {
-      throw new HttpError("User doesn't exists", 404);
+      throw new HttpError(constants.NO_USER, 404);
     }
     await PasswordHasher.Compare(user.password, result.password);
 

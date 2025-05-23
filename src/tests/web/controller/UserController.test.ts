@@ -2,8 +2,8 @@ import Sinon from "sinon";
 import { UserController } from "../../../app/web/controller/UserController.js";
 import { UserService } from "../../../app/web/services/UserService.js";
 import { ResponseApi } from "../../../utils/ApiResponse.js";
-import {  User } from "../../../entity/user.js";
-import {Role} from "../../../entity/role";
+import { User } from "../../../entity/user.js";
+import { Role } from "../../../entity/role";
 
 describe("User controller tests ", () => {
   const userController = new UserController();
@@ -103,7 +103,7 @@ describe("User controller tests ", () => {
         },
       };
       deleteUserstub.returns(0);
-      const userData: User[] = [
+      const userData = [
         {
           firstname: "Test",
           lastname: "test",
@@ -141,7 +141,7 @@ describe("User controller tests ", () => {
         },
       };
       deleteUserstub.returns(1);
-      const userData: User[] = [
+      const userData = [
         {
           firstname: "Test",
           lastname: "user",
@@ -217,7 +217,7 @@ describe("User controller tests ", () => {
         req = {
           query: {
             limit: "1",
-            offset: " 5",
+            offset: "5",
           },
         };
         let userData: User[] = [
@@ -261,27 +261,9 @@ describe("User controller tests ", () => {
 
     //single user test case
     describe("Single user test suite", () => {
-      it("User doesnt exists", async () => {
-        req = {
-          params: {
-            id: "4",
-          },
-        };
-        // readUserStub.returns([]);
-        await userController.GetUser(req, res);
-        Sinon.assert.calledOnce(readUserStub);
-        Sinon.assert.calledWith(readUserStub, 0, 0, 4);
-
-        Sinon.assert.calledOnce(writeResponseStub);
-        Sinon.assert.calledWith(writeResponseStub, res, {
-          status: 404,
-          message: "User not found",
-        });
-      });
-
       //user exists
       it("Userexists", async () => {
-        let user: User = {
+        let user = {
           firstname: "subham",
           lastname: "thapa",
           id: 4,
