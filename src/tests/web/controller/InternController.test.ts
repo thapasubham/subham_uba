@@ -5,7 +5,7 @@ import { ResponseApi } from "../../../utils/ApiResponse.js";
 import { Intern } from "../../../entity/intern.js";
 
 describe("Intern controller tests ", () => {
-  let internController = new InternController();
+  const internController = new InternController();
   let req: any;
   let res: any;
   let sendStub: Sinon.SinonStub;

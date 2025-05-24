@@ -40,33 +40,32 @@ describe("User controller tests ", () => {
 
     //create user test case
     it("Create user Test case", async () => {
+     const user ={
+       id: 5,
+       firstname: "Subham",
+       lastname: "Thapa",
+       email: "subham@thapa.com",
+       phoneNumber: "9874563210",
+        role: 2
+     }
+
       req = {
         body: {
-          id: 0,
-          firstname: "Subham",
-          lastname: "Thapa",
-          email: "subham@thapa.com",
-          phoneNumber: "9874563210",
-          intern: 5,
+            user
         },
       };
 
       await userController.CreateUser(req, res);
       Sinon.assert.calledOnce(createUserStub);
       Sinon.assert.calledWith(createUserStub, {
-        firstname: "Subham",
-        lastname: "Thapa",
-        email: "subham@thapa.com",
-        phoneNumber: "9874563210",
-        intern: 5,
+       user,
 
-        id: Sinon.match.number,
       });
       Sinon.assert.calledOnce(writeResponseStub);
-      Sinon.assert.calledWith(writeResponseStub, res, {
-        status: 201,
-        message: "User Created",
-      });
+        Sinon.assert.calledWith(writeResponseStub, res, {
+          status: 201,
+          message: "User Created",
+        });
     });
   });
 
