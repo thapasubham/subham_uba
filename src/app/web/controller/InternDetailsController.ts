@@ -31,7 +31,6 @@ export class InternDetailsController {
     const id = Number(req.params.id);
     const detail = await internService.ReadIntern(0, 0, id);
 
-
     if (!detail) {
       response.message = constants.NO_DATA;
       response.status = 404;
@@ -45,10 +44,10 @@ export class InternDetailsController {
     const response: responseType<internShipDetails[]> = {
       status: 200,
     };
-
+    const limit =   Number(req.query.limit);
+          const offset = Number(req.query.offset);
     const details = (await internService.ReadIntern(
-      Number(req.query.limit),
-      Number(req.query.offset)
+      limit, offset
     )) as unknown as internShipDetails[];
 
     if (details.length === 0) {

@@ -36,17 +36,17 @@ describe("Role service test case", () => {
       readRole.restore();
     });
     it("Read role by name test", async () => {
-      const name = "admin";
+      const id = 4;
       const role: Role = {
         id: 4,
         name: "admin",
       };
 
       readRole.returns(role);
-      const result = await roleService.ReadRole(name);
+      const result = await roleService.ReadRole(id);
       assert.equal(result, role);
       Sinon.assert.calledOnce(readRole);
-      Sinon.assert.calledWith(readRole, name);
+      Sinon.assert.calledWith(readRole, id);
     });
   });
 

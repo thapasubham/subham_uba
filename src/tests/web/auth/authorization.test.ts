@@ -7,127 +7,162 @@ import { constants } from "../../../constants/constant.js";
 import { RolesDB } from "../../../app/web/database/roles.db.js";
 import { Role } from "../../../entity/role.js";
 
-describe("Auth Middleware", () => {
-  let req: any;
-  let res: any;
-  let next: Sinon.SinonSpy;
-  let verifyStub: Sinon.SinonStub;
-  let getPermissionStub: Sinon.SinonStub;
-  let readRoleStub: Sinon.SinonStub;
-  beforeEach(() => {
-    req = { headers: {}, params: {} };
-    res = {};
-    next = Sinon.spy();
-    verifyStub = Sinon.stub(jwt, "verify");
-    getPermissionStub = Sinon.stub(Auth, "getPermission");
-    readRoleStub = Sinon.stub(RolesDB, "ReadRole");
-  });
+describe("Auth Middleware class ", () => {
+  describe("Authorization", () => {
+    let req: any;
+    let res: any;
+    let next: Sinon.SinonSpy;
+    let verifyStub: Sinon.SinonStub;
+    let getPermissionStub: Sinon.SinonStub;
 
-  afterEach(() => {
-    Sinon.restore();
-  });
-
-  it("throws error if no Authorization header", async () => {
-    const middleware = Auth.isAuthorized("view");
-
-    try {
-      await middleware(req, res, next);
-    } catch (err) {
-      expect(err).to.be.instanceOf(HttpError);
-      expect(err.message).to.equal(constants.UNAUTHORIZED_MSG);
-    }
-  });
-
-  it("calls next() if token is valid and id matches", async () => {
-    req = {
-      headers: {
-        authorization: "Bearer faketoken",
-      },
-      params: {
-        id: "123",
-      },
-    };
-    verifyStub.returns({ id: "123", role: "user" });
-    getPermissionStub.returns(["view", "edit"]);
-    const middleware = Auth.isAuthorized("view");
-    await middleware(req, res, next);
-
-    Sinon.assert.calledOnce(next);
-  });
-
-  it("throws error if id does not match and role is not admin", async () => {
-    req = {
-      headers: {
-        authorization: "Bearer faketoken",
-      },
-      params: {
-        id: "251",
-      },
-    };
-    verifyStub.returns({ id: "123", role: "user" });
-
-    const middleware = Auth.isAuthorized("view");
-
-    try {
-      await middleware(req, res, next);
-    } catch (err) {
-      expect(err).to.be.instanceOf(HttpError);
-      expect(err.message).to.equal("Unauthorized");
-    }
-  });
-
-  it("calls next() if role is admin even if id does not match", async () => {
-    req = {
-      headers: {
-        authorization: "Bearer faketoken",
-      },
-      params: {
-        id: "120",
-      },
-    };
-    verifyStub.returns({ id: "123", role: "admin" });
-    getPermissionStub.returns(["view", "edit"]);
-    const middleware = Auth.isAuthorized("view");
-    await middleware(req, res, next);
-
-    Sinon.assert.calledOnce(next);
-  });
-
-  it("throws error when token is invalid", async () => {
-    req = {
-      headers: {
-        authorization: "Bearer faketoken",
-      },
-    };
-    verifyStub.throws(new HttpError("Invalid Token"));
-    getPermissionStub.returns(["view"]);
-    const middleware = Auth.isAuthorized("view");
-
-    try {
-      await middleware(req, res, next);
-    } catch (err) {
-      expect(err).to.be.instanceOf(HttpError);
-      expect(err.message).to.equal("Invalid Token");
-    }
-  });
-
-  describe("Sign Test", () => {
-    let signStub: Sinon.SinonStub;
     beforeEach(() => {
-      signStub = Sinon.stub(jwt, "sign");
+      req = { headers: {}, params: {} };
+      res = {};
+      next = Sinon.spy();
+      verifyStub = Sinon.stub(jwt, "verify");
+      getPermissionStub = Sinon.stub(Auth, "getPermission");
     });
 
     afterEach(() => {
-      signStub.restore();
+      getPermissionStub.restore();
+      verifyStub.restore();
     });
 
-    it("Signing test", () => {
-      const bearerToken = "bearerToken";
-      const refreshToken = "bearerToken";
+    it("throws error if no Authorization header", async () => {
+      const middleware = Auth.isAuthorized("view");
 
-      Auth.Sign(892834, 4);
+      try {
+        await middleware(req, res, next);
+      } catch (err) {
+        expect(err).to.be.instanceOf(HttpError);
+        expect(err.message).to.equal(constants.UNAUTHORIZED_MSG);
+      }
+    });
 
-      Sinon.assert.calledTwice(signStub);
+    it("calls next() if token is valid and id matches", async () => {
+      req = {
+        headers: {
+          authorization: "Bearer faketoken",
+        },
+        params: {
+          id: "123",
+        },
+      };
+      verifyStub.returns({ id: "123", role: "user" });
+      getPermissionStub.returns(["view", "edit"]);
+      const middleware = Auth.isAuthorized("view");
+      await middleware(req, res, next);
+
+      Sinon.assert.calledOnce(next);
+    });
+
+    it("throws error if id does not match and role is not admin", async () => {
+      req = {
+        headers: {
+          authorization: "Bearer faketoken",
+        },
+        params: {
+          id: "251",
+        },
+      };
+      verifyStub.returns({ id: "123", role: "user" });
+
+      const middleware = Auth.isAuthorized("view");
+
+      try {
+        await middleware(req, res, next);
+      } catch (err) {
+        expect(err).to.be.instanceOf(HttpError);
+        expect(err.message).to.equal("Unauthorized");
+      }
+    });
+
+    it("calls next() if role is admin even if id does not match", async () => {
+      req = {
+        headers: {
+          authorization: "Bearer faketoken",
+        },
+        params: {
+          id: "120",
+        },
+      };
+      verifyStub.returns({ id: "123", role: "admin" });
+      getPermissionStub.returns(["view", "edit"]);
+      const middleware = Auth.isAuthorized("view");
+      await middleware(req, res, next);
+
+      Sinon.assert.calledOnce(next);
+    });
+
+    it("throws error when token is invalid", async () => {
+      req = {
+        headers: {
+          authorization: "Bearer faketoken",
+        },
+      };
+      verifyStub.throws(new HttpError("Invalid Token"));
+      getPermissionStub.returns(["view"]);
+      const middleware = Auth.isAuthorized("view");
+
+      try {
+        await middleware(req, res, next);
+      } catch (err) {
+        expect(err).to.be.instanceOf(HttpError);
+        expect(err.message).to.equal("Invalid Token");
+      }
+    });
+
+    describe("Sign Test", () => {
+      let signStub: Sinon.SinonStub;
+      beforeEach(() => {
+        signStub = Sinon.stub(jwt, "sign");
+      });
+
+      afterEach(() => {
+        signStub.restore();
+      });
+
+      it("Signing test", () => {
+        const bearerToken = "bearerToken";
+        const refreshToken = "bearerToken";
+
+        Auth.Sign(892834, 4);
+
+        Sinon.assert.calledTwice(signStub);
+      });
+    });
+  });
+
+  describe("Get Permission", () => {
+    let readRoleStub: Sinon.SinonStub;
+    beforeEach(() => {
+      readRoleStub = Sinon.stub(RolesDB, "ReadRole");
+    });
+    afterEach(() => {
+      readRoleStub.restore();
+    });
+    it("Get permission test", async () => {
+      const roleID = 4;
+      const permission = "view";
+      const role: Role = {
+        id: 4,
+        name: "admin",
+        permission: [
+          {
+            id: 1,
+            name: "add",
+          },
+          {
+            id: 4,
+            name: "view",
+          },
+        ],
+      };
+
+      readRoleStub.returns(role);
+
+      const result = await Auth.getPermission(roleID, permission);
+      assert.equal(result, true);
     });
   });
 });

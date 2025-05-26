@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { ResponseApi, responseType } from "../../../utils/ApiResponse.js";
 import { parseBody } from "../utils/utils.js";
 import { InternService } from "../services/InternService.js";
-import {Intern} from "../../../entity/intern.js";
+import { Intern } from "../../../entity/intern.js";
 
 const internService = new InternService();
 
