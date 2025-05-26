@@ -15,27 +15,27 @@ const usersHandler = new UserController();
 
 router.get(
   "/getUsers",
-  Auth.isAuthorized("view"),
+  Auth.isAuthorized("user:view"),
   checkQuery,
   usersHandler.GetUsers
 );
 router.get(
   "/getUser/:id",
-  Auth.isAuthorized("view"),
+  Auth.isAuthorized("user:view"),
   checkID,
   usersHandler.GetUser
 );
 router.post("/createUser", validate, usersHandler.CreateUser);
-router.post("/login", validateLogin, usersHandler.login);
+router.post("/user/login", validateLogin, usersHandler.login);
 router.delete(
   "/deleteUser/:id",
-  Auth.isAuthorized("delete"),
+  Auth.isAuthorized("user:delete"),
   checkID,
   usersHandler.DeleteUser
 );
 router.put(
   "/updateUser/:id",
-  Auth.isAuthorized("update"),
+  Auth.isAuthorized("user:update"),
   checkID,
   validate,
   usersHandler.UpdateUser

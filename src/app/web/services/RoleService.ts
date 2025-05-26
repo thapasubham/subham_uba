@@ -6,8 +6,8 @@ export class RoleService {
     return await RolesDB.CreateRole(role);
   }
 
-  async ReadRole(name: string) {
-    return await RolesDB.ReadRole(name);
+  async ReadRole(id: number) {
+    return await RolesDB.ReadRole(id);
   }
   async ReadRoles() {
     return await RolesDB.ReadRoles();

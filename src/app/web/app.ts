@@ -8,8 +8,6 @@ import { errorHandler } from "./middleware/error.js";
 import routes from "./routes/index.js";
 
 import { dataSource } from "./graphql/datasource/index.js";
-import { PasswordHasher } from "./auth/hash.js";
-import { asyncWrapProviders } from "async_hooks";
 
 export async function startServer() {
   const app = express();

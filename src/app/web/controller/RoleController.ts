@@ -17,8 +17,9 @@ export class RoleController {
     ResponseApi.WriteResponse(res, { status: 201, data: result });
   }
   async ReadRole(req: Request, res: Response) {
-    const roleName = req.body.name;
-    const result = await roleService.ReadRole(roleName);
+    const roleID = Number(req.params.id);
+    console.log(roleID);
+    const result = await roleService.ReadRole(roleID);
 
     ResponseApi.WriteResponse(res, { status: 200, data: result });
   }
@@ -31,10 +32,9 @@ export class RoleController {
     ResponseApi.WriteResponse(res, { status: 201, data: result });
   }
 
-  async DeleteRole(req: Request, res: Response){
+  async DeleteRole(req: Request, res: Response) {
     const roleID = Number(req.params.id);
     const result = await roleService.DeleteRole(roleID);
     ResponseApi.WriteResponse(res, { status: 204, data: result });
   }
-
 }

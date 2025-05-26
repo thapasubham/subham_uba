@@ -15,11 +15,10 @@ export class RolesDB {
     return result;
   }
 
-  static async ReadRole(name: string) {
+  static async ReadRole(id: number) {
+    console.log(id);
     return await roleRepository.findOne({
-      where: {
-        name: name,
-      },
+      where: { id },
       relations: ["permission"],
     });
   }
@@ -39,7 +38,7 @@ export class RolesDB {
     return result;
   }
 
-  static async DeleteRole(id :number  ) {
+  static async DeleteRole(id: number) {
     const result = await roleRepository.delete({
       id: id,
     });

@@ -57,8 +57,8 @@ export class UserDb {
     result.email = user.email;
     result.password = user.password;
     result.role = user.role;
-    await userRepository.save(result);
-    return 1;
+    const db_result = await userRepository.save(result);
+    return db_result;
   }
 
   static async DeleteUser(id: number) {
@@ -77,14 +77,13 @@ export class UserDb {
   }
 
   static async Login(user: login) {
-    console.log("user: ", user);
     const result = await userRepository.findOne({
       where: { email: user.email },
       relations: {
         role: true,
       },
     });
-    console.log(result);
+
     if (!result) {
       throw new HttpError(constants.NO_USER, 404);
     }
@@ -92,6 +91,6 @@ export class UserDb {
     await PasswordHasher.Compare(user.password, result.password);
 
     const id = result.id;
-    return Auth.Sign(id, result.role.name);
+    return Auth.Sign(id, result.role.id);
   }
 }

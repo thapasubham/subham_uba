@@ -109,7 +109,7 @@ export class MentorDb {
     await PasswordHasher.Compare(user.password, result.password);
 
     const id = result.id;
-    const role = result.role.name;
+    const role = result.role.id;
     return Auth.Sign(id, role);
   }
 }

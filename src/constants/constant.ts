@@ -6,4 +6,6 @@ export const constants = {
   NO_DATA: "No data were found",
   SALT: 6,
   PERMISSION_DELETED: "Permission Deleted",
+  BEARER_JWT_EXP: "30m",
+  REFRESH_JWT_EXP: "30d",
 };

@@ -106,20 +106,20 @@ describe("Roles Controller test", () => {
       writeResponseStub.restore();
     });
     it("Read Roles", async () => {
-      const name = "hr";
+      const id = 4;
       req = {
-        body: {
-          name: name,
+        params: {
+          id: 4,
         },
       };
       const result: Role = {
-        id: 6,
+        id: 4,
         name: "hr",
       };
       readStub.returns(result);
       await roleController.ReadRole(req, res);
       Sinon.assert.calledOnce(readStub);
-      Sinon.assert.calledWith(readStub, name);
+      Sinon.assert.calledWith(readStub, id);
       Sinon.assert.calledWith(writeResponseStub, res, {
         status: 200,
         data: result,

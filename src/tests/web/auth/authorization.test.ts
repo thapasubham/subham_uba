@@ -1,9 +1,11 @@
 import Sinon from "sinon";
 import jwt from "jsonwebtoken";
 import { Auth } from "../../../app/web/auth/authorization.js";
-import { expect } from "chai";
+import { assert, expect } from "chai";
 import { HttpError } from "../../../app/web/middleware/error.js";
 import { constants } from "../../../constants/constant.js";
+import { RolesDB } from "../../../app/web/database/roles.db.js";
+import { Role } from "../../../entity/role.js";
 
 describe("Auth Middleware", () => {
   let req: any;
@@ -11,12 +13,14 @@ describe("Auth Middleware", () => {
   let next: Sinon.SinonSpy;
   let verifyStub: Sinon.SinonStub;
   let getPermissionStub: Sinon.SinonStub;
+  let readRoleStub: Sinon.SinonStub;
   beforeEach(() => {
     req = { headers: {}, params: {} };
     res = {};
     next = Sinon.spy();
     verifyStub = Sinon.stub(jwt, "verify");
     getPermissionStub = Sinon.stub(Auth, "getPermission");
+    readRoleStub = Sinon.stub(RolesDB, "ReadRole");
   });
 
   afterEach(() => {
@@ -118,10 +122,10 @@ describe("Auth Middleware", () => {
     });
 
     it("Signing test", () => {
-      let bearerToken = "bearerToken";
-      let refreshToken = "bearerToken";
+      const bearerToken = "bearerToken";
+      const refreshToken = "bearerToken";
 
-      Auth.Sign(892834, "admin");
+      Auth.Sign(892834, 4);
 
       Sinon.assert.calledTwice(signStub);
     });
