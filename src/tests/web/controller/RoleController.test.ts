@@ -5,7 +5,7 @@ import { RoleService } from "../../../app/web/services/RoleService.js";
 import { Role } from "../../../entity/role";
 
 describe("Roles Controller test", () => {
-  let roleController = new RoleController();
+  const roleController = new RoleController();
   let req: any;
   let res: any;
   let sendStub: Sinon.SinonStub;

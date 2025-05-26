@@ -11,16 +11,13 @@ export class Auth {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
         const decoded_token: any = await Auth.getDecodedToken(req);
-        console.log(decoded_token);
         const id = Number(req.params.id);
         const decodedID = Number(decoded_token.id);
         const role = decoded_token.role;
 
         const rolePermission = await Auth.getPermission(role, permission);
         const idMatch = Auth.matchID(id, decodedID);
-        console.log(id, decodedID);
-        console.log(idMatch, rolePermission);
-        console.log(decodedID === id);
+
         if (idMatch || rolePermission) {
           return next();
         }
@@ -50,7 +47,6 @@ export class Auth {
 
   static async getDecodedToken(req: Request) {
     let token = req.headers.authorization;
-    console.log(token);
     if (!token) {
       throw new HttpError(
         constants.UNAUTHORIZED_MSG,
@@ -66,10 +62,8 @@ export class Auth {
     if (!roleID) {
       throw new Error("JWT invalid");
     }
-    console.log(roleID);
     const roles = await RolesDB.ReadRole(roleID);
     const permissions = roles.permission;
-    console.log(permissions);
     const rolePermission = permissions.some((p) => p.name == permission);
     return rolePermission;
   }

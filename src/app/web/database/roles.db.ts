@@ -16,7 +16,6 @@ export class RolesDB {
   }
 
   static async ReadRole(id: number) {
-    console.log(id);
     return await roleRepository.findOne({
       where: { id },
       relations: ["permission"],

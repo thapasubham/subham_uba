@@ -31,7 +31,6 @@ export class InternDetailsController {
     const id = Number(req.params.id);
     const detail = await internService.ReadIntern(0, 0, id);
 
-
     if (!detail) {
       response.message = constants.NO_DATA;
       response.status = 404;
