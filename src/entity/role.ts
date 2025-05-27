@@ -5,18 +5,20 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { PermissionType } from "../types/permission.types";
 
 @Entity()
 export class Permission {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column("varchar", { length: 20 })
-  name: string;
+  @Column({ type: "enum", enum: PermissionType, unique: true })
+  name: PermissionType;
 
   @Column("boolean", { default: false })
   isDeleted?: boolean;
 }
+
 @Entity()
 export class Role {
   @PrimaryGeneratedColumn()

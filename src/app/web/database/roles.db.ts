@@ -11,6 +11,14 @@ export class RolesDB {
   static async ReadRoles() {
     const result = await roleRepository.find({
       relations: ["permission"],
+      select: {
+        id: true,
+        name: true,
+        permission: {
+          id: true,
+          name: true,
+        },
+      },
     });
     return result;
   }

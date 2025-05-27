@@ -8,6 +8,7 @@ import {
 } from "../middleware/validate.middleware.js";
 import { MentorController } from "../controller/MentorController.js";
 import { Auth } from "../auth/authorization.js";
+import { PermissionType } from "../../../types/permission.types.js";
 
 const router = express.Router();
 
@@ -15,31 +16,31 @@ const mentorController = new MentorController();
 
 router.get(
   "/",
-
+  Auth.isAuthorized(PermissionType.ADMIN_VIEW),
   checkQuery,
   mentorController.GetMentors
 );
 router.get(
   "/:id",
-
+  Auth.isAuthorized(PermissionType.ADMIN_VIEW),
   checkID,
   mentorController.GetMentor
 );
 router.post(
   "/",
-  Auth.isAuthorized("add"),
+  Auth.isAuthorized(PermissionType.ADMIN_ADD),
   validate,
   mentorController.CreateMentor
 );
 router.delete(
   "/:id",
-  Auth.isAuthorized("delete"),
+  Auth.isAuthorized(PermissionType.ADMIN_DELETE),
   checkID,
   mentorController.DeleteMentor
 );
 router.put(
   "/:id",
-  Auth.isAuthorized("edit"),
+  Auth.isAuthorized(PermissionType.ADMIN_EDIT),
   checkID,
   validate,
   mentorController.UpdateMentor
