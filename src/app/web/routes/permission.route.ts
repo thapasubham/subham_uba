@@ -21,7 +21,7 @@ router.get(
 );
 router.post(
   "/",
-
+  Auth.isAuthorized(PermissionType.ADMIN_ADD),
   isValidPermission,
   permissionController.CreatePermission
 );
