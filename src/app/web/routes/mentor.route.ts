@@ -16,6 +16,7 @@ const mentorController = new MentorController();
 
 router.get(
   "/",
+
   Auth.isAuthorized(PermissionType.ADMIN_VIEW),
   checkQuery,
   mentorController.GetMentors
@@ -34,12 +35,14 @@ router.post(
 );
 router.delete(
   "/:id",
+  Auth.isAuthenticated,
   Auth.isAuthorized(PermissionType.ADMIN_DELETE),
   checkID,
   mentorController.DeleteMentor
 );
 router.put(
   "/:id",
+  Auth.isAuthenticated,
   Auth.isAuthorized(PermissionType.ADMIN_EDIT),
   checkID,
   validate,

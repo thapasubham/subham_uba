@@ -5,7 +5,7 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { PermissionType } from "../types/permission.types";
+import { PermissionType } from "../types/permission.types.js";
 
 @Entity()
 export class Permission {

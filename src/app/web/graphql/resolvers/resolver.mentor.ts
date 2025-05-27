@@ -23,6 +23,10 @@ export const mentor = {
       const updatedUser = await dataSource.mentorService.Update(user);
       return updatedUser;
     },
+    async loginMentor(_: any, { login }: any, { dataSource }: any) {
+      const tokens = await dataSource.mentorService.Login(login);
+      return tokens;
+    },
     async deleteMentor(_: any, { id }: any, { dataSource }: any) {
       const user = await dataSource.mentorService.DeleteMentor(parseInt(id));
 

@@ -43,7 +43,9 @@ export class Details {
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    console.log("hook fired");
+    if (!this.password) {
+      return;
+    }
     this.password = await PasswordHasher.Hash(this.password);
   }
 }

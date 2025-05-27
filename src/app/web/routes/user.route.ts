@@ -16,7 +16,8 @@ const usersHandler = new UserController();
 
 router.get(
   "/getUsers",
-  Auth.isAuthorized(PermissionType.ADMIN_VIEW),
+
+  Auth.isAuthorized(PermissionType.VIEW),
   checkQuery,
   usersHandler.GetUsers
 );
@@ -36,6 +37,7 @@ router.delete(
 );
 router.put(
   "/updateUser/:id",
+  Auth.isAuthenticated,
   Auth.isAuthorized(PermissionType.EDIT),
   checkID,
   validate,

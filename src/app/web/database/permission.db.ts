@@ -1,3 +1,4 @@
+import { constants } from "../../../constants/constant.js";
 import { AppDataSource } from "../../../data-source.js";
 import { Permission } from "../../../entity/role.js";
 import { HttpError } from "../middleware/error.js";
@@ -26,7 +27,7 @@ export class permissionDB {
     });
 
     if (!result) {
-      throw new HttpError("Permission doesn't exists", 404);
+      throw new HttpError(constants.NO_PERMISSION_FOUND, 404);
     }
     await permRepository.save(permission);
     return 1;
@@ -35,7 +36,7 @@ export class permissionDB {
   static async DeletePermission(id: number) {
     const result = await permRepository.findOne({ where: { id: id } });
     if (!result) {
-      throw new HttpError("Permission doesn't exists", 404);
+      throw new HttpError(constants.NO_PERMISSION_FOUND, 404);
     }
     result.isDeleted = true;
     await permRepository.save(result);

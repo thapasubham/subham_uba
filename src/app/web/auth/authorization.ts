@@ -7,18 +7,32 @@ import { constants } from "../../../constants/constant.js";
 import { RolesDB } from "../database/roles.db.js";
 
 export class Auth {
+  static async isAuthenticated(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const decoded_token: any = await Auth.getDecodedToken(req);
+    const id = Number(req.params.id);
+    const decodedID = Number(decoded_token.id);
+    if (id !== decodedID) {
+      throw new HttpError(
+        constants.UNAUTHORIZED_MSG,
+        constants.UNAUTHORIZED_STAUTS
+      );
+    }
+    next();
+  }
+
   static isAuthorized(permission: string) {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
         const decoded_token: any = await Auth.getDecodedToken(req);
-        const id = Number(req.params.id);
-        const decodedID = Number(decoded_token.id);
         const role = decoded_token.role;
 
         const rolePermission = await Auth.getPermission(role, permission);
-        const idMatch = Auth.matchID(id, decodedID);
 
-        if (idMatch || rolePermission) {
+        if (rolePermission) {
           return next();
         }
         throw new HttpError(
@@ -47,6 +61,7 @@ export class Auth {
 
   static async getDecodedToken(req: Request) {
     let token = req.headers.authorization;
+    console.log(token);
     if (!token) {
       throw new HttpError(
         constants.UNAUTHORIZED_MSG,
@@ -66,8 +81,5 @@ export class Auth {
     const permissions = roles.permission;
     const rolePermission = permissions.some((p) => p.name == permission);
     return rolePermission;
-  }
-  static matchID(id: number, decodedID: number) {
-    return id === decodedID;
   }
 }

@@ -43,13 +43,12 @@ export class UserDb {
   }
 
   static async UpdateUser(user: User) {
-    console.log(user.id);
     let result = await userRepository.findOneBy({
       id: user.id,
       isDeleted: false,
     });
     if (!result) {
-      throw new HttpError("User doesn't exists", 404);
+      throw new HttpError(constants.NO_USER, 404);
     }
     result.firstname = user.firstname;
     result.lastname = user.lastname;

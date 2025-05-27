@@ -84,7 +84,7 @@ export class MentorDb {
     return 1;
   }
 
-  //returns the status of delete 1 = success, 0= failed to delete;
+  //returns the status of delete 1 = success, 0 = failed to delete;
   static async DeleteMentor(id: number) {
     const mentor = await repository.findOneBy({ id: id, isDeleted: false });
     if (mentor) {

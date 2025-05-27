@@ -24,26 +24,29 @@ const typeDefs = gql`
     name: String!
   }
 
+  type AuthToken {
+    bearerToken: String
+    refreshToken: String
+  }
 
-  
   type Permission {
-      id: Int!
-      name: String!
+    id: Int!
+    name: String!
   }
   type Role {
-      id: Int!
-      name: String!
-      permission: [Permission]
+    id: Int!
+    name: String!
+    permission: [Permission]
   }
 
   type InternDetails {
-      id: Int!
-      started_at: Date
-      end_at: Date
-      isCertified: Boolean
-      intern: Intern
-      mentor: Mentor
-      user: User
+    id: Int!
+    started_at: Date
+    end_at: Date
+    isCertified: Boolean
+    intern: Intern
+    mentor: Mentor
+    user: User
   }
   type Query {
     users(limit: Int!, offset: Int!): [User]
@@ -54,10 +57,10 @@ const typeDefs = gql`
     internDetails(limit: Int!, offset: Int!): [InternDetails]
     mentors(limit: Int!, offset: Int!): [Mentor]
     mentor(id: ID!): Mentor
-      role(id: ID!): Role
-      roles: [Role]
-      permission(id: ID!): Permission
-      permissions: [Permission]
+    role(id: ID!): Role
+    roles: [Role]
+    permission(id: ID!): Permission
+    permissions: [Permission]
   }
 
   input UserInput {
@@ -90,20 +93,24 @@ const typeDefs = gql`
     role: String
   }
 
-  
-input RoleInput {
+  input RoleInput {
     id: Int
     name: String!
     permission: Int
-}
+  }
   input PermissionInput {
-      id: Int
-      name: String!
+    id: Int
+    name: String!
+  }
+  input loginInput {
+    email: String
+    password: String
   }
   type Mutation {
     createUser(user: UserInput!): User
     updateUser(user: UserInput!): User
     deleteUser(id: ID!): Int
+    loginUser(login: loginInput!): AuthToken
 
     createIntern(intern: InternInput!): Intern
     updateIntern(intern: InternInput!): Intern
@@ -116,14 +123,15 @@ input RoleInput {
     createMentor(mentor: MentorInput!): Mentor
     updateMentor(mentor: MentorInput!): Mentor
     deleteMentor(id: ID!): Int
-      
-      Createpermission(permission: PermissionInput!): Permission
-      updatePermission(permission: PermissionInput!): Permission
-      deletePermission(id: ID!): Int
-      
-      Createrole(role: RoleInput!): Role
-      updateRole(role: RoleInput!): Role
-      deleteRole(id: ID!): Int
+    loginMentor(login: loginInput!): AuthToken
+
+    Createpermission(permission: PermissionInput!): Permission
+    updatePermission(permission: PermissionInput!): Permission
+    deletePermission(id: ID!): Int
+
+    Createrole(role: RoleInput!): Role
+    updateRole(role: RoleInput!): Role
+    deleteRole(id: ID!): Int
   }
 `;
 
