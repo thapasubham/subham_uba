@@ -1,4 +1,5 @@
 import { Mentor } from "../../../entity/user.js";
+import { login } from "../../../types/login.types.js";
 import { MentorDb } from "../database/mentor.db.js";
 
 /**
@@ -87,6 +88,11 @@ export class MentorService {
   async Update(mentor: Mentor): Promise<number> {
     const result = await MentorDb.UpdateMentor(mentor);
 
+    return result;
+  }
+
+  async Login(user: login): Promise<any> {
+    const result = await MentorDb.Login(user);
     return result;
   }
 }

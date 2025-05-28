@@ -3,8 +3,11 @@ import {
   checkID,
   checkQuery,
   validate,
+  validateIntern,
+  validateLogin,
 } from "../../../app/web/middleware/validate.middleware.js";
 import { ResponseApi } from "../../../utils/ApiResponse.js";
+import { expect } from "chai";
 
 describe("Middleware tests", () => {
   let req: any;
@@ -35,6 +38,19 @@ describe("Middleware tests", () => {
         body: {
           firstname: "Subham",
         },
+      };
+      validate(req, res, callback);
+
+      Sinon.assert.calledOnce(writeErrorStub);
+      Sinon.assert.calledWith(writeErrorStub, res, {
+        message: "Missing fields",
+        status: 400,
+      });
+    });
+
+    it("Empty body", () => {
+      req = {
+        body: {},
       };
       validate(req, res, callback);
 
@@ -111,6 +127,70 @@ describe("Middleware tests", () => {
         checkID(req, res, callback);
         Sinon.assert.calledOnce(callback);
       });
+    });
+  });
+
+  describe("validate Intern", () => {
+    it("When no body", () => {
+      req = {};
+
+      const data = () => validateIntern(req, res, callback);
+
+      expect(data).to.throw(Error);
+    });
+
+    it("When empty body", () => {
+      req = {
+        body: {},
+      };
+
+      validateIntern(req, res, callback);
+      Sinon.assert.calledOnce(writeErrorStub);
+      Sinon.assert.calledWith(writeErrorStub, res, {
+        message: "Missing fields",
+        status: 400,
+      });
+    });
+
+    it("When the correct body is provided", () => {
+      req = {
+        body: { name: "Full-stack" },
+      };
+
+      validateIntern(req, res, callback);
+      Sinon.assert.calledOnce(callback);
+    });
+  });
+
+  describe("Login validate", () => {
+    it("When no body", () => {
+      req = {};
+
+      const data = () => validateLogin  (req, res, callback);
+
+      expect(data).to.throw(Error);
+    });
+
+    it("When empty body", () => {
+      req = {
+        body: {},
+      };
+
+      validateLogin(req, res, callback);
+      Sinon.assert.calledOnce(writeErrorStub);
+      Sinon.assert.calledWith(writeErrorStub, res, {
+        message: "Missing fields",
+        status: 400,
+      });
+    });
+
+    it("When the correct body is provided", () => {
+      req = {
+        body: { email: "test@login.com", password: "password123" },
+      };
+
+      validateLogin(req, res, callback);
+      Sinon.assert.calledOnce(callback);
     });
   });
 });

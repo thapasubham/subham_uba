@@ -24,6 +24,10 @@ export const userResolvers = {
       const updatedUser = await dataSource.userService.Update(user);
       return updatedUser;
     },
+    async loginUser(_: any, { login }: any, { dataSource }: any) {
+      const tokens = await dataSource.userService.Login(login);
+      return tokens;
+    },
     async deleteUser(_: any, { id }: any, { dataSource }: any) {
       const user = await dataSource.userService.DeleteUser(parseInt(id));
 

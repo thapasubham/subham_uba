@@ -1,29 +1,31 @@
 import Sinon from "sinon";
 import { UserService } from "../../../app/web/services/UserService.js";
-import { user } from "../../../entity/user.js";
+import { User } from "../../../entity/user.js";
 import { assert } from "chai";
-import { DataBase } from "../../../app/web/database/user.db.js";
+import { UserDb } from "../../../app/web/database/user.db";
+import { Role } from "../../../entity/role.js";
 
 describe("User Services tests", () => {
-  let userService: UserService;
+  const userService = new UserService();
 
   //test to create user
   describe("Create User test suite", () => {
     let saveUserStub: Sinon.SinonStub;
     beforeEach(() => {
-      userService = new UserService();
-      saveUserStub = Sinon.stub(DataBase, "Createuser");
+      saveUserStub = Sinon.stub(UserDb, "Createuser");
     });
     afterEach(() => {
       saveUserStub.restore();
     });
     it("Create user test case", async () => {
-      const user: user = {
+      const user: User = {
         firstname: "Subham",
         lastname: "thapa",
         id: 5,
         email: "subham@gmail.com",
         phoneNumber: "9830827938",
+        password: "Subham",
+        role: new Role(),
       };
       saveUserStub.returns(user);
       const result = await userService.CreateUser(user);
@@ -37,8 +39,7 @@ describe("User Services tests", () => {
   describe("Delete User test suite", () => {
     let deleteuserStub: Sinon.SinonStub;
     beforeEach(() => {
-      userService = new UserService();
-      deleteuserStub = Sinon.stub(DataBase, "DeleteUser");
+      deleteuserStub = Sinon.stub(UserDb, "DeleteUser");
     });
     afterEach(() => {
       deleteuserStub.restore();
@@ -65,19 +66,19 @@ describe("User Services tests", () => {
   describe("Update test suite", () => {
     let updateUserStub: Sinon.SinonStub;
     beforeEach(() => {
-      userService = new UserService();
-      updateUserStub = Sinon.stub(DataBase, "UpdateUser");
+      updateUserStub = Sinon.stub(UserDb, "UpdateUser");
     });
     afterEach(() => {
       updateUserStub.restore();
     });
     it("Create user test case", async () => {
-      const user: user = {
+      const user: User = {
         firstname: "John",
         lastname: "BloodBorne",
         id: 5,
         email: "john@gmail.com",
         phoneNumber: "9876543310",
+        role: new Role(),
       };
       updateUserStub.returns(1);
       const result = await userService.Update(user);
@@ -91,8 +92,7 @@ describe("User Services tests", () => {
   describe("", () => {
     let readUserStub: Sinon.SinonStub;
     beforeEach(() => {
-      userService = new UserService();
-      readUserStub = Sinon.stub(DataBase, "ReadUsers");
+      readUserStub = Sinon.stub(UserDb, "ReadUsers");
     });
     afterEach(() => {
       readUserStub.restore();
@@ -111,13 +111,14 @@ describe("User Services tests", () => {
       });
 
       it("Read user Data", async () => {
-        let users: user[] = [
+        let users: User[] = [
           {
             firstname: "Subham",
             lastname: "Thapa",
             id: 5,
             email: "subham@gmail.com",
             phoneNumber: "9876543210",
+            role: new Role(),
           },
           {
             firstname: "John",
@@ -125,6 +126,7 @@ describe("User Services tests", () => {
             id: 10,
             email: "john@black.com",
             phoneNumber: "1234566789",
+            role: new Role(),
           },
           {
             firstname: "Ashoka",
@@ -132,6 +134,7 @@ describe("User Services tests", () => {
             id: 7,
             email: "ashoka@jedi.com",
             phoneNumber: "95748586520",
+            role: new Role(),
           },
           {
             firstname: "Anikan",
@@ -139,6 +142,7 @@ describe("User Services tests", () => {
             id: 14,
             email: "anikan@jedi.com",
             phoneNumber: "9874563210",
+            role: new Role(),
           },
         ];
         readUserStub.returns(users);
@@ -152,8 +156,7 @@ describe("User Services tests", () => {
   describe("read user test suite", () => {
     let readUserStub: Sinon.SinonStub;
     beforeEach(() => {
-      userService = new UserService();
-      readUserStub = Sinon.stub(DataBase, "ReadUser");
+      readUserStub = Sinon.stub(UserDb, "ReadUser");
     });
     afterEach(() => {
       readUserStub.restore();
@@ -171,15 +174,40 @@ describe("User Services tests", () => {
         id: 10,
         email: "john@black.com",
         phoneNumber: "1248216745",
-        intern: {
-          id: 2,
-          name: "DevOps",
-        },
+        role: new Role(),
       };
       readUserStub.returns(user);
       const result = await userService.ReadUsers(0, 0, 10);
       assert.equal(result, user);
       Sinon.assert.calledWith(readUserStub, 10);
+    });
+  });
+
+  describe("login test", () => {
+    let loginStub: Sinon.SinonStub;
+
+    beforeEach(() => {
+      loginStub = Sinon.stub(UserDb, "Login");
+    });
+    after(() => {
+      Sinon.restore();
+    });
+    it("Epic test", async () => {
+      let user = {
+        email: "subham@gmail.com",
+        password: "cool secure password",
+      };
+
+      const data: any = {
+        accessToken: "accessToken",
+        refreshToken: "refreshToken",
+      };
+
+      loginStub.returns(data);
+
+      const result = await userService.Login(user);
+      assert.equal(result, data);
+      Sinon.assert.calledWith(loginStub, user);
     });
   });
 });
