@@ -5,11 +5,14 @@ import { PasswordHasher } from "../auth/hash.js";
 import { Auth } from "../auth/authorization.js";
 import { HttpError } from "../middleware/error.js";
 import { constants } from "../../../constants/constant.js";
+import { DEFAULT_ROLE } from "../../../types/permission.types.js";
+import { RolesDB } from "./roles.db.js";
 
 const userRepository = AppDataSource.getRepository(User);
 
 export class UserDb {
   static async Createuser(user: User) {
+    user.role = await RolesDB.getrolebyname(DEFAULT_ROLE);
     const entity = userRepository.create(user);
     return await userRepository.save(entity);
   }
@@ -17,23 +20,44 @@ export class UserDb {
   static async ReadUser(id: number) {
     const result = await userRepository.findOne({
       where: { id: id, isDeleted: false },
+      relations: ["role", "role.permission"],
       select: {
+        id: true,
         firstname: true,
         lastname: true,
         email: true,
         phoneNumber: true,
+        role: {
+          id: true,
+          name: true,
+          permission: true,
+        },
+        password: false,
+        isDeleted: false,
       },
     });
     if (!result) {
       throw new HttpError(constants.NO_USER, 404);
     }
+    console.log(result);
     return result;
   }
 
   static async ReadUsers(limit: number, offset: number) {
     const result = await userRepository.find({
       where: { isDeleted: false },
+      relations: ["role"],
       select: {
+        id: true,
+        firstname: true,
+        lastname: true,
+        email: true,
+        phoneNumber: true,
+        role: {
+          id: true,
+          name: true,
+        },
+        password: false,
         isDeleted: false,
       },
       skip: offset,

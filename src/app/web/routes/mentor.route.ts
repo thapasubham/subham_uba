@@ -9,6 +9,7 @@ import {
 import { MentorController } from "../controller/MentorController.js";
 import { Auth } from "../auth/authorization.js";
 import { PermissionType } from "../../../types/permission.types.js";
+import refreshTokenValid from "../auth/refreshToken.auth.js";
 
 const router = express.Router();
 
@@ -49,5 +50,5 @@ router.put(
   mentorController.UpdateMentor
 );
 router.post("/login", validateLogin, mentorController.login);
-
+router.post("/refreshToken", refreshTokenValid, mentorController.Refresh);
 export const mentorRoutes = router;

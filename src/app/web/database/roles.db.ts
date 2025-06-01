@@ -27,6 +27,14 @@ export class RolesDB {
     return await roleRepository.findOne({
       where: { id },
       relations: ["permission"],
+      select: {
+        id: true,
+        name: true,
+        permission: {
+          id: true,
+          name: true,
+        },
+      },
     });
   }
 
@@ -50,5 +58,11 @@ export class RolesDB {
       id: id,
     });
     return result;
+  }
+  static async getrolebyname(default_role: string) {
+    const result = await roleRepository.findOne({
+      where: { name: default_role },
+    });
+    return result.id;
   }
 }

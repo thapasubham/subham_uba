@@ -7,6 +7,7 @@ const typeDefs = gql`
     id: Float
     email: String!
     phoneNumber: String!
+    role: Role
   }
 
   type Mentor {
@@ -15,7 +16,7 @@ const typeDefs = gql`
     id: Float
     email: String!
     phoneNumber: String!
-    role: String
+    role: Role
   }
   scalar Date
 

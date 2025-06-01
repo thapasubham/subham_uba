@@ -18,7 +18,6 @@ export class RoleController {
   }
   async ReadRole(req: Request, res: Response) {
     const roleID = Number(req.params.id);
-    console.log(roleID);
     const result = await roleService.ReadRole(roleID);
 
     ResponseApi.WriteResponse(res, { status: 200, data: result });

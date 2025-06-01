@@ -10,6 +10,7 @@ export const userResolvers = {
         parseInt(id)
       );
 
+      console.log(getUser);
       return getUser;
     },
   },

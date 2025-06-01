@@ -35,12 +35,10 @@ export class Auth {
         if (rolePermission) {
           return next();
         }
-        throw new HttpError(
-          constants.UNAUTHORIZED_MSG,
-          constants.UNAUTHORIZED_STAUTS
-        );
+
+        throw new HttpError(constants.UNAUTHORIZED_MSG, 403);
       } catch (e) {
-        throw new HttpError(e.message, constants.UNAUTHORIZED_STAUTS);
+        throw new HttpError(e.message, 401);
       }
     };
   }
@@ -61,7 +59,6 @@ export class Auth {
 
   static async getDecodedToken(req: Request) {
     let token = req.headers.authorization;
-    console.log(token);
     if (!token) {
       throw new HttpError(
         constants.UNAUTHORIZED_MSG,

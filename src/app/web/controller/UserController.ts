@@ -5,17 +5,18 @@ import { ResponseApi, responseType } from "../../../utils/ApiResponse.js";
 import { UserService } from "../services/UserService.js";
 import { parseBody } from "../utils/utils.js";
 import { login } from "../../../types/login.types.js";
+import { constants } from "../../../constants/constant.js";
 
 const userService = new UserService();
 export class UserController {
   async CreateUser(req: Request, res: Response) {
-    const response: responseType<User[]> = {
+    const response: responseType<User> = {
       message: "",
       status: 200,
     };
 
     const bodyData: User = parseBody(req);
-
+    console.log(bodyData);
     await userService.CreateUser(bodyData);
 
     response.status = 201;
@@ -33,7 +34,7 @@ export class UserController {
     const user = (await userService.ReadUsers(limit, offset)) as User[];
 
     if (user.length === 0) {
-      response.message = "No User exists";
+      response.message = constants.NO_MORE_USER;
       response.status = 404;
     } else {
       response.data = user;
@@ -96,6 +97,13 @@ export class UserController {
     const login: login = req.body;
     const result = await userService.Login(login);
 
+    ResponseApi.WriteResponse(res, { status: 200, data: result });
+  }
+
+  async Refresh(req: Request, res: Response) {
+    const id = res.locals.id;
+    console.log(id);
+    const result = await userService.Refresh(id);
     ResponseApi.WriteResponse(res, { status: 200, data: result });
   }
 }

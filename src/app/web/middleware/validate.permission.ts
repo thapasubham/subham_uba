@@ -13,7 +13,6 @@ export function isValidPermission(
 
   const name = req.body.name;
 
-  console.log(name === PermissionType.EDIT);
   if (Object.values(PermissionType).includes(name)) {
     next();
     return;

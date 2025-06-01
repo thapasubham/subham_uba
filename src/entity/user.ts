@@ -23,7 +23,6 @@ export class Details {
   @Column("varchar", { length: 30, nullable: false })
   lastname: string;
 
-  @Index("email-idx")
   @Column("varchar", { length: 30, nullable: false, unique: true })
   email: string;
 

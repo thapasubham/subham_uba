@@ -5,18 +5,20 @@ import { PasswordHasher } from "../auth/hash.js";
 import { Auth } from "../auth/authorization.js";
 import { HttpError } from "../middleware/error.js";
 import { constants } from "../../../constants/constant.js";
+import { RolesDB } from "./roles.db.js";
+import { DEFAULT_ROLE } from "../../../types/permission.types.js";
 
 const repository = AppDataSource.getRepository(Mentor);
 export class MentorDb {
   static async CreateMentor(mentor: Mentor) {
-    const entity = repository.create(mentor);
-    const result = await repository.save(entity);
+    mentor.role = await RolesDB.getrolebyname(DEFAULT_ROLE);
+    const result = await repository.save(mentor);
     return result;
   }
   static async ReadMentor(id: number) {
     const result = await repository.findOne({
       where: { id: id, isDeleted: false },
-      relations: ["role"],
+      relations: ["role", "role.permission"],
       select: {
         id: true,
         firstname: true,
@@ -32,6 +34,7 @@ export class MentorDb {
         isDeleted: false,
       },
     });
+
     if (!result) {
       throw new HttpError(constants.NO_USER, 404);
     }
@@ -41,7 +44,7 @@ export class MentorDb {
   static async ReadMentors(limit: number, offset: number) {
     const result = await repository.find({
       where: { isDeleted: false },
-      relations: ["role"],
+      relations: ["role", "role.permission"],
       select: {
         id: true,
         firstname: true,
@@ -63,8 +66,6 @@ export class MentorDb {
   }
 
   static async UpdateMentor(mentor: Mentor) {
-    console.log(mentor.id);
-
     let result = await repository.findOneBy({
       id: mentor.id,
       isDeleted: false,
@@ -106,6 +107,7 @@ export class MentorDb {
     if (!result) {
       throw new HttpError(constants.NO_USER, 404);
     }
+
     await PasswordHasher.Compare(user.password, result.password);
 
     const id = result.id;

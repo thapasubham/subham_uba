@@ -4,6 +4,7 @@ import { UserService } from "../../../app/web/services/UserService.js";
 import { ResponseApi } from "../../../utils/ApiResponse.js";
 import { User } from "../../../entity/user.js";
 import { Role } from "../../../entity/role";
+import { constants } from "../../../constants/constant.js";
 
 describe("User controller tests ", () => {
   const userController = new UserController();
@@ -40,32 +41,31 @@ describe("User controller tests ", () => {
 
     //create user test case
     it("Create user Test case", async () => {
-     const user ={
-       id: 5,
-       firstname: "Subham",
-       lastname: "Thapa",
-       email: "subham@thapa.com",
-       phoneNumber: "9874563210",
-        role: 2
-     }
+      const user = {
+        id: 5,
+        firstname: "Subham",
+        lastname: "Thapa",
+        email: "subham@thapa.com",
+        phoneNumber: "9874563210",
+        role: 2,
+      };
 
       req = {
         body: {
-            user
+          user,
         },
       };
 
       await userController.CreateUser(req, res);
       Sinon.assert.calledOnce(createUserStub);
       Sinon.assert.calledWith(createUserStub, {
-       user,
-
+        user,
       });
       Sinon.assert.calledOnce(writeResponseStub);
-        Sinon.assert.calledWith(writeResponseStub, res, {
-          status: 201,
-          message: "User Created",
-        });
+      Sinon.assert.calledWith(writeResponseStub, res, {
+        status: 201,
+        message: "User Created",
+      });
     });
   });
 
@@ -209,7 +209,7 @@ describe("User controller tests ", () => {
         Sinon.assert.calledOnce(writeResponseStub);
         Sinon.assert.calledWith(writeResponseStub, res, {
           status: 404,
-          message: "No User exists",
+          message: constants.NO_MORE_USER,
         });
       });
       it("Users exists", async () => {

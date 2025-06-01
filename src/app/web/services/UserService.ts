@@ -1,5 +1,6 @@
 import { User } from "../../../entity/user.js";
 import { login } from "../../../types/login.types.js";
+import { Auth } from "../auth/authorization.js";
 import { UserDb } from "../database/user.db.js";
 
 /**
@@ -85,14 +86,19 @@ export class UserService {
     }
   }
 
-  async Update(user: User): Promise<number> {
+  async Update(user: User): Promise<User> {
     const result = await UserDb.UpdateUser(user);
 
     return result;
   }
 
-  async Login(user: login): Promise<any> {
+  async Login(user: login) {
     const result = await UserDb.Login(user);
     return result;
+  }
+  async Refresh(id: number) {
+    const user = await UserDb.ReadUser(id);
+    const signedJWT = Auth.Sign(user.id, user.role.id);
+    return signedJWT;
   }
 }

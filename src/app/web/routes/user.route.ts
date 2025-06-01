@@ -9,34 +9,36 @@ import {
 } from "../middleware/validate.middleware.js";
 import { Auth } from "../auth/authorization.js";
 import { PermissionType } from "../../../types/permission.types.js";
+import refreshTokenValid from "../auth/refreshToken.auth.js";
 
 const router = express.Router();
 
 const usersHandler = new UserController();
 
 router.get(
-  "/getUsers",
+  "/",
 
   Auth.isAuthorized(PermissionType.VIEW),
   checkQuery,
   usersHandler.GetUsers
 );
 router.get(
-  "/getUser/:id",
+  "/:id",
   Auth.isAuthorized(PermissionType.VIEW),
   checkID,
   usersHandler.GetUser
 );
-router.post("/createUser", validate, usersHandler.CreateUser);
-router.post("/user/login", validateLogin, usersHandler.login);
+router.post("/", validate, usersHandler.CreateUser);
+router.post("/login", validateLogin, usersHandler.login);
 router.delete(
-  "/deleteUser/:id",
+  "/:id",
+  Auth.isAuthenticated,
   Auth.isAuthorized(PermissionType.DELETE),
   checkID,
   usersHandler.DeleteUser
 );
 router.put(
-  "/updateUser/:id",
+  "/:id",
   Auth.isAuthenticated,
   Auth.isAuthorized(PermissionType.EDIT),
   checkID,
@@ -44,4 +46,5 @@ router.put(
   usersHandler.UpdateUser
 );
 
+router.post("/refreshToken", refreshTokenValid, usersHandler.Refresh);
 export const userRouter = router;

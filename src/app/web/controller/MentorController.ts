@@ -96,4 +96,9 @@ export class MentorController {
 
     ResponseApi.WriteResponse(res, { status: 200, data: result });
   }
+  async Refresh(req: Request, res: Response) {
+    const id = res.locals.id;
+    const result = await mentorService.Refresh(id);
+    ResponseApi.WriteResponse(res, { status: 200, data: result });
+  }
 }

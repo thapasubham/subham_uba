@@ -25,7 +25,6 @@ export class InternDb {
   }
 
   static async Update(intern: Intern) {
-    console.log(intern.id);
     const result = await internRepository.findOneBy({
       id: intern.id,
       isDeleted: false,

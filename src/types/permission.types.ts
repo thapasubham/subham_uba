@@ -7,3 +7,5 @@ export enum PermissionType {
   ADMIN_EDIT = "admin:edit",
   ADMIN_DELETE = "admin:delete",
 }
+
+export const DEFAULT_ROLE = "default";
