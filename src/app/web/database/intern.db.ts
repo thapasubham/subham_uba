@@ -1,9 +1,9 @@
 import { AppDataSource } from "../../../data-source.js";
-import { Intern } from "../../../entity/user.js";
+import { Intern } from "../../../entity/intern.js";
 
 const internRepository = AppDataSource.getRepository(Intern);
 
-export class DataBaseIntern {
+export class InternDb {
   static async Create(intern: Intern) {
     const result = await internRepository.save(intern);
     return result;
@@ -25,7 +25,6 @@ export class DataBaseIntern {
   }
 
   static async Update(intern: Intern) {
-    console.log(intern.id);
     const result = await internRepository.findOneBy({
       id: intern.id,
       isDeleted: false,

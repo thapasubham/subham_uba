@@ -1,20 +1,22 @@
 import { Request, Response } from "express";
-import { user } from "../../../entity/user.js";
+import { User } from "../../../entity/user.js";
 import { ResponseApi, responseType } from "../../../utils/ApiResponse.js";
 
 import { UserService } from "../services/UserService.js";
 import { parseBody } from "../utils/utils.js";
+import { login } from "../../../types/login.types.js";
+import { constants } from "../../../constants/constant.js";
 
 const userService = new UserService();
 export class UserController {
   async CreateUser(req: Request, res: Response) {
-    const response: responseType<user[]> = {
+    const response: responseType<User> = {
       message: "",
       status: 200,
     };
 
-    const bodyData: user = parseBody(req);
-
+    const bodyData: User = parseBody(req);
+    console.log(bodyData);
     await userService.CreateUser(bodyData);
 
     response.status = 201;
@@ -24,15 +26,15 @@ export class UserController {
   }
 
   async GetUsers(req: Request, res: Response) {
-    const response: responseType<user[]> = {
+    const response: responseType<User[]> = {
       status: 200,
     };
     const limit = parseInt(req.query.limit as string);
     const offset = parseInt(req.query.offset as string);
-    const user = (await userService.ReadUsers(limit, offset)) as user[];
+    const user = (await userService.ReadUsers(limit, offset)) as User[];
 
     if (user.length === 0) {
-      response.message = "No User exists";
+      response.message = constants.NO_MORE_USER;
       response.status = 404;
     } else {
       response.data = user;
@@ -42,47 +44,39 @@ export class UserController {
   }
 
   async GetUser(req: Request, res: Response) {
-    const response: responseType<user> = {
+    const response: responseType<User> = {
       status: 200,
     };
 
     const id = parseInt(req.params.id);
     const user = await userService.ReadUsers(0, 0, id);
 
-    if (!user) {
-      response.status = 404;
-      response.message = "User not found";
-    } else {
-      response.status = 200;
-      response.data = user as user;
-    }
+    response.status = 200;
+    response.data = user as User;
+
     ResponseApi.WriteResponse(res, response);
   }
 
   async UpdateUser(req: Request, res: Response) {
-    const response: responseType<user> = {
+    const response: responseType<User> = {
       message: "",
       status: 200,
     };
 
     const id = parseInt(req.params.id);
-    const userData: user = parseBody(req);
+    const userData: User = parseBody(req);
 
     userData.id = id;
-    const result = await userService.Update(userData);
+    await userService.Update(userData);
 
-    if (result === 0) {
-      response.message = "Failed to update user";
-      response.status = 404;
-    } else {
-      response.message = "User Updated";
-      response.status = 200;
-    }
+    response.message = "User Updated";
+    response.status = 200;
+
     ResponseApi.WriteResponse(res, response);
   }
 
   async DeleteUser(req: Request, res: Response) {
-    const response: responseType<user> = {
+    const response: responseType<User> = {
       message: "",
       status: 200,
     };
@@ -97,5 +91,19 @@ export class UserController {
       response.message = "User Deleted";
     }
     ResponseApi.WriteResponse(res, response);
+  }
+
+  async login(req: Request, res: Response) {
+    const login: login = req.body;
+    const result = await userService.Login(login);
+
+    ResponseApi.WriteResponse(res, { status: 200, data: result });
+  }
+
+  async Refresh(req: Request, res: Response) {
+    const id = res.locals.id;
+    console.log(id);
+    const result = await userService.Refresh(id);
+    ResponseApi.WriteResponse(res, { status: 200, data: result });
   }
 }

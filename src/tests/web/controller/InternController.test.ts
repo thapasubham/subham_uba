@@ -2,26 +2,21 @@ import Sinon from "sinon";
 import { InternController } from "../../../app/web/controller/InternController.js";
 import { InternService } from "../../../app/web/services/InternService.js";
 import { ResponseApi } from "../../../utils/ApiResponse.js";
-import { Intern } from "../../../entity/user.js";
+import { Intern } from "../../../entity/intern.js";
 
 describe("Intern controller tests ", () => {
-  let internController: InternController;
+  const internController = new InternController();
   let req: any;
   let res: any;
   let sendStub: Sinon.SinonStub;
   let statusStub: Sinon.SinonStub;
   let writeResponseStub: Sinon.SinonStub;
 
-  //only use to stub methods
-  let internService: InternService;
-
   describe("Intern create test suites", () => {
     let createStub: Sinon.SinonStub;
 
     //setup
     beforeEach(() => {
-      internController = new InternController();
-      internService = new InternService();
       createStub = Sinon.stub(
         InternService.prototype,
         "CreateIntern"
@@ -66,8 +61,6 @@ describe("Intern controller tests ", () => {
 
     //setup
     beforeEach(() => {
-      internController = new InternController();
-      internService = new InternService();
       deleteStub = Sinon.stub(
         InternService.prototype,
         "DeleteIntern"
@@ -145,8 +138,6 @@ describe("Intern controller tests ", () => {
 
     //setup
     beforeEach(() => {
-      internController = new InternController();
-      internService = new InternService();
       readStub = Sinon.stub(InternService.prototype, "ReadIntern").resolves();
       writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
       statusStub = Sinon.stub().returnsThis();
@@ -258,8 +249,6 @@ describe("Intern controller tests ", () => {
 
     //setup
     beforeEach(() => {
-      internController = new InternController();
-      internService = new InternService();
       updateStub = Sinon.stub(
         InternService.prototype,
         "UpdateIntern"

@@ -1,18 +1,21 @@
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
 } from "typeorm";
+import { Role } from "./role.js";
+import { PasswordHasher } from "../app/web/auth/hash.js";
+
 @Entity()
 export class Details {
   @Index()
   @PrimaryColumn("bigint", { nullable: false })
-  id: number;
+  id?: number;
 
   @Column("varchar", { length: 30, nullable: false })
   firstname: string;
@@ -23,55 +26,31 @@ export class Details {
   @Column("varchar", { length: 30, nullable: false, unique: true })
   email: string;
 
+  @Column("varchar")
+  password?: string;
+
   @Column("varchar", { length: 10, nullable: false, unique: true })
   phoneNumber: string;
 
   @Column("boolean", { default: false })
   isDeleted?: boolean;
+
+  @ManyToOne(() => Role)
+  @JoinColumn({ name: "role_id" })
+  role: Role;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    if (!this.password) {
+      return;
+    }
+    this.password = await PasswordHasher.Hash(this.password);
+  }
 }
 
 @Entity()
-export class user extends Details {}
+export class User extends Details {}
 
 @Entity()
-export class Mentor extends Details {
-  @Column("varchar", { length: 30, nullable: false })
-  role: string;
-}
-
-@Entity()
-export class Intern {
-  @PrimaryGeneratedColumn()
-  id?: number;
-
-  @Column("varchar", { unique: true, nullable: false })
-  name: String;
-
-  @Column("boolean", { default: false })
-  isDeleted?: boolean;
-}
-
-@Entity()
-export class internShipDetails {
-  @PrimaryGeneratedColumn()
-  id?: number;
-
-  @Column("date")
-  started_at: Date;
-
-  @Column("date")
-  end_at: Date;
-
-  @Column("boolean")
-  isCertified: boolean;
-
-  @ManyToOne(() => Intern)
-  intern: Intern;
-
-  @ManyToOne(() => Mentor)
-  mentor: Mentor;
-
-  @OneToOne(() => user)
-  @JoinColumn()
-  user: user;
-}
+export class Mentor extends Details {}

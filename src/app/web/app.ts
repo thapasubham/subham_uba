@@ -1,32 +1,40 @@
-import { userRouter } from "./routes/users/user.route.js";
 import express from "express";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import typeDefs from "./graphql/schema.js";
-import { resolvers } from "./graphql/resolvers/resolver.js";
+import { resolvers } from "./graphql/resolvers/index.js";
 import { errorHandler } from "./middleware/error.js";
-import { UserService } from "./services/UserService.js";
-import { internRoutes } from "./routes/users/intern.route.js";
-import { InternService } from "./services/InternService.js";
-import { internDetailsRoutes } from "./routes/users/internDetails.route.js";
-import { InternDetailsService } from "./services/InternDetailsService.js";
-import { mentorRoutes } from "./routes/users/mentor.routes.js";
+import cors from "cors";
+import routes from "./routes/index.js";
+import cookieparser from "cookie-parser";
+import { dataSource } from "./graphql/datasource/index.js";
 
 export async function startServer() {
   const app = express();
 
   const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 4040;
-
+  app.use(
+    cors({
+      origin: "http://localhost:5173",
+      credentials: true,
+    })
+  );
   app.use(express.json());
+  app.use(cookieparser());
 
   const server = new ApolloServer({ typeDefs, resolvers });
 
   //restapi
+  // app.get("/", (req, res) => {
+  //   res.send("hello");
+  // });
+  app.use("/api/user", routes.userRouter);
+  app.use("/api/intern", routes.internRoutes);
+  app.use("/api/detail", routes.internDetailsRoutes);
+  app.use("/api/mentor", routes.mentorRoutes);
+  app.use("/api/roles", routes.rolesRoutes);
+  app.use("/api/permission", routes.permissionRoutes);
 
-  app.use("/api/", userRouter);
-  app.use("/api/intern", internRoutes);
-  app.use("/api/detail", internDetailsRoutes);
-  app.use("/api/mentor", mentorRoutes);
   //graphql
   await server.start();
 
@@ -34,11 +42,7 @@ export async function startServer() {
     "/graphql",
     expressMiddleware(server, {
       context: async () => ({
-        dataSource: {
-          userService: new UserService(),
-          internService: new InternService(),
-          detailsService: new InternDetailsService(),
-        },
+        dataSource,
       }),
     }) as any
   );

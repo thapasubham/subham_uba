@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import { internShipDetails } from "../../../entity/user.js";
+import { internShipDetails } from "../../../entity/intern.js";
 import { ResponseApi, responseType } from "../../../utils/ApiResponse.js";
 import { InternDetailsService } from "../services/InternDetailsService.js";
 import { parseBody } from "../utils/utils.js";
+import { constants } from "../../../constants/constant.js";
 
 const internService = new InternDetailsService();
 export class InternDetailsController {
@@ -17,7 +18,7 @@ export class InternDetailsController {
     await internService.CreateIntern(bodyData);
 
     response.status = 201;
-    response.message = "Intern Details Created";
+    response.message = "Intern details created";
 
     ResponseApi.WriteResponse(res, response);
   }
@@ -28,13 +29,13 @@ export class InternDetailsController {
     };
 
     const id = Number(req.params.id);
-    const detail = (await internService.ReadIntern(id)) as internShipDetails;
+    const detail = await internService.ReadIntern(0, 0, id);
 
     if (!detail) {
-      response.message = "No Data were found";
+      response.message = constants.NO_DATA;
       response.status = 404;
     } else {
-      response.data = detail;
+      response.data = detail as internShipDetails;
     }
 
     ResponseApi.WriteResponse(res, response);
@@ -43,12 +44,14 @@ export class InternDetailsController {
     const response: responseType<internShipDetails[]> = {
       status: 200,
     };
-
-    const details =
-      (await internService.ReadIntern()) as unknown as internShipDetails[];
+    const limit =   Number(req.query.limit);
+          const offset = Number(req.query.offset);
+    const details = (await internService.ReadIntern(
+      limit, offset
+    )) as unknown as internShipDetails[];
 
     if (details.length === 0) {
-      response.message = "No Data were found";
+      response.message = "No data were found";
       response.status = 404;
     } else {
       response.data = details;
@@ -58,7 +61,7 @@ export class InternDetailsController {
   }
 
   async Certify(req: Request, res: Response) {
-    const response: responseType<String> = {
+    const response: responseType<string> = {
       message: "",
       status: 200,
     };

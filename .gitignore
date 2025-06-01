@@ -4,3 +4,6 @@ user.json
 .env
 /coverage
 .nyc_output
+.idea
+.vs-code
+*/migrations

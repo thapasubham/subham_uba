@@ -31,13 +31,9 @@ export class MentorController {
     const offset = parseInt(req.query.offset as string);
     const user = (await mentorService.ReadMentors(limit, offset)) as Mentor[];
 
-    if (user.length === 0) {
-      response.message = "No User exists";
-      response.status = 404;
-    } else {
-      response.data = user;
-      response.status = 200;
-    }
+    response.data = user;
+    response.status = 200;
+
     ResponseApi.WriteResponse(res, response);
   }
 
@@ -49,13 +45,9 @@ export class MentorController {
     const id = parseInt(req.params.id);
     const user = await mentorService.ReadMentors(0, 0, id);
 
-    if (!user) {
-      response.status = 404;
-      response.message = "User not found";
-    } else {
-      response.status = 200;
-      response.data = user as Mentor;
-    }
+    response.status = 200;
+    response.data = user as Mentor;
+
     ResponseApi.WriteResponse(res, response);
   }
 
@@ -97,5 +89,16 @@ export class MentorController {
       response.message = "Mentor Deleted";
     }
     ResponseApi.WriteResponse(res, response);
+  }
+
+  async login(req: Request, res: Response) {
+    const result = await mentorService.Login(req.body);
+
+    ResponseApi.WriteResponse(res, { status: 200, data: result });
+  }
+  async Refresh(req: Request, res: Response) {
+    const id = res.locals.id;
+    const result = await mentorService.Refresh(id);
+    ResponseApi.WriteResponse(res, { status: 200, data: result });
   }
 }

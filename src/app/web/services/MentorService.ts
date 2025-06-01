@@ -1,4 +1,6 @@
 import { Mentor } from "../../../entity/user.js";
+import { login } from "../../../types/login.types.js";
+import { Auth } from "../auth/authorization.js";
 import { MentorDb } from "../database/mentor.db.js";
 
 /**
@@ -88,5 +90,15 @@ export class MentorService {
     const result = await MentorDb.UpdateMentor(mentor);
 
     return result;
+  }
+
+  async Login(user: login): Promise<any> {
+    const result = await MentorDb.Login(user);
+    return result;
+  }
+  async Refresh(id: number) {
+    const user = await MentorDb.ReadMentor(id);
+    const signedJWT = Auth.Sign(user.id, user.role.id);
+    return signedJWT;
   }
 }
