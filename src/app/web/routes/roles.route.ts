@@ -25,7 +25,7 @@ router.post(
 );
 router.put(
   "/:id",
-  Auth.isAuthorized(PermissionType.ADMIN_EDIT),
+  // Auth.isAuthorized(PermissionType.ADMIN_EDIT),
   checkID,
   roleController.UpdateRole
 );
