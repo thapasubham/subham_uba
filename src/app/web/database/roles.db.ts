@@ -63,6 +63,6 @@ export class RolesDB {
     const result = await roleRepository.findOne({
       where: { name: default_role },
     });
-    return result.id;
+    return result;
   }
 }

@@ -16,7 +16,6 @@ export class UserController {
     };
 
     const bodyData: User = parseBody(req);
-    console.log(bodyData);
     await userService.CreateUser(bodyData);
 
     response.status = 201;
