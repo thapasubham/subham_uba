@@ -13,9 +13,11 @@ export async function startServer() {
   const app = express();
 
   const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 4040;
+  const url: string = process.env.URL;
+  console.log(url);
   app.use(
     cors({
-      origin: "http://localhost:5173",
+      origin: "http://localhost:5000",
       credentials: true,
     })
   );

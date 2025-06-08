@@ -65,8 +65,10 @@ export class UserService {
    */
 
   async ReadUsers(
+    filter: string,
     limit?: number,
     offset?: number,
+
     id?: number
   ): Promise<User[] | User> {
     if (typeof id === "number") {
@@ -77,7 +79,8 @@ export class UserService {
     if ((limit as number) >= 0 && (offset as number) >= 0) {
       const users: User[] = await UserDb.ReadUsers(
         limit as number,
-        offset as number
+        offset as number,
+        filter
       );
 
       return users;

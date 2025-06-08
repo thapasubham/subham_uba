@@ -1,10 +1,9 @@
-
 services:
   database:
     image: postgres
     restart: unless-stopped
     ports:
-      - ${DB_PORT}:${DB_PORT}
+      - 8000:5432
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
@@ -13,13 +12,13 @@ services:
       - uba_intern
 
   backend:
-    depends_on: 
+    depends_on:
       - database
     restart: unless-stopped
-    build: .
+    build: ./
     env_file: .env
     ports:
-      - "3000:3000"
+      - "3000:${PORT}"
     environment:
       PORT: ${PORT}
       TEST_PORT: ${TEST_PORT}

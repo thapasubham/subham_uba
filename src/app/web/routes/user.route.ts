@@ -10,25 +10,26 @@ import {
 import { Auth } from "../auth/authorization.js";
 import { PermissionType } from "../../../types/permission.types.js";
 import refreshTokenValid from "../auth/refreshToken.auth.js";
+import { ValidateUnique } from "../middleware/duplicateEmail.middleware.js";
+import { User } from "../../../entity/user.js";
 
 const router = express.Router();
 
 const usersHandler = new UserController();
-
-router.get(
-  "/",
-
-  Auth.isAuthorized(PermissionType.VIEW),
-  checkQuery,
-  usersHandler.GetUsers
-);
+const unique = new ValidateUnique(User);
+router.get("/", checkQuery, usersHandler.GetUsers);
 router.get(
   "/:id",
-  Auth.isAuthorized(PermissionType.VIEW),
+  // Auth.isAuthorized(PermissionType.VIEW),
   checkID,
   usersHandler.GetUser
 );
-router.post("/", validate, usersHandler.CreateUser);
+router.post(
+  "/",
+  unique.UniqueEmail.bind(unique),
+  validate,
+  usersHandler.CreateUser
+);
 router.post("/login", validateLogin, usersHandler.login);
 router.delete(
   "/:id",
@@ -39,10 +40,11 @@ router.delete(
 );
 router.put(
   "/:id",
-  Auth.isAuthenticated,
-  Auth.isAuthorized(PermissionType.EDIT),
+  // Auth.isAuthenticated,
+  // Auth.isAuthorized(PermissionType.EDIT),
   checkID,
   validate,
+  unique.isUnique.bind(unique),
   usersHandler.UpdateUser
 );
 

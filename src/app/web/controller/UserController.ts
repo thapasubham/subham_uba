@@ -30,7 +30,8 @@ export class UserController {
     };
     const limit = parseInt(req.query.limit as string);
     const offset = parseInt(req.query.offset as string);
-    const user = (await userService.ReadUsers(limit, offset)) as User[];
+    const filter = req.query.filter as string;
+    const user = (await userService.ReadUsers(filter, limit, offset)) as User[];
 
     if (user.length === 0) {
       response.message = constants.NO_MORE_USER;
@@ -48,7 +49,7 @@ export class UserController {
     };
 
     const id = parseInt(req.params.id);
-    const user = await userService.ReadUsers(0, 0, id);
+    const user = await userService.ReadUsers("", 0, 0, id);
 
     response.status = 200;
     response.data = user as User;
@@ -101,7 +102,6 @@ export class UserController {
 
   async Refresh(req: Request, res: Response) {
     const id = res.locals.id;
-    console.log(id);
     const result = await userService.Refresh(id);
     ResponseApi.WriteResponse(res, { status: 200, data: result });
   }

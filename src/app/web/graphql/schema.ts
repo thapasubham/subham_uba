@@ -50,7 +50,7 @@ const typeDefs = gql`
     user: User
   }
   type Query {
-    users(limit: Int!, offset: Int!): [User]
+    users(filter: String, limit: Int!, offset: Int!): [User]
     user(id: ID!): User
     intern(id: ID!): Intern
     interns: [Intern]
@@ -70,6 +70,7 @@ const typeDefs = gql`
     id: Float
     email: String!
     phoneNumber: String!
+    password: String
   }
 
   input InternInput {
@@ -126,11 +127,11 @@ const typeDefs = gql`
     deleteMentor(id: ID!): Int
     loginMentor(login: loginInput!): AuthToken
 
-    Createpermission(permission: PermissionInput!): Permission
+    createPermission(permission: PermissionInput!): Permission
     updatePermission(permission: PermissionInput!): Permission
     deletePermission(id: ID!): Int
 
-    Createrole(role: RoleInput!): Role
+    createRole(role: RoleInput!): Role
     updateRole(role: RoleInput!): Role
     deleteRole(id: ID!): Int
   }

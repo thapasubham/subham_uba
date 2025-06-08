@@ -197,6 +197,7 @@ describe("User controller tests ", () => {
       it("No User exists", async () => {
         req = {
           query: {
+            filter: "firstname",
             limit: "1",
             offset: " 5",
           },
@@ -204,7 +205,7 @@ describe("User controller tests ", () => {
         readUserStub.returns([]);
         await userController.GetUsers(req, res);
         Sinon.assert.calledOnce(readUserStub);
-        Sinon.assert.calledWith(readUserStub, 1, 5);
+        Sinon.assert.calledWith(readUserStub, "firstname", 1, 5);
 
         Sinon.assert.calledOnce(writeResponseStub);
         Sinon.assert.calledWith(writeResponseStub, res, {
@@ -248,7 +249,7 @@ describe("User controller tests ", () => {
         readUserStub.returns(userData);
         await userController.GetUsers(req, res);
         Sinon.assert.calledOnce(readUserStub);
-        Sinon.assert.calledWith(readUserStub, 1, 5);
+        Sinon.assert.calledWith(readUserStub, undefined, 1, 5);
 
         Sinon.assert.calledOnce(writeResponseStub);
         Sinon.assert.calledWith(writeResponseStub, res, {
@@ -278,7 +279,7 @@ describe("User controller tests ", () => {
         readUserStub.returns([user]);
         await userController.GetUser(req, res);
         Sinon.assert.calledOnce(readUserStub);
-        Sinon.assert.calledWith(readUserStub, 0, 0, 4);
+        Sinon.assert.calledWith(readUserStub, "", 0, 0, 4);
 
         Sinon.assert.calledOnce(writeResponseStub);
         Sinon.assert.calledWith(writeResponseStub, res, {

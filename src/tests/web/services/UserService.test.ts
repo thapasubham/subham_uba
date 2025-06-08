@@ -105,13 +105,13 @@ describe("User Services tests", () => {
       });
       it("No user Found", async () => {
         readUserStub.returns([]);
-        const result = await userService.ReadUsers(1, 5);
+        const result = await userService.ReadUsers("", 1, 5);
         assert.deepEqual(result, []);
         Sinon.assert.calledOnce(readUserStub);
       });
 
       it("Read user Data", async () => {
-        let users: User[] = [
+        let users = [
           {
             firstname: "Subham",
             lastname: "Thapa",
@@ -146,7 +146,7 @@ describe("User Services tests", () => {
           },
         ];
         readUserStub.returns(users);
-        const result = await userService.ReadUsers(1, 5);
+        const result = await userService.ReadUsers(undefined, 1, 5);
         assert.deepEqual(result, users);
         Sinon.assert.calledOnce(readUserStub);
       });
@@ -163,7 +163,7 @@ describe("User Services tests", () => {
     });
     it("Id not found", async () => {
       readUserStub.returns([]);
-      const result = await userService.ReadUsers(0, 0, 5);
+      const result = await userService.ReadUsers("", 0, 0, 5);
       assert.deepEqual(result, []);
       Sinon.assert.calledWith(readUserStub, 5);
     });
@@ -177,7 +177,7 @@ describe("User Services tests", () => {
         role: new Role(),
       };
       readUserStub.returns(user);
-      const result = await userService.ReadUsers(0, 0, 10);
+      const result = (await userService.ReadUsers(undefined, 0, 0, 10)) as User;
       assert.equal(result, user);
       Sinon.assert.calledWith(readUserStub, 10);
     });

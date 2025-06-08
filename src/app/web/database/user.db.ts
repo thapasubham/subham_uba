@@ -7,6 +7,7 @@ import { HttpError } from "../middleware/error.js";
 import { constants } from "../../../constants/constant.js";
 import { DEFAULT_ROLE } from "../../../types/permission.types.js";
 import { RolesDB } from "./roles.db.js";
+import { off } from "process";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -39,30 +40,22 @@ export class UserDb {
     if (!result) {
       throw new HttpError(constants.NO_USER, 404);
     }
-    console.log(result);
     return result;
   }
 
-  static async ReadUsers(limit: number, offset: number) {
-    const result = await userRepository.find({
-      where: { isDeleted: false },
-      relations: ["role"],
-      select: {
-        id: true,
-        firstname: true,
-        lastname: true,
-        email: true,
-        phoneNumber: true,
-        role: {
-          id: true,
-          name: true,
-        },
-        password: false,
-        isDeleted: false,
-      },
-      skip: offset,
-      take: limit,
-    });
+  static async ReadUsers(
+    limit: number,
+    offset: number,
+    sort_by: string,
+    order?: string
+  ) {
+    const result = await userRepository
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.role", "role")
+      .limit(limit)
+      .offset(offset)
+      .orderBy(sort_by, "ASC")
+      .getMany();
     return result;
   }
 

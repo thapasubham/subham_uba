@@ -1,16 +1,24 @@
 export const userResolvers = {
   Query: {
-    async users(_: any, { limit, offset }: any, { dataSource }: any) {
-      return await dataSource.userService.ReadUsers(limit, offset);
+    async users(_: any, { limit, offset, filter }: any, { dataSource }: any) {
+      console.log(filter);
+
+      const result = await dataSource.userService.ReadUsers(
+        filter,
+        limit,
+        offset
+      );
+      console.log(result);
+      return result;
     },
     async user(_: any, { id }: any, { dataSource }: any) {
       const getUser = await dataSource.userService.ReadUsers(
+        "",
         0,
         0,
         parseInt(id)
       );
 
-      console.log(getUser);
       return getUser;
     },
   },

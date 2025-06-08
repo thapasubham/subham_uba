@@ -3,8 +3,8 @@ import { internResolvers } from "./resolver.intern.js";
 import { userResolvers } from "./resolvers.user.js";
 import { internDetailResolvers } from "./resolver.details.js";
 import { mentor } from "./resolver.mentor.js";
-import {roleResolvers} from "./resolver.role.js";
-import {permissionResolvers} from "./resolver.permission.js";
+import { roleResolvers } from "./resolver.role.js";
+import { permissionResolvers } from "./resolver.permission.js";
 
 export const resolvers = {
   Query: {
@@ -20,6 +20,8 @@ export const resolvers = {
     ...userResolvers.Mutation,
     ...internDetailResolvers.Mutation,
     ...mentor.Mutation,
+    ...permissionResolvers.Mutation,
+    ...roleResolvers.Mutation,
   },
 };
 
