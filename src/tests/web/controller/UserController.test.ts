@@ -5,6 +5,7 @@ import { ResponseApi } from "../../../utils/ApiResponse.js";
 import { User } from "../../../entity/user.js";
 import { Role } from "../../../entity/role";
 import { constants } from "../../../constants/constant.js";
+import {MentorService} from "../../../app/web/services/MentorService";
 
 describe("User controller tests ", () => {
   const userController = new UserController();
@@ -39,7 +40,7 @@ describe("User controller tests ", () => {
       writeResponseStub.restore();
     });
 
-    //create user test case
+
     it("Create user Test case", async () => {
       const user = {
         id: 5,
@@ -52,15 +53,13 @@ describe("User controller tests ", () => {
 
       req = {
         body: {
-          user,
+        ...user
         },
       };
 
       await userController.CreateUser(req, res);
       Sinon.assert.calledOnce(createUserStub);
-      Sinon.assert.calledWith(createUserStub, {
-        user,
-      });
+      Sinon.assert.calledWith(createUserStub, user );
       Sinon.assert.calledOnce(writeResponseStub);
       Sinon.assert.calledWith(writeResponseStub, res, {
         status: 201,
@@ -166,18 +165,21 @@ describe("User controller tests ", () => {
       Sinon.assert.calledOnce(writeResponseStub);
       Sinon.assert.calledWith(writeResponseStub, res, {
         status: 204,
-        message: "User Deleted",
+        message: "",
       });
     });
   });
 
   //read user test cases
-  describe("", () => {
+  describe("Read user test suits", () => {
     let readUserStub: Sinon.SinonStub;
+    let readUsersStub: Sinon.SinonStub;
 
     //setup
     beforeEach(() => {
-      readUserStub = Sinon.stub(UserService.prototype, "ReadUsers").resolves();
+      readUsersStub = Sinon.stub(UserService.prototype, "ReadUsers").resolves();
+      readUserStub = Sinon.stub(UserService.prototype, "ReadUser").resolves();
+
       writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
       statusStub = Sinon.stub().returnsThis();
       sendStub = Sinon.stub();
@@ -190,6 +192,7 @@ describe("User controller tests ", () => {
 
     //teardown
     afterEach(() => {
+      readUsersStub.restore();
       readUserStub.restore();
       writeResponseStub.restore();
     });
@@ -202,10 +205,18 @@ describe("User controller tests ", () => {
             offset: " 5",
           },
         };
-        readUserStub.returns([]);
+        readUsersStub.returns([]);
         await userController.GetUsers(req, res);
-        Sinon.assert.calledOnce(readUserStub);
-        Sinon.assert.calledWith(readUserStub, "firstname", 1, 5);
+        Sinon.assert.calledOnce(readUsersStub);
+        Sinon.assert.calledWith(
+          readUsersStub,
+          undefined,
+          undefined,
+          "firstname",
+          1,
+          5,
+          undefined
+        );
 
         Sinon.assert.calledOnce(writeResponseStub);
         Sinon.assert.calledWith(writeResponseStub, res, {
@@ -216,6 +227,10 @@ describe("User controller tests ", () => {
       it("Users exists", async () => {
         req = {
           query: {
+            select: "",
+            selectBy: "",
+            filter: "",
+            orderBy: "",
             limit: "1",
             offset: "5",
           },
@@ -246,10 +261,19 @@ describe("User controller tests ", () => {
             role: new Role(),
           },
         ];
-        readUserStub.returns(userData);
+        readUsersStub.returns(userData);
         await userController.GetUsers(req, res);
-        Sinon.assert.calledOnce(readUserStub);
-        Sinon.assert.calledWith(readUserStub, undefined, 1, 5);
+        Sinon.assert.calledOnce(readUsersStub);
+        Sinon.assert.calledWith(
+          readUsersStub,
+          undefined,
+          undefined,
+          "",
+
+          1,
+          5,
+          ""
+        );
 
         Sinon.assert.calledOnce(writeResponseStub);
         Sinon.assert.calledWith(writeResponseStub, res, {
@@ -279,7 +303,7 @@ describe("User controller tests ", () => {
         readUserStub.returns([user]);
         await userController.GetUser(req, res);
         Sinon.assert.calledOnce(readUserStub);
-        Sinon.assert.calledWith(readUserStub, "", 0, 0, 4);
+        Sinon.assert.calledWith(readUserStub, 4);
 
         Sinon.assert.calledOnce(writeResponseStub);
         Sinon.assert.calledWith(writeResponseStub, res, {
@@ -370,4 +394,132 @@ describe("User controller tests ", () => {
       });
     });
   });
+
+  describe("Refresh user", () => {
+    let refreshStub: Sinon.SinonStub;
+    beforeEach(() => {
+      refreshStub= Sinon.stub(UserService.prototype, "Refresh").resolves();
+      writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
+      statusStub = Sinon.stub().returnsThis();
+      sendStub = Sinon.stub();
+      res = {
+        status: statusStub,
+        send: sendStub,
+      };
+    })
+    afterEach(()=>{
+      refreshStub.restore();
+      writeResponseStub.restore();
+    })
+    it("Refresh the user", async () => {
+      res = {
+        locals: {
+          id: 4
+        }
+      }
+      const data = {
+        accessToken: "accessToken",
+        refreshToken: "refreshToken",
+      };
+      refreshStub.returns(data);
+      await userController.Refresh(req, res);
+      Sinon.assert.calledOnce(refreshStub);
+      Sinon.assert.calledWith(writeResponseStub, res, {status:200, data: data });
+      Sinon.assert.calledOnce(writeResponseStub);
+    })
+  })
+
+  describe('Delete user', () => {
+    let deleteStub: Sinon.SinonStub;
+    beforeEach(() => {
+      deleteStub = Sinon.stub(UserService.prototype, "DeleteUser").resolves();
+      writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
+      statusStub = Sinon.stub().returnsThis();
+      sendStub = Sinon.stub();
+      res = {
+        status: statusStub,
+        send: sendStub,
+      };
+    });
+    afterEach(() => {
+      deleteStub.restore();
+      writeResponseStub.restore();
+    });
+    it("Failed to delete the mentor", async () => {
+      req = {
+
+        params: {
+          id: "1",
+        },
+      };
+
+      deleteStub.returns(0);
+      await userController.DeleteUser(req, res);
+      Sinon.assert.calledOnce(deleteStub);
+      Sinon.assert.calledWith(writeResponseStub, res, {
+        message: "Failed to delete user",
+        status: 400,
+      });
+    });
+    it("Delete the mentor", async () => {
+      req = {
+        params: {
+          id: "8",
+        },
+      };
+
+      deleteStub.returns(1);
+      await userController.DeleteUser(req, res);
+      Sinon.assert.calledOnce(deleteStub);
+      Sinon.assert.calledWith(writeResponseStub, res, {
+        message: "",
+        status: 204,
+      });
+    });
+  })
+
+
+  describe("Delete unverified user", () => {
+    let deleteStub: Sinon.SinonStub;
+    beforeEach(() => {
+      deleteStub = Sinon.stub(UserService.prototype, "DeleteUnverified").resolves();
+      statusStub = Sinon.stub().returnsThis();
+      sendStub = Sinon.stub();
+      writeResponseStub = Sinon.stub(ResponseApi, "WriteResponse");
+      res = {
+        status: statusStub,
+        send: sendStub,
+      };
+    })
+
+    afterEach(() => {
+      writeResponseStub.restore();
+      deleteStub.restore();
+    })
+    it("Delete Unverified user", async () => {
+      req = {
+        params: {
+          id: "8",
+        },
+      };
+
+      deleteStub.resolves(1);
+      await userController.Delete(req, res);
+      Sinon.assert.calledOnce(deleteStub);
+      Sinon.assert.calledWith(writeResponseStub, res, {status: 204})
+    })
+
+    it("Failed to delete unverified user", async () => {
+      req = {
+        params: {
+          id: "8",
+        },
+      };
+
+      deleteStub.resolves(0);
+      await userController.Delete(req, res);
+      Sinon.assert.calledOnce(deleteStub);
+      Sinon.assert.calledWith(writeResponseStub, res, { message: 'Failed to delete user',status: 400})
+    })
+  })
 });

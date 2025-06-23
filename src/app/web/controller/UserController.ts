@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
+import {  Request, Response } from "express";
 import { User } from "../../../entity/user.js";
 import { ResponseApi, responseType } from "../../../utils/ApiResponse.js";
-
 import { UserService } from "../services/UserService.js";
 import { parseBody } from "../utils/utils.js";
 import { login } from "../../../types/login.types.js";
 import { constants } from "../../../constants/constant.js";
+import { sanitizeInput } from "../middleware/sanitizeUser.js";
 
 const userService = new UserService();
 export class UserController {
@@ -16,7 +16,9 @@ export class UserController {
     };
 
     const bodyData: User = parseBody(req);
-    await userService.CreateUser(bodyData);
+    const user = sanitizeInput(bodyData);
+
+    await userService.CreateUser(user);
 
     response.status = 201;
     response.message = "User Created";
@@ -30,8 +32,16 @@ export class UserController {
     };
     const limit = parseInt(req.query.limit as string);
     const offset = parseInt(req.query.offset as string);
-    const filter = req.query.filter as string;
-    const user = (await userService.ReadUsers(filter, limit, offset)) as User[];
+
+    const { search, searchby, orderBy, filter } = req.query;
+    const user = (await userService.ReadUsers(
+      search,
+      searchby,
+      filter,
+      limit,
+      offset,
+      orderBy
+    )) as User[];
 
     if (user.length === 0) {
       response.message = constants.NO_MORE_USER;
@@ -49,7 +59,7 @@ export class UserController {
     };
 
     const id = parseInt(req.params.id);
-    const user = await userService.ReadUsers("", 0, 0, id);
+    const user = await userService.ReadUser(id);
 
     response.status = 200;
     response.data = user as User;
@@ -88,7 +98,6 @@ export class UserController {
       response.message = "Failed to delete user";
     } else {
       response.status = 204;
-      response.message = "User Deleted";
     }
     ResponseApi.WriteResponse(res, response);
   }
@@ -103,6 +112,24 @@ export class UserController {
   async Refresh(req: Request, res: Response) {
     const id = res.locals.id;
     const result = await userService.Refresh(id);
+
     ResponseApi.WriteResponse(res, { status: 200, data: result });
+  }
+
+  async Delete(req: Request, res: Response) {
+    const id = Number(req.params.id);
+    const response: responseType<string> = {
+      status: 200,
+    };
+    const result = await userService.DeleteUnverified(id);
+
+    if (result === 0) {
+      response.status = 400;
+      response.message = "Failed to delete user";
+    } else {
+      response.status = 204;
+    }
+
+    ResponseApi.WriteResponse(res, response);
   }
 }

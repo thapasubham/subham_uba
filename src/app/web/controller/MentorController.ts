@@ -4,6 +4,7 @@ import { ResponseApi, responseType } from "../../../utils/ApiResponse.js";
 
 import { parseBody } from "../utils/utils.js";
 import { MentorService } from "../services/MentorService.js";
+import { sanitizeInput } from "../middleware/sanitizeUser.js";
 
 const mentorService = new MentorService();
 export class MentorController {
@@ -13,9 +14,11 @@ export class MentorController {
       status: 200,
     };
 
+    console.log(req.body);
     const bodyData: Mentor = parseBody(req);
-
-    await mentorService.CreateMentor(bodyData);
+    console.log(bodyData);
+    const user = sanitizeInput(bodyData);
+    await mentorService.CreateMentor(user);
 
     response.status = 201;
     response.message = "Mentor Created";
@@ -43,7 +46,7 @@ export class MentorController {
     };
 
     const id = parseInt(req.params.id);
-    const user = await mentorService.ReadMentors(0, 0, id);
+    const user = await mentorService.ReadMentor(id);
 
     response.status = 200;
     response.data = user as Mentor;

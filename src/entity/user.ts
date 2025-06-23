@@ -26,7 +26,7 @@ export class Details {
   @Column("varchar", { length: 30, nullable: false, unique: true })
   email: string;
 
-  @Column("varchar")
+  @Column("varchar", { default: "password123" })
   password?: string;
 
   @Column("varchar", { length: 10, nullable: false, unique: true })
@@ -42,7 +42,7 @@ export class Details {
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    if (!this.password) {
+    if (!this.password || this.password.startsWith("$2b$")) {
       return;
     }
     this.password = await PasswordHasher.Hash(this.password);
@@ -50,7 +50,13 @@ export class Details {
 }
 
 @Entity()
-export class User extends Details {}
+export class User extends Details {
+  @Column("boolean", { default: false })
+  isverified?: boolean;
+}
 
 @Entity()
-export class Mentor extends Details {}
+export class Mentor extends Details {
+  @Column("boolean", { default: true })
+  isverified?: boolean;
+}

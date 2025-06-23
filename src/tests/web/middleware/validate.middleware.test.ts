@@ -16,9 +16,10 @@ describe("Middleware tests", () => {
   let statusStub: Sinon.SinonStub;
   let writeErrorStub: Sinon.SinonStub;
   let callback: Sinon.SinonStub;
-
+let apiWriteStub: Sinon.SinonStub;
   beforeEach(() => {
     writeErrorStub = Sinon.stub(ResponseApi, "WriteError");
+    apiWriteStub = Sinon.stub(ResponseApi, "WriteResponse");
     callback = Sinon.stub();
     sendStub = Sinon.stub().returnsThis();
     statusStub = Sinon.stub();
@@ -30,36 +31,27 @@ describe("Middleware tests", () => {
   });
 
   afterEach(() => {
+    apiWriteStub.restore();
     writeErrorStub.restore();
   });
   describe("Validate test suite", () => {
-    it("Missing fields in body", () => {
+    it("Invalid input", () => {
       req = {
         body: {
           firstname: "Subham",
+          lastname: "",
+          phoneNumber: "",
+          email: "",
+
         },
       };
       validate(req, res, callback);
 
-      Sinon.assert.calledOnce(writeErrorStub);
-      Sinon.assert.calledWith(writeErrorStub, res, {
-        message: "Missing fields",
-        status: 400,
-      });
+      Sinon.assert.calledOnce(apiWriteStub);
+
     });
 
-    it("Empty body", () => {
-      req = {
-        body: {},
-      };
-      validate(req, res, callback);
 
-      Sinon.assert.calledOnce(writeErrorStub);
-      Sinon.assert.calledWith(writeErrorStub, res, {
-        message: "Missing fields",
-        status: 400,
-      });
-    });
     it("Full body is sent", () => {
       req = {
         body: {

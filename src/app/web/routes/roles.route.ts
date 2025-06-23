@@ -10,7 +10,7 @@ const router = express.Router();
 const roleController = new RoleController();
 router.get(
   "/",
-  Auth.isAuthorized(PermissionType.ADMIN_VIEW),
+  // Auth.isAuthorized(PermissionType.ADMIN_VIEW),
   roleController.ReadRoles
 );
 router.get(
@@ -20,7 +20,7 @@ router.get(
 );
 router.post(
   "/",
-  Auth.isAuthorized(PermissionType.ADMIN_ADD),
+  // Auth.isAuthorized(PermissionType.ADMIN_ADD),
   roleController.CreateRole
 );
 router.put(

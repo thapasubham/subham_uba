@@ -1,6 +1,7 @@
 import { HttpError } from "../middleware/error.js";
 import { NextFunction, Request, Response } from "express";
 import { Auth } from "./authorization.js";
+import {constants} from "../../../constants/constant.js";
 
 export default async function refreshTokenValid(
   req: Request,
@@ -9,8 +10,11 @@ export default async function refreshTokenValid(
 ) {
   try {
     const refreshToken = req.headers.authorization;
-    if (!refreshToken || !refreshToken.startsWith("refreshToken ")) {
-      throw new HttpError("Cannot validate", 401);
+    if (!refreshToken  ) {
+      throw new HttpError(constants.EMPTY_TOKEN, 401);
+    }
+    if (!refreshToken.startsWith("refreshToken ")) {
+      throw new HttpError(constants.EMPTY_TOKEN, 401);
     }
     const result: any = await Auth.getDecodedToken(req);
 
@@ -18,6 +22,6 @@ export default async function refreshTokenValid(
 
     next();
   } catch (e) {
-    throw new HttpError(e.message);
+    throw new HttpError(e.message, e.status);
   }
 }

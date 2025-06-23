@@ -57,7 +57,7 @@ export class RolesDB {
     const result = await roleRepository.delete({
       id: id,
     });
-    return result;
+    return result.affected;
   }
   static async getrolebyname(default_role: string) {
     const result = await roleRepository.findOne({

@@ -20,33 +20,43 @@ const unique = new ValidateUnique(User);
 router.get("/", checkQuery, usersHandler.GetUsers);
 router.get(
   "/:id",
-  // Auth.isAuthorized(PermissionType.VIEW),
+  Auth.isAuthorized(PermissionType.VIEW),
   checkID,
   usersHandler.GetUser
 );
 router.post(
   "/",
-  unique.UniqueEmail.bind(unique),
+  unique.isUnique.bind(unique),
   validate,
   usersHandler.CreateUser
 );
 router.post("/login", validateLogin, usersHandler.login);
 router.delete(
   "/:id",
-  Auth.isAuthenticated,
+
   Auth.isAuthorized(PermissionType.DELETE),
   checkID,
   usersHandler.DeleteUser
 );
+// router.post(
+//   "/verify:id",
+//   Auth.isAuthorized(PermissionType.ADMIN_EDIT),
+//   checkID,
+//   usersHandler.Verify
+// );
 router.put(
   "/:id",
-  // Auth.isAuthenticated,
-  // Auth.isAuthorized(PermissionType.EDIT),
+  Auth.isAuthorized(PermissionType.EDIT),
   checkID,
   validate,
   unique.isUnique.bind(unique),
   usersHandler.UpdateUser
 );
-
+router.delete(
+  "/:id/delete/",
+  Auth.isAuthorized(PermissionType.ADMIN_DELETE),
+  checkID,
+  usersHandler.Delete
+);
 router.post("/refreshToken", refreshTokenValid, usersHandler.Refresh);
 export const userRouter = router;

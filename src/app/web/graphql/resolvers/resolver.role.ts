@@ -12,7 +12,7 @@ export const roleResolvers = {
       return dataSource.roleService.CreateRole(role);
     },
     async updateRole(_: any, { role }: any, { dataSource }: any) {
-      return dataSource.roleService.UpdateRole(role);
+      return dataSource.roleService.UpdateRole(role.id, role.permission);
     },
     async deleteRole(_: any, { id }: any, { dataSource }: any) {
       return dataSource.roleService.DeleteRole(id);

@@ -4,6 +4,7 @@ import { User } from "../../../entity/user.js";
 import { assert } from "chai";
 import { UserDb } from "../../../app/web/database/user.db";
 import { Role } from "../../../entity/role.js";
+import {Auth} from "../../../app/web/auth/authorization";
 
 describe("User Services tests", () => {
   const userService = new UserService();
@@ -98,14 +99,9 @@ describe("User Services tests", () => {
       readUserStub.restore();
     });
     describe("read users test suite", () => {
-      it("Query doesnt satistify", async () => {
-        const result = await userService.ReadUsers();
-        assert.deepEqual(result, []);
-        Sinon.assert.notCalled(readUserStub);
-      });
       it("No user Found", async () => {
         readUserStub.returns([]);
-        const result = await userService.ReadUsers("", 1, 5);
+        const result = await userService.ReadUsers("", "", "", 1, 5, "ASC", false);
         assert.deepEqual(result, []);
         Sinon.assert.calledOnce(readUserStub);
       });
@@ -146,7 +142,14 @@ describe("User Services tests", () => {
           },
         ];
         readUserStub.returns(users);
-        const result = await userService.ReadUsers(undefined, 1, 5);
+        const result = await userService.ReadUsers(
+          "",
+          "",
+          "firstname",
+          1,
+          5,
+          "ASC"
+        );
         assert.deepEqual(result, users);
         Sinon.assert.calledOnce(readUserStub);
       });
@@ -155,16 +158,19 @@ describe("User Services tests", () => {
 
   describe("read user test suite", () => {
     let readUserStub: Sinon.SinonStub;
+    let authSign: Sinon.SinonStub;
     beforeEach(() => {
+      authSign= Sinon.stub(Auth, "Sign");
       readUserStub = Sinon.stub(UserDb, "ReadUser");
     });
     afterEach(() => {
+      authSign.restore();
       readUserStub.restore();
     });
     it("Id not found", async () => {
-      readUserStub.returns([]);
-      const result = await userService.ReadUsers("", 0, 0, 5);
-      assert.deepEqual(result, []);
+      readUserStub.returns(null);
+      const result = await userService.ReadUser(5);
+      assert.deepEqual(result, null);
       Sinon.assert.calledWith(readUserStub, 5);
     });
     it("User found", async () => {
@@ -177,11 +183,41 @@ describe("User Services tests", () => {
         role: new Role(),
       };
       readUserStub.returns(user);
-      const result = (await userService.ReadUsers(undefined, 0, 0, 10)) as User;
+      const result = (await userService.ReadUser(10)) as User;
       assert.equal(result, user);
       Sinon.assert.calledWith(readUserStub, 10);
     });
+
+    it("Refresh mentor", async () => {
+      const user = {
+        firstname: "John",
+        lastname: "Black",
+        id: 10,
+        email: "john@black.com",
+        phoneNumber: "1248216745",
+
+        role: {
+          permission: [
+            {name: "view"},
+            {name: "edit"},
+          ]
+        },
+      };
+      readUserStub.returns(user);
+      const token= {
+        bearerToken: "accessToken",
+        refreshToken: "refreshToken",
+      }
+      authSign.returns(token);
+
+      const result = await userService.Refresh(user.id);
+
+      assert.equal(result.id, user.id);
+      assert.equal(result.signed_token, token);
+
+    })
   });
+
 
   describe("login test", () => {
     let loginStub: Sinon.SinonStub;
@@ -208,6 +244,32 @@ describe("User Services tests", () => {
       const result = await userService.Login(user);
       assert.equal(result, data);
       Sinon.assert.calledWith(loginStub, user);
+    });
+  });
+
+  describe("Delete unverified test suite", () => {
+    let deleteuserStub: Sinon.SinonStub;
+    beforeEach(() => {
+      deleteuserStub = Sinon.stub(UserDb, "DeleteUnverified");
+    });
+    afterEach(() => {
+      deleteuserStub.restore();
+    });
+    it("Test when failed to delete", async () => {
+      const id = 10;
+      deleteuserStub.returns(0);
+      const result = await userService.DeleteUnverified(id);
+      assert.equal(result, 0);
+      Sinon.assert.calledOnce(deleteuserStub);
+      Sinon.assert.calledWith(deleteuserStub, id);
+    });
+    it("Delete user test case", async () => {
+      const id = 5;
+      deleteuserStub.returns(1);
+      const result = await userService.DeleteUnverified(id);
+      assert.equal(result, 1);
+      Sinon.assert.calledOnce(deleteuserStub);
+      Sinon.assert.calledWith(deleteuserStub, id);
     });
   });
 });

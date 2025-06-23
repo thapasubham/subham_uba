@@ -6,7 +6,6 @@ const roleService = new RoleService();
 export class RoleController {
   async ReadRoles(req: Request, res: Response) {
     const result = await roleService.ReadRoles();
-
     ResponseApi.WriteResponse(res, { status: 200, data: result });
   }
   async CreateRole(req: Request, res: Response) {

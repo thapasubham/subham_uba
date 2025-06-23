@@ -14,7 +14,9 @@ export class Auth {
   ) {
     const decoded_token: any = await Auth.getDecodedToken(req);
     const id = Number(req.params.id);
+
     const decodedID = Number(decoded_token.id);
+
     if (id !== decodedID) {
       throw new HttpError(
         constants.UNAUTHORIZED_MSG,
@@ -29,10 +31,11 @@ export class Auth {
       try {
         const decoded_token: any = await Auth.getDecodedToken(req);
         const role = decoded_token.role;
-
+        const decode_id = Number(decoded_token.id);
         const rolePermission = await Auth.getPermission(role, permission);
+        const id = Number(req.params.id);
 
-        if (rolePermission) {
+        if (id === decode_id || rolePermission) {
           return next();
         }
 
@@ -54,7 +57,11 @@ export class Auth {
   }
 
   static async Decode(token: string) {
-    return jwt.verify(token, process.env.SECRET);
+    try {
+      return jwt.verify(token, process.env.SECRET);
+    } catch (e) {
+      throw new HttpError(e.message, 401);
+    }
   }
 
   static async getDecodedToken(req: Request) {
@@ -66,13 +73,14 @@ export class Auth {
       );
     }
     token = token.split(" ")[1];
+
     const decoded = await Auth.Decode(token);
     return decoded;
   }
 
   static async getPermission(roleID: number, permission: string) {
     if (!roleID) {
-      throw new Error("JWT invalid");
+      throw new HttpError("No Roles found", 401);
     }
     const roles = await RolesDB.ReadRole(roleID);
     const permissions = roles.permission;

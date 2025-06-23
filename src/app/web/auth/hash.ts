@@ -3,12 +3,12 @@ import { HttpError } from "../middleware/error.js";
 import { constants } from "../../../constants/constant.js";
 export class PasswordHasher {
   static async Hash(password: string): Promise<string> {
-    let hashedPassword = await bcrypt.hash(password, constants.SALT);
+    const hashedPassword = await bcrypt.hash(password, constants.SALT);
     return hashedPassword;
   }
 
   static async Compare(password: string, hashedPassword: string) {
-    let result = await bcrypt.compare(password, hashedPassword);
+    const result = await bcrypt.compare(password, hashedPassword);
     if (!result) {
       throw new HttpError(constants.PASSWORD_DOESNT_MATCH, 401);
     }

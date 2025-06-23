@@ -3,6 +3,13 @@ import { AppDataSource } from "../../../data-source.js";
 import { NextFunction } from "express";
 import { Request, Response } from "express";
 import { HttpError } from "./error.js";
+import { ResponseApi, responseType } from "../../../utils/ApiResponse.js";
+import { constants } from "../../../constants/constant.js";
+
+interface duplicate {
+  email: string;
+  phoneNumber: string;
+}
 
 export class ValidateUnique<T> {
   private repository: Repository<T>;
@@ -12,17 +19,29 @@ export class ValidateUnique<T> {
 
   isUnique = async (req: Request, res: Response, next: NextFunction) => {
     const { id, email, phoneNumber } = req.body;
-    const c_id = Number(id);
+    const c_id = id ? Number(id) : -1;
     if (!email || !phoneNumber) {
       throw new HttpError("Email and phone number are required", 404);
     }
 
-    const duplicateEmail = await this.UniqueEmail(email, c_id);
-    const duplicatePhone = await this.UniquePhone(phoneNumber, c_id);
-    if (duplicateEmail || duplicatePhone) {
-      throw new HttpError("Emal or phonenumber already exists", 409);
-    }
+    const isEmailDuplicate = await this.UniqueEmail(email, c_id);
+    const isNumberDuplicate = await this.UniquePhone(phoneNumber, c_id);
 
+    const response: responseType<duplicate> = {
+      status: 409,
+    };
+
+    const data: duplicate = {
+      email: isEmailDuplicate ? isEmailDuplicate : "",
+      phoneNumber: isNumberDuplicate ? isNumberDuplicate : "",
+    };
+
+    response.data = data;
+
+    if (isEmailDuplicate || isNumberDuplicate) {
+      ResponseApi.WriteResponse(res, response);
+      return;
+    }
     next();
   };
 
@@ -33,7 +52,8 @@ export class ValidateUnique<T> {
         email,
       },
     } as any);
-    return duplicate ? true : false;
+
+    return duplicate ? constants.EMAIL_EXISTS : false;
   }
   async UniquePhone(phoneNumber: string, id?: number) {
     const duplicate = await this.repository.findOne({
@@ -42,6 +62,6 @@ export class ValidateUnique<T> {
         phoneNumber,
       },
     } as any);
-    return duplicate ? true : false;
+    return duplicate ? constants.PHONE_EXISTS : false;
   }
 }

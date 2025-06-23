@@ -206,7 +206,7 @@ describe("Auth Middleware class ", () => {
       try {
         await Auth.getPermission(roleID, permission);
       } catch (err) {
-        expect(err.message).to.equal("JWT invalid");
+        expect(err.message).to.equal("No Roles found");
       }
     });
   });

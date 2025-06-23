@@ -9,7 +9,7 @@ describe("User Resolver test", () => {
     beforeEach(() => {
       readStub = Sinon.stub();
       dataSource = {
-        userService: { ReadUsers: readStub },
+        userService: { ReadUser: readStub },
       };
     });
 
@@ -22,13 +22,13 @@ describe("User Resolver test", () => {
         phoneNumber: "9876543210",
       };
       readStub.resolves(data);
-      const result = await userResolvers.Query.user(
+      const result = await userResolvers.Query.getusers(
         {},
         { id: 5 },
         { dataSource: dataSource }
       );
       assert.equal(result, data);
-      Sinon.assert.calledOnce(dataSource.userService.ReadUsers);
+      Sinon.assert.calledOnce(dataSource.userService.ReadUser);
     });
 
     //users
@@ -57,13 +57,13 @@ describe("User Resolver test", () => {
         },
       ];
       readStub.resolves(data);
-      const result = await userResolvers.Query.users(
+      const result = await userResolvers.Query.getusers(
         {},
         { limit: 5, offset: 5 },
         { dataSource: dataSource }
       );
       assert.equal(result, data);
-      Sinon.assert.calledOnce(dataSource.userService.ReadUsers);
+      Sinon.assert.calledOnce(dataSource.userService.ReadUser);
     });
   });
 

@@ -64,23 +64,29 @@ export class MentorService {
    * const mentors = await mentorService.Readmentors(limit, offset);
    */
 
+  async ReadMentor(id: number) {
+    const user = await MentorDb.ReadMentor(id);
+    return user;
+  }
   async ReadMentors(
-    limit?: number,
-    offset?: number,
-    id?: number
-  ): Promise<Mentor[] | Mentor> {
-    if (typeof id === "number") {
-      const mentor = await MentorDb.ReadMentor(id);
-      return mentor;
-    }
-
+    search: string,
+    searchby: string,
+    filter: string,
+    limit: number,
+    offset: number,
+    orderBy: string
+  ) {
     if ((limit as number) >= 0 && (offset as number) >= 0) {
-      const mentors: Mentor[] = await MentorDb.ReadMentors(
+      const users: Mentor[] = await MentorDb.ReadMentors(
+        search,
+        searchby,
         limit as number,
-        offset as number
+        offset as number,
+        filter,
+        orderBy as "ASC" | "DESC"
       );
 
-      return mentors;
+      return users;
     } else {
       return [];
     }
@@ -97,8 +103,10 @@ export class MentorService {
     return result;
   }
   async Refresh(id: number) {
-    const user = await MentorDb.ReadMentor(id);
-    const signedJWT = Auth.Sign(user.id, user.role.id);
-    return signedJWT;
+    const result = await MentorDb.ReadMentor(id);
+
+    const signed_token = Auth.Sign(id, result.role.id);
+    const permissionNames = result.role.permission.map((p) => p.name);
+    return { signed_token, permissions: permissionNames, id: result.id };
   }
 }

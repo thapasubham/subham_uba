@@ -64,29 +64,31 @@ export class UserService {
    * const users = await userService.ReadUsers(limit, offset);
    */
 
+  async ReadUser(id: number) {
+    const user = await UserDb.ReadUser(id);
+    return user;
+  }
   async ReadUsers(
+    search: string,
+    searchby: string,
     filter: string,
-    limit?: number,
-    offset?: number,
-
-    id?: number
-  ): Promise<User[] | User> {
-    if (typeof id === "number") {
-      const user = await UserDb.ReadUser(id);
-      return user;
-    }
-
-    if ((limit as number) >= 0 && (offset as number) >= 0) {
+    limit: number,
+    offset: number,
+    orderBy: string,
+    isVerified: boolean
+  ) {
       const users: User[] = await UserDb.ReadUsers(
+        search,
+        searchby,
         limit as number,
         offset as number,
-        filter
+        filter,
+        orderBy as "ASC" | "DESC",
+        isVerified
       );
 
       return users;
-    } else {
-      return [];
-    }
+
   }
 
   async Update(user: User): Promise<User> {
@@ -101,7 +103,13 @@ export class UserService {
   }
   async Refresh(id: number) {
     const user = await UserDb.ReadUser(id);
-    const signedJWT = Auth.Sign(user.id, user.role.id);
-    return signedJWT;
+    const signed_token = Auth.Sign(user.id, user.role.id);
+    const permissionName = user.role.permission.map((p) => p.name);
+    return { signed_token, permissions: permissionName, id: user.id };
+  }
+
+  async DeleteUnverified(id: number) {
+    const result = UserDb.DeleteUnverified(id);
+    return result;
   }
 }

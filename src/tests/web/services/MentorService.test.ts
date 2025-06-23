@@ -4,8 +4,19 @@ import { MentorService } from "../../../app/web/services/MentorService.js";
 import { assert } from "chai";
 import { Mentor } from "../../../entity/user.js";
 import { Role } from "../../../entity/role.js";
+import {Auth} from "../../../app/web/auth/authorization";
 
-describe("Mentor Test", () => {
+const data = {
+  signed_token:{
+  bearerToken: "accessToken",
+  refreshToken: "refreshToken",
+},
+  permissions: ["view", "edit"],
+  id: 14254
+
+};
+
+describe("Mentor service Test", () => {
   const mentorService = new MentorService();
 
   describe("Create User test suite", () => {
@@ -43,13 +54,10 @@ describe("Mentor Test", () => {
     after(() => {
       Sinon.restore();
     });
-    it("Epic test", async () => {
-      let user = { email: "sishir@rijal.com", password: "password43" };
+    it("login test", async () => {
+    const user = { email: "sishir@rijal.com", password: "password43" };
 
-      const data: any = {
-        accessToken: "accessToken",
-        refreshToken: "refreshToken",
-      };
+
 
       loginStub.returns(data);
 
@@ -59,7 +67,7 @@ describe("Mentor Test", () => {
     });
   });
 
-  describe("", () => {
+  describe("Read mentors test suite", () => {
     let readUserStub: Sinon.SinonStub;
     beforeEach(() => {
       readUserStub = Sinon.stub(MentorDb, "ReadMentors");
@@ -75,13 +83,13 @@ describe("Mentor Test", () => {
       });
       it("No mentor found", async () => {
         readUserStub.returns([]);
-        const result = await mentorService.ReadMentors(1, 5);
+        const result = await mentorService.ReadMentors("", "", "", 1, 5, "ASC");
         assert.deepEqual(result, []);
         Sinon.assert.calledOnce(readUserStub);
       });
 
       it("Read mentor Data", async () => {
-        let users: Mentor[] = [
+        const users= [
           {
             firstname: "Subham",
             lastname: "Thapa",
@@ -116,29 +124,33 @@ describe("Mentor Test", () => {
           },
         ];
         readUserStub.returns(users);
-        const result = await mentorService.ReadMentors(1, 5);
+        const result = await mentorService.ReadMentors("","","",1, 5,"ASC");
         assert.deepEqual(result, users);
         Sinon.assert.calledOnce(readUserStub);
       });
     });
   });
 
-  describe("read mentor test suite", () => {
+  describe("Read mentor test suite", () => {
     let readUserStub: Sinon.SinonStub;
+    let authSign: Sinon.SinonStub;
+
     beforeEach(() => {
+      authSign = Sinon.stub(Auth, "Sign");
       readUserStub = Sinon.stub(MentorDb, "ReadMentor");
     });
     afterEach(() => {
       readUserStub.restore();
+      authSign.restore();
     });
     it("Id not found", async () => {
-      readUserStub.returns([]);
-      const result = await mentorService.ReadMentors(0, 0, 5);
-      assert.deepEqual(result, []);
+      readUserStub.returns(null);
+      const result = await mentorService.ReadMentor(5);
+      assert.deepEqual(result, null);
       Sinon.assert.calledWith(readUserStub, 5);
     });
     it("User found", async () => {
-      let user = {
+      const user = {
         firstname: "John",
         lastname: "Black",
         id: 10,
@@ -147,10 +159,39 @@ describe("Mentor Test", () => {
         role: new Role(),
       };
       readUserStub.returns(user);
-      const result = await mentorService.ReadMentors(0, 0, 10);
+      const result = await mentorService.ReadMentor(10);
       assert.equal(result, user);
       Sinon.assert.calledWith(readUserStub, 10);
     });
+
+    it("Refresh mentor", async () => {
+      const user = {
+            firstname: "John",
+            lastname: "Black",
+            id: 10,
+            email: "john@black.com",
+            phoneNumber: "1248216745",
+
+            role: {
+            permission: [
+              {name: "view"},
+              {name: "edit"},
+            ]
+          },
+      };
+      readUserStub.returns(user);
+      const token= {
+        bearerToken: "accessToken",
+        refreshToken: "refreshToken",
+      }
+      authSign.returns(token);
+
+      const result = await mentorService.Refresh(user.id);
+
+      assert.equal(result.id, user.id);
+      assert.equal(result.signed_token, token);
+
+    })
   });
 
   describe("Delete mentor test suite", () => {
@@ -188,7 +229,7 @@ describe("Mentor Test", () => {
       updateMentor.restore();
     });
     it("Update mentor test case", async () => {
-      const mentor: Mentor = {
+      const mentor = {
         firstname: "John",
         lastname: "BloodBorne",
         id: 5,
@@ -202,5 +243,7 @@ describe("Mentor Test", () => {
       Sinon.assert.calledOnce(updateMentor);
       Sinon.assert.calledWith(updateMentor, mentor);
     });
+
   });
+
 });

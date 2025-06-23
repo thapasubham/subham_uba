@@ -106,7 +106,33 @@ describe("Role service test case", () => {
 
       updateStub.returns(role);
       const result = await roleService.UpdateRole(roleid, permission_id);
+      assert.equal(result, role);
       Sinon.assert.calledWith(updateStub, roleid, permission_id);
+    });
+  });
+
+  describe('DeleteRole', () => {
+    let deleteRoleStub: Sinon.SinonStub;
+
+    beforeEach(() => {
+
+      deleteRoleStub = Sinon.stub(RolesDB, 'DeleteRole');
+    });
+
+    afterEach(() => {
+      deleteRoleStub.restore();
+    });
+
+    it('should delete a role and return the result', async () => {
+
+      const roleId = 123;
+      deleteRoleStub.withArgs(roleId).resolves(1);
+
+
+      const result = await roleService.DeleteRole(roleId);
+
+
+      assert.equal(result, 1);
     });
   });
 });

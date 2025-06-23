@@ -6,6 +6,7 @@ const typeDefs = gql`
     lastname: String!
     id: Float
     email: String!
+    isverified: Boolean
     phoneNumber: String!
     role: Role
   }
@@ -15,6 +16,7 @@ const typeDefs = gql`
     lastname: String!
     id: Float
     email: String!
+    isverified: Boolean
     phoneNumber: String!
     role: Role
   }
@@ -50,14 +52,30 @@ const typeDefs = gql`
     user: User
   }
   type Query {
-    users(filter: String, limit: Int!, offset: Int!): [User]
-    user(id: ID!): User
+    users(
+      search: String
+      searchBy: String
+      filter: String
+      limit: Int!
+      offset: Int!
+      orderBy: String
+      isVerified: Boolean
+    ): [User]
+    getusers(id: ID!): User
     intern(id: ID!): Intern
     interns: [Intern]
     internDetail(id: ID!): InternDetails
     internDetails(limit: Int!, offset: Int!): [InternDetails]
-    mentors(limit: Int!, offset: Int!): [Mentor]
-    mentor(id: ID!): Mentor
+    mentors(
+      search: String
+      searchBy: String
+      filter: String
+      limit: Int!
+      offset: Int!
+      orderBy: String
+      isVerified: Boolean
+    ): [Mentor]
+    getmentors(id: ID!): Mentor
     role(id: ID!): Role
     roles: [Role]
     permission(id: ID!): Permission
@@ -92,12 +110,13 @@ const typeDefs = gql`
     id: Float
     email: String!
     phoneNumber: String!
-    role: String
+    password: String
+    role: Int
   }
 
   input RoleInput {
     id: Int
-    name: String!
+    name: String
     permission: Int
   }
   input PermissionInput {
@@ -123,7 +142,7 @@ const typeDefs = gql`
     certify(id: ID!): String
 
     createMentor(mentor: MentorInput!): Mentor
-    updateMentor(mentor: MentorInput!): Mentor
+    updateMentor(mentor: MentorInput!): String
     deleteMentor(id: ID!): Int
     loginMentor(login: loginInput!): AuthToken
 

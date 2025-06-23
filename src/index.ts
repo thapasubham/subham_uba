@@ -6,7 +6,7 @@ AppDataSource.initialize()
   .then(async () => {
     console.log("Data Source has been initialized!");
     await Seed.RoleSeed();
-    startServer();
+     startServer();
   })
   .catch((err) => {
     console.error("Error during Data Source initialization:", err);

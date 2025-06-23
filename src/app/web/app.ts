@@ -17,7 +17,7 @@ export async function startServer() {
   console.log(url);
   app.use(
     cors({
-      origin: "http://localhost:5000",
+      origin: url,
       credentials: true,
     })
   );
@@ -26,14 +26,11 @@ export async function startServer() {
 
   const server = new ApolloServer({ typeDefs, resolvers });
 
-  //restapi
-  // app.get("/", (req, res) => {
-  //   res.send("hello");
-  // });
-  app.use("/api/user", routes.userRouter);
+
+  app.use("/api/users", routes.userRouter);
   app.use("/api/intern", routes.internRoutes);
   app.use("/api/detail", routes.internDetailsRoutes);
-  app.use("/api/mentor", routes.mentorRoutes);
+  app.use("/api/mentors", routes.mentorRoutes);
   app.use("/api/roles", routes.rolesRoutes);
   app.use("/api/permission", routes.permissionRoutes);
 
@@ -41,7 +38,7 @@ export async function startServer() {
   await server.start();
 
   app.use(
-    "/graphql",
+    "/api/graphql",
     expressMiddleware(server, {
       context: async () => ({
         dataSource,

@@ -12,8 +12,12 @@ const repository = AppDataSource.getRepository(Mentor);
 export class MentorDb {
   static async CreateMentor(mentor: Mentor) {
     mentor.role = await RolesDB.getrolebyname(DEFAULT_ROLE);
-    const result = await repository.save(mentor);
-    return result;
+    if (!mentor.password) {
+      mentor.password = process.env.DEFAULT_PASSWORD;
+    }
+
+    const entity = repository.create(mentor);
+    return await repository.save(entity);
   }
   static async ReadMentor(id: number) {
     const result = await repository.findOne({
@@ -38,35 +42,49 @@ export class MentorDb {
     if (!result) {
       throw new HttpError(constants.NO_USER, 404);
     }
-
+    console.log(result);
     return result;
   }
-  static async ReadMentors(limit: number, offset: number) {
-    const result = await repository.find({
-      where: { isDeleted: false },
-      relations: ["role", "role.permission"],
-      select: {
-        id: true,
-        firstname: true,
-        lastname: true,
-        email: true,
-        phoneNumber: true,
-        role: {
-          id: true,
-          name: true,
-          permission: true,
-        },
-        password: false,
-        isDeleted: false,
-      },
-      skip: offset,
-      take: limit,
-    });
+
+  static async ReadMentors(
+    search: string,
+    searchby: string,
+    limit: number,
+    offset: number,
+    sort_by: string,
+    order: "ASC" | "DESC"
+  ) {
+    let qb = repository
+      .createQueryBuilder("mentor")
+
+      .leftJoinAndSelect("mentor.role", "role");
+
+    if (search && searchby) {
+      qb = qb.where(`mentor.${searchby} ILIKE :name`, {
+        name: `%${search}%`,
+      });
+    }
+
+    const result = await qb
+      .andWhere("mentor.isDeleted = :deleted", { deleted: false })
+      .limit(limit)
+      .select([
+        "mentor.id",
+        "mentor.firstname",
+        "mentor.lastname",
+        "mentor.email",
+        "mentor.phoneNumber",
+        "mentor.isverified",
+      ])
+      .offset(offset)
+      .orderBy(sort_by || "mentor.id", order || "ASC")
+      .getMany();
+
     return result;
   }
 
   static async UpdateMentor(mentor: Mentor) {
-    let result = await repository.findOneBy({
+    const result = await repository.findOneBy({
       id: mentor.id,
       isDeleted: false,
     });
@@ -101,7 +119,9 @@ export class MentorDb {
     const result = await repository.findOne({
       where: { email: user.email },
       relations: {
-        role: true,
+        role: {
+          permission: true,
+        },
       },
     });
     if (!result) {
@@ -111,7 +131,9 @@ export class MentorDb {
     await PasswordHasher.Compare(user.password, result.password);
 
     const id = result.id;
-    const role = result.role.id;
-    return Auth.Sign(id, role);
+    const signed_token = Auth.Sign(id, result.role.id);
+
+    const permissionNames = result.role.permission.map((p) => p.name);
+    return { signed_token, permissions: permissionNames, id: result.id };
   }
 }
