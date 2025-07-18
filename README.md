@@ -29,5 +29,6 @@ npm install
 npm run start
 ```
 ## You can also run this on docker
-``` docker compose up
+```
+docker compose up
 ```
