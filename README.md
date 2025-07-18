@@ -15,6 +15,7 @@ git clone https://github.com/thapasubham/subham_uba.git
 ```
 cd subham_uba
 ```
+- Add a new .env file and follow as in the .env.example file
 
 - Install the dependencies
 
@@ -26,4 +27,7 @@ npm install
 
 ```
 npm run start
+```
+## You can also run this on docker
+``` docker compose up
 ```
